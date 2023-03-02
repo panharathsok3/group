@@ -44,11 +44,6 @@ public class CollageProjectModelImpl implements CollageProjectModel {
   }
 
   @Override
-  public Color[][] getIndividualComponent(String name) {
-    return new Color[0][];
-  }
-
-  @Override
   public void newProject(String name, int height, int width) {
 
   }

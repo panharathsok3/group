@@ -155,28 +155,27 @@ public class ImageUtil {
         ArrayList<ArrayList<Image> pixelsOnALayer =
 
 
-        Color[][] projectContents =  loadedImages[i][j].getGraphics().getColor();
-        Color c = loadedImages[i][j].getGraphics().getColor();
-
-        int red = c.getRed();
-        int green = c.getGreen();
-        int blue = c.getBlue();
-
-        fileWriter.write(red + "\n");
-        fileWriter.write(green + "\n");
-        fileWriter.write(blue + "\n");
+//        Color[][] projectContents =  loadedImages[i][j].getGraphics().getColor();
+//        Color c = loadedImages[i][j].getGraphics().getColor();
+//
+//        int red = c.getRed();
+//        int green = c.getGreen();
+//        int blue = c.getBlue();
+//        fileWriter.write(red + "\n");
+//        fileWriter.write(green + "\n");
+//        fileWriter.write(blue + "\n");
       }
     }
 
-    try{
-      byte[] bytes = fileWriter.toString().getBytes();
-      fileWriter.write(Arrays.toString(bytes));
-      fileWriter.close();
-      fileWriter.flush();
-      System.out.println("Project has been saved!");
-    } catch(IOException e) {
-      throw new IllegalStateException("Was not able to save project!");
-    }
+//    try{
+//      byte[] bytes = fileWriter.toString().getBytes();
+//      fileWriter.write(Arrays.toString(bytes));
+//      fileWriter.close();
+//      fileWriter.flush();
+//      System.out.println("Project has been saved!");
+//    } catch(IOException e) {
+//      throw new IllegalStateException("Was not able to save project!");
+//    }
 
 
 
