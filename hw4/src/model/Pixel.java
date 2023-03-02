@@ -14,7 +14,7 @@ public class Pixel {
   private int blue;
 
   static  final int maxValue = 255;
-  private  int alpha;
+  private int alpha;
 
   /**
    * Represents a pixel of an image using the row and column of the image and its color.
