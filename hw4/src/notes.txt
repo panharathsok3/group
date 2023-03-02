@@ -1,0 +1,53 @@
+
++ Verbs:
+value
+intensity
+luma
+greyscale/rgb conversion
+transparency
+filter
+darken
+brighten
+max values
+creating projects
+loading projects
+save project
+adding layers
+add image
+set-filter
+saving images
+quit
+
+
++ Nouns:
+Color
+Pixel
+
+
+Pixel Interface {
+enum (reg, g, b, a)
+
+void setred(int newColor)
+{
+this.red = new color;
+}
+
+}
+
+public class pixelImpl implements{
+
+
+
+private int red;
+private int green;
+private int blue;
+static final int Max_Value = 255;
+
+public pixelImpl(int red, int green , int blue) {
+
+}
+
+
+
+
+}
