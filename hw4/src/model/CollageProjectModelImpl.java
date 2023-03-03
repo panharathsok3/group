@@ -61,7 +61,6 @@ public class CollageProjectModelImpl implements CollageProjectModel {
   // of the image is at (x-pos, y-pos)
   @Override
   public void addImageToLayer(String layerName, ArrayList<Pixel> imageToAdd, int xPos, int yPos) {
-    //ToDO:Fix this
     this.collageDirectory.get(layer).add((xPos * yPos),imageToAdd);
   }
 
