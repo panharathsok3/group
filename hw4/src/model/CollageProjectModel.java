@@ -18,7 +18,6 @@ public interface CollageProjectModel {
    */
   int getHeight(String name);
 
-
   /**
    * Produces the project's height.
    * @param name the name of the project.
