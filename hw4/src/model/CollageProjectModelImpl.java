@@ -172,12 +172,6 @@ public class CollageProjectModelImpl implements CollageProjectModel {
         int newRedColor = (int) Math.round((filterValue[0] * red) + (filterValue[1] * green) + (filterValue[2] * blue));
         int newGreenColor = (int) Math.round((filterValue[3] * red) + (filterValue[4] * green) + (filterValue[5] * blue));
         int newBlueColor = (int) Math.round((filterValue[6] * red) + (filterValue[7] * green) + (filterValue[8] * blue));
-
-
-        //setting the rgb values on the current layer
-        currentLayer.setRedComponent(Math.max(Math.min(newRedColor, 255), 0));
-        currentLayer.setGreenComponent(Math.max(Math.min(newGreenColor, 255), 0));
-        currentLayer.setBlueComponent(Math.max(Math.min(newBlueColor, 255), 0));
       }
     }
     UpdateCollageDirectory(layerName, layer);

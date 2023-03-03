@@ -6,6 +6,7 @@ import model.Pixel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class PixelTest {
 
@@ -22,6 +23,38 @@ public class PixelTest {
     this.pixel3 = new Pixel(21,50,68,100);
     this.pixel4 = new Pixel(12,11,10);
     this.pixel5 = new Pixel(1,1,1);
+  }
+
+  @Test
+  public void testInvalidConstructor() {
+    try {
+      Pixel pixel1 = new Pixel(-1, 0, 0);
+      fail("the given component can't be negative");
+    } catch (IllegalArgumentException e) {
+      // do nothing
+    }
+
+    try {
+      Pixel pixel1 = new Pixel(0, -1, 0);
+      fail("the given component can't be negative");
+    } catch (IllegalArgumentException e) {
+      // do nothing
+    }
+
+    try {
+      Pixel pixel1 = new Pixel(0, 0, -1);
+      fail("the given component can't be negative");
+    } catch (IllegalArgumentException e) {
+      // do nothing
+    }
+
+    try {
+      Pixel pixel1 = new Pixel(0, 0, 0, -1);
+      fail("the given component can't be negative");
+    } catch (IllegalArgumentException e) {
+      // do nothing
+    }
+
   }
 
   @Test
@@ -80,11 +113,7 @@ public class PixelTest {
     assertEquals(1,this.pixel5.luma());
     assertEquals(0,this.pixel1.luma());
     assertEquals(45,this.pixel3.luma());
-
-
   }
-
-
 
 
 }

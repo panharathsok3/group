@@ -17,8 +17,13 @@ public class Pixel {
    * @param redComponent   the red pixel value
    * @param greenComponent the greenComponent pixel value
    * @param blueComponent  the blue pixel value
+   * @throws IllegalArgumentException if the components are negative
    */
-  public Pixel(int redComponent, int greenComponent, int blueComponent) {
+  public Pixel(int redComponent, int greenComponent, int blueComponent)
+      throws IllegalArgumentException {
+    if (redComponent < 0 || greenComponent < 0 || blueComponent < 0) {
+      throw new IllegalArgumentException("The components can't be negative");
+    }
     this.redComponent = redComponent;
     this.greenComponent = greenComponent;
     this.blueComponent = blueComponent;
@@ -31,8 +36,13 @@ public class Pixel {
    * @param redComponent   the red pixel value
    * @param greenComponent the green pixel value
    * @param blueComponent  the blue pixel value
+   * @throws IllegalArgumentException if the components are negative
    */
-  public Pixel(int redComponent, int greenComponent, int blueComponent, int alphaComponent) {
+  public Pixel(int redComponent, int greenComponent, int blueComponent, int alphaComponent)
+      throws IllegalArgumentException {
+    if (redComponent < 0 || greenComponent < 0 || blueComponent < 0 || alphaComponent < 0) {
+      throw new IllegalArgumentException("The components can't be negative");
+    }
     this.redComponent = redComponent;
     this.greenComponent = greenComponent;
     this.blueComponent = blueComponent;
@@ -42,7 +52,6 @@ public class Pixel {
 
   /**
    * Returns the red component of this color.
-   *
    * @return the red component of this color
    */
   public int getRedComponent() {
@@ -51,7 +60,6 @@ public class Pixel {
 
   /**
    * Returns the green component of this color.
-   *
    * @return the green component of this color
    */
   public int getGreenComponent() {
@@ -60,7 +68,6 @@ public class Pixel {
 
   /**
    * Returns the blue component of this color.
-   *
    * @return the blue component of this color
    */
   public int getBlueComponent() {
@@ -69,7 +76,6 @@ public class Pixel {
 
   /**
    * Returns the alpha component of this color.
-   *
    * @return the alpha component of this color
    */
   public int getAlphaComponent() {
@@ -78,7 +84,6 @@ public class Pixel {
 
   /**
    * Returns the maximum value of the rgb component.
-   *
    * @return the maximum value of the rgb component
    */
   public int value() {
@@ -88,7 +93,6 @@ public class Pixel {
 
   /**
    * Returns the average of the rgb components.
-   *
    * @return the average of the rgb components
    */
   public int intensity() {
@@ -97,7 +101,6 @@ public class Pixel {
 
   /**
    * Returns the weighted sum of the rgb components.
-   *
    * @return the weighted sum of the rgb components
    */
   public int luma() {
