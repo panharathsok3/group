@@ -1,4 +1,6 @@
-package model;
+package model.Effects;
+
+import model.Layer;
 
 /**
  * A command that assigns a specified filter to a layer.
