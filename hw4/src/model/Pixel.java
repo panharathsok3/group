@@ -7,8 +7,9 @@ public class Pixel {
   private int redComponent;
   private int greenComponent;
   private int blueComponent;
-  static  final int maxValue = 255;
   private int alphaComponent;
+  static final int maxValue = 255;
+
 
   /**
    * Creates a color using rgb values.
@@ -77,6 +78,7 @@ public class Pixel {
     return Math.max(Math.max(this.redComponent, this.greenComponent), this.blueComponent);
   }
 
+
   /**
    * Returns the average of the rgb components.
    * @return the average of the rgb components
@@ -93,5 +95,19 @@ public class Pixel {
     return (int)Math.round((0.216 * this.redComponent) + (0.7152 * this.greenComponent)
         + (0.0722 * this.blueComponent));
   }
+
+  //added setters to the pixel class
+  public void setRedComponent(int newComponent) {
+    this.redComponent = newComponent;
+  }
+
+  public void setGreenComponent(int newComponent) {
+    this.greenComponent = newComponent;
+  }
+
+  public void setBlueComponent(int newComponent) {
+    this.blueComponent = newComponent;
+  }
+
 
 }

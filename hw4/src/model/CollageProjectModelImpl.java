@@ -11,12 +11,10 @@ import java.util.Map;
 
 public class CollageProjectModelImpl implements CollageProjectModel {
 
-  //Hashmap that internally matches a layers to its pixels.
-  private final Map<String, ArrayList<ArrayList<Image>>> collageDirectory;
-
- private final int canvasHeight;
-
- private final int canvasWidth;
+  //Hashmap that internally matches a layer to its pixels.
+  private final Map<String, ArrayList<ArrayList<Pixel>>> collageDirectory;
+  private final int canvasHeight;
+  private final int canvasWidth;
 
 
   public CollageProjectModelImpl(int canvasHeight, int canvasWidth) {
@@ -30,36 +28,32 @@ public class CollageProjectModelImpl implements CollageProjectModel {
     return this.canvasHeight;
   }
 
-  //the name of each layer
+
   @Override
   public int getWidth(String name) {
     return this.canvasWidth;
   }
 
+  //new-project canvas-height canvas-width:
   @Override
-  public void newProject(String name, int height, int width) {
-
+  public void newProject(String projectName, int canvasHeight, int canvasWidth) {
+    CollageProjectModelImpl projectModel = new CollageProjectModelImpl(canvasHeight, canvasWidth);
   }
 
+
+  //add-layer layer-name: adds a new layer with the given name to the top of the whole project.
   @Override
   public void addLayerToProject(String name) {
   }
+
 
   @Override
   public void addImageToLayer(String layerName, String imageName, int xPos, int yPos) {
   }
 
 
-  /**
-   * Allows the user to save their project to a file with all the loaded images included.
-   * This is to accommodate workflow of users making incremental progress.
-   *
-   * @param fileName     the name of the new file.
-   * @param filePath     the path/directory where the user saves their image.
-   * @param loadedImages the images that were already in the project.
-   * @throws IllegalArgumentException is the user is not able to save their project.
-   */
-  public static void saveProject(String fileName, String filePath, Image[][] loadedImages) throws IllegalArgumentException {
+  @Override
+  public void saveProject(String fileName, String filePath, Image[][] loadedImages) throws IllegalArgumentException {
 
     String[] cd = filePath.split("\\.");
     String fileFormat = cd[1];
@@ -74,16 +68,8 @@ public class CollageProjectModelImpl implements CollageProjectModel {
 
   }
 
-  /**
-   * Allows the user to save a project as a PPM file.
-   *
-   //  * @param fileName     the name of the file they want to give to their project.
-   * @param filePath     the location where the file will be stored.
-   * @param loadedImages the images in the project at the time they saved it.
-   * @throws IllegalArgumentException if the file has no contents/images.
-   * @throws FileNotFoundException    if the file
-   */
-  public static void savePPMProject(String filePath, Image[][] loadedImages) throws IOException, FileNotFoundException {
+  @Override
+  public void savePPMProject(String filePath, Image[][] loadedImages) throws IOException, FileNotFoundException {
     if (loadedImages == null || loadedImages.length == 0) {
       throw new IllegalArgumentException("File cannot be empty");
     }
@@ -103,7 +89,7 @@ public class CollageProjectModelImpl implements CollageProjectModel {
       for (int j = 0; j < width; j += 1) {
 
         ArrayList<Image> layer;
-        Map<String,ArrayList<ArrayList<Image>>> layers ;
+        Map<String, ArrayList<ArrayList<Image>>> layers;
         ArrayList<ArrayList<Image> pixelsOnALayer =
 
 
@@ -130,20 +116,11 @@ public class CollageProjectModelImpl implements CollageProjectModel {
 //    }
 
 
-
   }
 
 
-
-  /**
-   * Allows the user to save an image that they have applied a filter(s) to.
-   *
-   * @param fileName the name of the new image after the filter(s) have been applied.
-   * @param filePath the directory or location of the new image.
-   *                 //* @param imageComponents the rgb values in that image after the filter(s) have been applied.
-   * @throws IllegalArgumentException is the user is not able to save their new image.
-   */
-  public static void saveImage(String fileName, String filePath) throws IllegalArgumentException {
+  @Override
+  public void saveImage(String fileName, String filePath) throws IllegalArgumentException {
 
     //list of pixels make an image
     //List of , list of pixels make images
@@ -165,85 +142,64 @@ public class CollageProjectModelImpl implements CollageProjectModel {
 
   //load-project path-to-project-file: loads a project into the program
 
-  private static CollageProjectModelImpl read(String filePath,String fileName) throws IOException {
+  private static CollageProjectModelImpl read(String filePath, String fileName) throws IOException {
     FileReader loader = new FileReader(filePath);
     Image[][] projectContents;
-    Map<String,ArrayList<ArrayList<Image>>> fileContents ;
+    Map<String, ArrayList<ArrayList<Image>>> fileContents;
 
     try {
       if (!fileName.endsWith(".ppm")) {
         //read other format of image
         projectContents = ImageUtil.readPPM(fileName);
       } else {
+
         //read the file/project as a ppm
         projectContents = ImageUtil.readPPM(fileName);
       }
-    } catch(IOException e){
+    } catch (IOException e) {
       throw new IllegalArgumentException("not able to read");
     }
 
     return projectContents;
   }
 
-  //new-project canvas-height canvas-width:
-  private static CollageProjectModelImpl newProject(String projectName,int canvasHeight, int canvasWidth) {
-
-
-    CollageProjectModelImpl projectModel = new CollageProjectModelImpl( canvasHeight, canvasWidth);
-
-
-  }
-
-
-
-
-
-
-
-
 
   //key value pairs
-  private void UpdateCollageDirectory(String layerName,ArrayList<ArrayList<Image>> image ) {
-    this.collageDirectory.put(layerName,image);
+  private void UpdateCollageDirectory(String layerName, ArrayList<ArrayList<Image>> image) {
+    this.collageDirectory.put(layerName, image);
   }
 
+
+  //set-filter layer-name filter-option:
+  // sets the filter of the given layer where filter-option is one of the following at the moment
+
   @Override
-  public void setFilter(String layerName, String filterOption, double filterValue) {
+  public void setFilter(String layerName, String filterOption, double[] filterValue) {
 
-    ArrayList<ArrayList<Image>> project = collageDirectory.get(layerName);
-
-    float r = 0;
-    float g = 0;
-    float b = 0;
-
-    for (int row = 0; row < project.size(); row++) {
-      for (int col = 0; col < project.get(0).size(); col++) {
-
-     Image currentLayer = project.get(row).get(col);
-        int red = currentLayer.getGraphics().getColor().getRed();
-        int green = currentLayer.getGraphics().getColor().getGreen();
-        int blue = currentLayer.getGraphics().getColor().getBlue();
+    ArrayList<ArrayList<Pixel>> layer = collageDirectory.get(layerName);
 
 
+    for (int row = 0; row < layer.size(); row++) {
+      for (int col = 0; col < layer.get(0).size(); col++) {
 
-        r += filterValue * currentLayer.getGraphics().getColor().getRed();
-        g += filterValue * currentLayer.getGraphics().getColor().getRed();
-        b += filterValue * currentLayer.getGraphics().getColor().getRed();
+        //getting the rgb values on the current layer
+        Pixel currentLayer = layer.get(row).get(col);
 
+        int red = currentLayer.getRedComponent();
+        int green = currentLayer.getGreenComponent();
+        int blue = currentLayer.getBlueComponent();
 
 
         int newRedColor = (int) Math.round((filterValue[0] * red) + (filterValue[1] * green) + (filterValue[2] * blue));
         int newGreenColor = (int) Math.round((filterValue[3] * red) + (filterValue[4] * green) + (filterValue[5] * blue));
         int newBlueColor = (int) Math.round((filterValue[6] * red) + (filterValue[7] * green) + (filterValue[8] * blue));
 
-       return new Color(Math.max(0,Math.min(255,Math.round(r)))),
 
-        Math.max(Math.min(newRedColor, 255), 0));
-        (Math.max(Math.min(newGreenColor, 255), 0));
-        (Math.max(Math.min(newBlueColor, 255), 0));
+        //setting the rgb values on the current layer
+        currentLayer.setRedComponent(Math.max(Math.min(newRedColor, 255), 0));
+        currentLayer.setGreenComponent(Math.max(Math.min(newGreenColor, 255), 0));
+        currentLayer.setBlueComponent(Math.max(Math.min(newBlueColor, 255), 0));
       }
     }
-
   }
-
 }

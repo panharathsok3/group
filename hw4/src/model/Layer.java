@@ -1,7 +1,7 @@
 package model;
 
 /**
- *
+ * Represents a single layer.
  */
 public class Layer {
   private final int height;
