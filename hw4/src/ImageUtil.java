@@ -1,17 +1,7 @@
 import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
 import java.util.Scanner;
-
-import model.CollageProjectModelImpl;
-import model.Pixel;
-
 
 /**
  * This class contains utility methods to read a PPM image from file and simply print its contents. Feel free to change this method
@@ -77,8 +67,6 @@ public class ImageUtil {
     }
     return collageContents;
   }
-
-
 
 
   //demo main
