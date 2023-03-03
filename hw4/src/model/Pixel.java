@@ -105,27 +105,111 @@ public class Pixel {
             + (0.0722 * this.blueComponent));
   }
 
-  //added setters to the pixel class
-  public void setRedComponent(int newRedComponent) {
-    if (newRedComponent < 0 || newRedComponent > 255) {
-      throw new IllegalArgumentException("red component should be between 0 - 255");
+  /**
+   * Modifies the component by adding or subtracting it by a given value.
+   * @param component the component to change
+   * @param value the value to be applied to the component
+   * @param add true if and only if the value is being added to and false otherwise which makes it
+   *            subtract instead
+   * @throws IllegalArgumentException if the given component is null or if the given value is
+   *                                  less than zero
+   */
+  public void modifyComponent(String component, int value, boolean add)
+      throws IllegalArgumentException {
+    if (component == null || value < 0) {
+      throw new IllegalArgumentException("the component cannot be null and the value cannot be "
+          + "negative");
     }
-    this.redComponent = newRedComponent;
+    if (add) {
+      this.add(component, value);
+    }
+    else {
+      this.subtract(component, value);
+    }
   }
 
-  public void setGreenComponent(int newGreenComponent) {
-    if (newGreenComponent < 0 || newGreenComponent > 255) {
-      throw new IllegalArgumentException("red component should be between 0 - 255");
+  /**
+   * Adds the value to the given component.
+   * @param component the component to be added to
+   * @param value the value to add to the component
+   */
+  private void add(String component, int value) {
+    switch (component) {
+      case "red":
+        this.redComponent += value;
+        this.checkBounds(component);
+        break;
+      case "blue":
+        this.blueComponent += value;
+        this.checkBounds(component);
+        break;
+      case "green":
+        this.greenComponent += value;
+        this.checkBounds(component);
+        break;
+      default:
+        throw new IllegalArgumentException("choose one of the three components to add to");
     }
-    this.greenComponent = newGreenComponent;
   }
 
-  public void setBlueComponent(int newBlueComponent) {
-    if (newBlueComponent < 0 || newBlueComponent > 255) {
-      throw new IllegalArgumentException("red component should be between 0 - 255");
+  /**
+   * Subtracts the value to the given component.
+   * @param component the component to be added to
+   * @param value the value to add to the component
+   */
+  private void subtract(String component, int value) {
+    switch (component) {
+      case "red":
+        this.redComponent -= value;
+        this.checkBounds(component);
+        break;
+      case "blue":
+        this.blueComponent -= value;
+        this.checkBounds(component);
+        break;
+      case "green":
+        this.greenComponent -= value;
+        this.checkBounds(component);
+        break;
+      default:
+        throw new IllegalArgumentException("choose one of the three components to add to");
     }
-    this.blueComponent = newBlueComponent;
   }
 
+  /**
+   * Checks if the given component is higher than the max value or if it's lower than zero and set
+   * it to either the max value if it exceeds it or set it to zero if it goes below zero.
+   * @param component the component to check the bounds for
+   */
+  private void checkBounds(String component) {
+    switch (component) {
+      case "red":
+        if (this.redComponent > 255) {
+          this.redComponent = 255;
+        }
+        if (this.redComponent < 0) {
+          this.redComponent = 0;
+        }
+        break;
+      case "blue":
+        if (this.blueComponent > 255) {
+          this.blueComponent = 255;
+        }
+        if (this.blueComponent < 0) {
+          this.blueComponent = 0;
+        }
+        break;
+      case "green":
+        if (this.greenComponent > 255) {
+          this.greenComponent = 255;
+        }
+        if (this.greenComponent < 0) {
+          this.greenComponent = 0;
+        }
+        break;
+      default:
+        throw new IllegalArgumentException("choose one of the three components to check");
+    }
+  }
 
 }

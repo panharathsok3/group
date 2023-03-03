@@ -32,17 +32,8 @@ public class PixelTest {
     assertEquals(21, this.pixel3.getRedComponent());
     assertEquals(12, this.pixel4.getRedComponent());
     assertEquals(1, this.pixel5.getRedComponent());
-
-
-    this.pixel1.setRedComponent(20);
-    assertEquals(20,this.pixel1.getRedComponent());
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testSetRedException() {
-    this.init();
-    this.pixel1.setRedComponent(300);
-  }
 
   @Test
   public void testGetGreenComponent() {
