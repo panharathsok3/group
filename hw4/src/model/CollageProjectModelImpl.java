@@ -1,6 +1,5 @@
 package model;
 
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,26 +10,16 @@ public class CollageProjectModelImpl implements CollageProjectModel {
   //Hashmap that internally matches a layers to its pixels.
   private final Map<String, ArrayList<ArrayList<Image>>> collageDirectory;
 
- private int canvasHeight;
+ private final int canvasHeight;
 
- private int canvasWidth;
+ private final int canvasWidth;
 
- private final float[][] filter;
-
-
-  /**
-   * Creates a collage with images.
-   */
-  public CollageProjectModelImpl() {
-    this.collageDirectory = new HashMap<>();
-    this.filter = filter;
-  }
 
   public CollageProjectModelImpl(int canvasHeight, int canvasWidth) {
+    this.canvasHeight = canvasHeight;
+    this.canvasWidth = canvasWidth;
     this.collageDirectory = new HashMap<>();
-    this.filter = filter;
   }
-
 
   @Override
   public int getHeight(String name) {

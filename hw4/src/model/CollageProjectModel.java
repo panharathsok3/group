@@ -22,14 +22,6 @@ public interface CollageProjectModel {
    */
   int getWidth(String name);
 
-
-  /**
-   * Produces a given component
-   * @param name the name of the project we want to get the
-   * @return
-   */
-  Color[][] getIndividualComponent(String name);
-
   /**
    * Creates a new Project with a name and a set of dimensions.
    * DEFAULT: every project has a white background layer by default.

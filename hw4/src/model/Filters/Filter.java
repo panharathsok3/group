@@ -1,7 +1,4 @@
-package Filters;
-
-import java.awt.*;
-import java.util.ArrayList;
+package model.Filters;
 
 public class Filter {
 

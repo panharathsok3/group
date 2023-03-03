@@ -1,10 +1,8 @@
-package Filters;
+package model.Filters;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
-
-import model.CollageProjectModelImpl;
 
 /**
  * This class handles the operation to brighten an image
