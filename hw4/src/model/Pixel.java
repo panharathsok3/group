@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.*;
+
 /**
  * Represents a pixel of an image.
  */
@@ -108,6 +110,7 @@ public class Pixel {
   public void setBlueComponent(int newComponent) {
     this.blueComponent = newComponent;
   }
+
 
 
 }

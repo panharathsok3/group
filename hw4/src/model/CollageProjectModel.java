@@ -4,6 +4,7 @@ package model;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * An interface to represent the operations that can be done with our program.
@@ -37,21 +38,22 @@ public interface CollageProjectModel {
   /**
    * Adds a layer with a given name to the top of the whole project.
    * DEFAULT: a fully transparent white image and the normal filter.
-   * @param name the name of layer that would be added to the project.
+   * @param layerName the name of layer that would be added to the project.
+   * @param defaultLayer the default layer to be added.
    * @throws IllegalArgumentException if there already exists a layer with the name
    * that the user is trying to give. Program should continue running.
    */
-  void addLayerToProject(String name);
+  void addLayerToProject(String layerName,ArrayList<ArrayList<Pixel>> defaultLayer);
 
 
   /**
    * Places an image on a layer at given dimensions.
    * @param layerName the name of the layer that the image would be placed on.
-   * @param imageName the image the user wants to add to the layer.
+   * @param imageToAdd the image the user wants to add to the layer.
    * @param xPos the position of the x-coordinate.
    * @param yPos the position of the y-coordinate.
    */
-  void addImageToLayer(String layerName, String imageName, int xPos,int yPos);
+  void addImageToLayer(String layerName, ArrayList<Pixel> imageToAdd, int xPos, int yPos);
 
 
   /**

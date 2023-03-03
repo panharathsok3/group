@@ -12,15 +12,20 @@ import java.util.Map;
 public class CollageProjectModelImpl implements CollageProjectModel {
 
   //Hashmap that internally matches a layer to its pixels.
+  //the directory of layers stored in the Collage program.
+  //the directory of layers maps a name String to a list of pixels.
   private final Map<String, ArrayList<ArrayList<Pixel>>> collageDirectory;
   private final int canvasHeight;
   private final int canvasWidth;
+
+  private final Layer layer;
 
 
   public CollageProjectModelImpl(int canvasHeight, int canvasWidth) {
     this.canvasHeight = canvasHeight;
     this.canvasWidth = canvasWidth;
     this.collageDirectory = new HashMap<>();
+    this.layer = new Layer(this.canvasHeight,this.canvasWidth," ");
   }
 
   @Override
@@ -41,14 +46,23 @@ public class CollageProjectModelImpl implements CollageProjectModel {
   }
 
 
-  //add-layer layer-name: adds a new layer with the given name to the top of the whole project.
+  //add-layer layer-name: adds a new layer with the given name
+
+  // to the top of the whole project.
+  //should throw an exception if there is any attempt at
+  // creating another layer with the same name
   @Override
-  public void addLayerToProject(String name) {
+  public void addLayerToProject(String layerName,ArrayList<ArrayList<Pixel>> defaultLayer) {
+   this.collageDirectory.put(layerName,defaultLayer);
   }
 
 
+  //places an image on the layer such that the top left corner
+  // of the image is at (x-pos, y-pos)
   @Override
-  public void addImageToLayer(String layerName, String imageName, int xPos, int yPos) {
+  public void addImageToLayer(String layerName, ArrayList<Pixel> imageToAdd, int xPos, int yPos) {
+    //ToDO:Fix this
+    this.collageDirectory.get(layer).add((xPos * yPos),imageToAdd);
   }
 
 
@@ -142,7 +156,9 @@ public class CollageProjectModelImpl implements CollageProjectModel {
 
   //load-project path-to-project-file: loads a project into the program
 
-  private static CollageProjectModelImpl read(String filePath, String fileName) throws IOException {
+  private CollageProjectModelImpl loadProject(String filePath, String fileName) throws IOException {
+
+
     FileReader loader = new FileReader(filePath);
     Image[][] projectContents;
     Map<String, ArrayList<ArrayList<Image>>> fileContents;
@@ -160,24 +176,25 @@ public class CollageProjectModelImpl implements CollageProjectModel {
       throw new IllegalArgumentException("not able to read");
     }
 
-    return projectContents;
+    return new CollageProjectModelImpl(this.canvasHeight, this.canvasWidth);
   }
 
 
   //key value pairs
-  private void UpdateCollageDirectory(String layerName, ArrayList<ArrayList<Image>> image) {
-    this.collageDirectory.put(layerName, image);
+  private void UpdateCollageDirectory(String layerName, ArrayList<ArrayList<Pixel>> layer) {
+    this.collageDirectory.put(layerName, layer);
   }
 
 
   //set-filter layer-name filter-option:
   // sets the filter of the given layer where filter-option is one of the following at the moment
 
+
   @Override
   public void setFilter(String layerName, String filterOption, double[] filterValue) {
 
+    //get the layer that we want to add a filter to
     ArrayList<ArrayList<Pixel>> layer = collageDirectory.get(layerName);
-
 
     for (int row = 0; row < layer.size(); row++) {
       for (int col = 0; col < layer.get(0).size(); col++) {
@@ -201,5 +218,6 @@ public class CollageProjectModelImpl implements CollageProjectModel {
         currentLayer.setBlueComponent(Math.max(Math.min(newBlueColor, 255), 0));
       }
     }
+    UpdateCollageDirectory(layerName, layer);
   }
 }
