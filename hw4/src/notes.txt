@@ -31,9 +31,13 @@ Pixel
 
 
 TODO:
-+ Macro ****
++ model.Macro ****
 + Layer (Make a layer class)
 + Controller
 + Filter **
 + View
 +
+
+method that takes in a value and a boolean; adds for brightness , subtracts for darkeness.
+
+
