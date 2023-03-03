@@ -1,5 +1,4 @@
 Make max value: 255 cuz easier & consistent
 
-New info
-hello
-hello2
+
++ executes macro should take in a layer because it is easy to understand from a users point of view.
