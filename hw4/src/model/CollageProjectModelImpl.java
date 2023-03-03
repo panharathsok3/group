@@ -132,7 +132,7 @@ public class CollageProjectModelImpl implements CollageProjectModel {
 
     ArrayList<ArrayList<Layer>> projectContents;
 
-    projectContents = ImageUtil.readPPM(fileName);
+   // projectContents = ImageUtil.readPPM(fileName);
 
     return new CollageProjectModelImpl(this.canvasHeight, this.canvasWidth);
   }
