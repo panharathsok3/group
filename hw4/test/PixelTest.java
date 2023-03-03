@@ -4,6 +4,8 @@ import org.junit.Test;
 import model.Pixel;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class PixelTest {
 
@@ -44,13 +46,43 @@ public class PixelTest {
 
   @Test
   public void testGetGreenComponent() {
-
+    this.init();
   }
 
   @Test
   public void testGetBlueComponent() {
+    this.init();
+  }
+
+  @Test
+  public void testValue() {
+    this.init();
+    assertEquals(0,this.pixel1.value());
+    assertEquals(120,this.pixel2.value());
+    assertEquals(68,this.pixel3.value());
+    assertTrue(this.pixel3.value() == 68);
+    assertTrue(this.pixel3.value() != 21);
+    assertFalse(this.pixel2.value() == 10);
+  }
+
+  @Test
+  public void testIntensity() {
+    this.init();
+    assertEquals(0,this.pixel1.intensity());
+    assertEquals(1,this.pixel5.intensity());
+  }
+
+  @Test
+  public void testLuma() {
+    this.init();
+    assertEquals(11,this.pixel4.luma());
+    assertEquals(1,this.pixel5.luma());
+    assertEquals(0,this.pixel1.luma());
+    assertEquals(45,this.pixel3.luma());
+
 
   }
+
 
 
 
