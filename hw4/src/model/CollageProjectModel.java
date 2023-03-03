@@ -75,7 +75,7 @@ public interface CollageProjectModel {
    * @param loadedImages the images that were already in the project.
    * @throws IllegalArgumentException is the user is not able to save their project.
    */
-  void saveProject(String fileName, String filePath, Image[][] loadedImages);
+  void saveProject(String fileName, String filePath, Color[][] loadedImages);
 
 
   /**
@@ -88,17 +88,17 @@ public interface CollageProjectModel {
    * @throws IllegalArgumentException if the file has no contents/images.
    * @throws FileNotFoundException    if the file
    */
-  void savePPMProject(String filePath, Image[][] loadedImages) throws IOException, FileNotFoundException;
+  void savePPMProject(String filePath, Color[][] loadedImages) throws IOException, FileNotFoundException;
 
   /**
    * Allows the user to save an image that they have applied a filter(s) to.
    *
-   * @param fileName the name of the new image after the filter(s) have been applied.
+   * @param imagePixels the pixels in the new image.
    * @param filePath the directory or location of the new image.
    *                 //* @param imageComponents the rgb values in that image after the filter(s) have been applied.
    * @throws IllegalArgumentException is the user is not able to save their new image.
    */
-  void saveImage(String fileName, String filePath) throws IllegalArgumentException;
+  void saveImage(String filePath,Color[][] imagePixels) throws IllegalArgumentException;
 
 
 
