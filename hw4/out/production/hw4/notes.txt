@@ -1,0 +1,39 @@
+
++ Verbs:
+value
+intensity
+luma
+greyscale/rgb conversion
+transparency
+filter
+darken
+brighten
+max values
+creating projects
+loading projects
+save project
+adding layers
+add image
+set-filter
+saving images
+quit
+
+
++ Nouns:
+Color
+Pixel
+
+
+  //a collage is set of images on top of each other
+  //should be able to add images to the collage and save it
+  //every image is a new layer on top of each other
+  //when a new project is created there is always a white background of size height and width
+
+
+TODO:
++ Macro ****
++ Layer (Make a layer class)
++ Controller
++ Filter **
++ View
++
