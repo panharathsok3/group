@@ -37,3 +37,7 @@ TODO:
 + Filter **
 + View
 +
+
+method that takes in a value and a boolean; adds for brightness , subtracts for darkeness.
+
+

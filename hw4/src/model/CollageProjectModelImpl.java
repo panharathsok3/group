@@ -18,6 +18,8 @@ public class CollageProjectModelImpl implements CollageProjectModel {
   private final int canvasHeight;
   private final int canvasWidth;
 
+  private Image image;
+
   private final Layer layer;
 
 
@@ -61,7 +63,9 @@ public class CollageProjectModelImpl implements CollageProjectModel {
   // of the image is at (x-pos, y-pos)
   @Override
   public void addImageToLayer(String layerName, ArrayList<Pixel> imageToAdd, int xPos, int yPos) {
-    this.collageDirectory.get(layer).add((xPos * yPos), imageToAdd);
+    //this.collageDirectory.get(layer).add((xPos * yPos), imageToAdd);
+    this.collageDirectory.get(xPos).set(yPos,imageToAdd);
+
   }
 
 
