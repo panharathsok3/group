@@ -1,7 +1,5 @@
 package model;
 
-import java.awt.*;
-
 /**
  * Represents a pixel of an image.
  */
@@ -15,9 +13,10 @@ public class Pixel {
 
   /**
    * Creates a color using rgb values.
-   * @param redComponent the red pixel value
+   *
+   * @param redComponent   the red pixel value
    * @param greenComponent the greenComponent pixel value
-   * @param blueComponent the blue pixel value
+   * @param blueComponent  the blue pixel value
    */
   public Pixel(int redComponent, int greenComponent, int blueComponent) {
     this.redComponent = redComponent;
@@ -28,9 +27,10 @@ public class Pixel {
 
   /**
    * Creates a color using rgb values and an alpha component for transparency.
-   * @param redComponent the red pixel value
+   *
+   * @param redComponent   the red pixel value
    * @param greenComponent the green pixel value
-   * @param blueComponent the blue pixel value
+   * @param blueComponent  the blue pixel value
    */
   public Pixel(int redComponent, int greenComponent, int blueComponent, int alphaComponent) {
     this.redComponent = redComponent;
@@ -42,6 +42,7 @@ public class Pixel {
 
   /**
    * Returns the red component of this color.
+   *
    * @return the red component of this color
    */
   public int getRedComponent() {
@@ -50,6 +51,7 @@ public class Pixel {
 
   /**
    * Returns the green component of this color.
+   *
    * @return the green component of this color
    */
   public int getGreenComponent() {
@@ -58,6 +60,7 @@ public class Pixel {
 
   /**
    * Returns the blue component of this color.
+   *
    * @return the blue component of this color
    */
   public int getBlueComponent() {
@@ -66,6 +69,7 @@ public class Pixel {
 
   /**
    * Returns the alpha component of this color.
+   *
    * @return the alpha component of this color
    */
   public int getAlphaComponent() {
@@ -74,6 +78,7 @@ public class Pixel {
 
   /**
    * Returns the maximum value of the rgb component.
+   *
    * @return the maximum value of the rgb component
    */
   public int value() {
@@ -83,6 +88,7 @@ public class Pixel {
 
   /**
    * Returns the average of the rgb components.
+   *
    * @return the average of the rgb components
    */
   public int intensity() {
@@ -91,26 +97,35 @@ public class Pixel {
 
   /**
    * Returns the weighted sum of the rgb components.
+   *
    * @return the weighted sum of the rgb components
    */
   public int luma() {
-    return (int)Math.round((0.216 * this.redComponent) + (0.7152 * this.greenComponent)
-        + (0.0722 * this.blueComponent));
+    return (int) Math.round((0.216 * this.redComponent) + (0.7152 * this.greenComponent)
+            + (0.0722 * this.blueComponent));
   }
 
   //added setters to the pixel class
-  public void setRedComponent(int newComponent) {
-    this.redComponent = newComponent;
+  public void setRedComponent(int newRedComponent) {
+    if (newRedComponent < 0 || newRedComponent > 255) {
+      throw new IllegalArgumentException("red component should be between 0 - 255");
+    }
+    this.redComponent = newRedComponent;
   }
 
-  public void setGreenComponent(int newComponent) {
-    this.greenComponent = newComponent;
+  public void setGreenComponent(int newGreenComponent) {
+    if (newGreenComponent < 0 || newGreenComponent > 255) {
+      throw new IllegalArgumentException("red component should be between 0 - 255");
+    }
+    this.greenComponent = newGreenComponent;
   }
 
-  public void setBlueComponent(int newComponent) {
-    this.blueComponent = newComponent;
+  public void setBlueComponent(int newBlueComponent) {
+    if (newBlueComponent < 0 || newBlueComponent > 255) {
+      throw new IllegalArgumentException("red component should be between 0 - 255");
+    }
+    this.blueComponent = newBlueComponent;
   }
-
 
 
 }

@@ -13,6 +13,7 @@ public class Filter {
     return this.filterType;
   }
 
+  //should override hash code here since we are overriding to string.
 
 
 }
