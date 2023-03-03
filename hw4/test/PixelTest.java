@@ -17,7 +17,7 @@ public class PixelTest {
 
   @Before
   public void init() {
-    this.pixel1 = new Pixel(0,0,0);
+    this.pixel1 = new Pixel(0,0,0, 1);
     this.pixel2 = new Pixel(120,72,99);
     this.pixel3 = new Pixel(21,50,68,100);
     this.pixel4 = new Pixel(12,11,10);
@@ -27,11 +27,11 @@ public class PixelTest {
   @Test
   public void testGetRedComponent() {
     this.init();
-    assertEquals(0,this.pixel1.getRedComponent());
-    assertEquals(120,this.pixel2.getRedComponent());
-    assertEquals(21,this.pixel3.getRedComponent());
-    assertEquals(12,this.pixel4.getRedComponent());
-    assertEquals(1,this.pixel5.getRedComponent());
+    assertEquals(0, this.pixel1.getRedComponent());
+    assertEquals(120, this.pixel2.getRedComponent());
+    assertEquals(21, this.pixel3.getRedComponent());
+    assertEquals(12, this.pixel4.getRedComponent());
+    assertEquals(1, this.pixel5.getRedComponent());
 
 
     this.pixel1.setRedComponent(20);
@@ -47,11 +47,21 @@ public class PixelTest {
   @Test
   public void testGetGreenComponent() {
     this.init();
+    assertEquals(0, this.pixel1.getGreenComponent());
+    assertEquals(72, this.pixel2.getGreenComponent());
+    assertEquals(50, this.pixel3.getGreenComponent());
+    assertEquals(11, this.pixel4.getGreenComponent());
+    assertEquals(1, this.pixel5.getGreenComponent());
   }
 
   @Test
   public void testGetBlueComponent() {
     this.init();
+    assertEquals(0, this.pixel1.getBlueComponent());
+    assertEquals(99, this.pixel2.getBlueComponent());
+    assertEquals(68, this.pixel3.getBlueComponent());
+    assertEquals(10, this.pixel4.getBlueComponent());
+    assertEquals(1, this.pixel5.getBlueComponent());
   }
 
   @Test
