@@ -37,22 +37,20 @@ public interface CollageProjectModel {
   /**
    * Adds a layer with a given name to the top of the whole project.
    * DEFAULT: a fully transparent white image and the normal filter.
-   * @param layerName the name of layer that would be added to the project.
-   * @param defaultLayer the default layer to be added.
+
    * @throws IllegalArgumentException if there already exists a layer with the name
    * that the user is trying to give. Program should continue running.
    */
-  void addLayerToProject(String layerName,ArrayList<ArrayList<Pixel>> defaultLayer);
+  void addLayerToProject();
 
 
   /**
    * Places an image on a layer at given dimensions.
-   * @param layerName the name of the layer that the image would be placed on.
    * @param imageToAdd the image the user wants to add to the layer.
    * @param xPos the position of the x-coordinate.
    * @param yPos the position of the y-coordinate.
    */
-  void addImageToLayer(String layerName, ArrayList<Pixel> imageToAdd, int xPos, int yPos);
+  void addImageToLayer(ArrayList<Pixel> imageToAdd, int xPos, int yPos);
 
 
   /**
@@ -74,7 +72,7 @@ public interface CollageProjectModel {
    * @param loadedImages the images that were already in the project.
    * @throws IllegalArgumentException is the user is not able to save their project.
    */
-  void saveProject(String fileName, String filePath, Color[][] loadedImages);
+  void saveProject(String fileName, String filePath, Pixel[][] loadedImages);
 
 
   /**
@@ -87,7 +85,7 @@ public interface CollageProjectModel {
    * @throws IllegalArgumentException if the file has no contents/images.
    * @throws FileNotFoundException    if the file
    */
-  void savePPMProject(String filePath, Color[][] loadedImages) throws IOException, FileNotFoundException;
+  void savePPMProject(String filePath, Pixel[][] loadedImages) throws IOException, FileNotFoundException;
 
   /**
    * Allows the user to save an image that they have applied a filter(s) to.
@@ -97,7 +95,7 @@ public interface CollageProjectModel {
    *                 //* @param imageComponents the rgb values in that image after the filter(s) have been applied.
    * @throws IllegalArgumentException is the user is not able to save their new image.
    */
-  void saveImage(String filePath,Color[][] imagePixels) throws IllegalArgumentException;
+  void saveImage(String filePath,Pixel[][] imagePixels) throws IllegalArgumentException;
 
 
 
