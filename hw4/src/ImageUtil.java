@@ -76,7 +76,7 @@ public class ImageUtil {
     if (args.length > 0) {
       filename = args[0];
     } else {
-      filename = "sample.ppm";
+      filename = "src/tako.ppm";
     }
     ImageUtil.readPPM(filename);
   }
