@@ -6,9 +6,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import model.Effects.MacroCollageEffects;
 
 
-public class CollageProjectModelImpl implements CollageProjectModel {
+public class CollageProjectModelImpl implements CollageProject {
 
   private ArrayList<Layer> project;
 
@@ -21,17 +22,6 @@ public class CollageProjectModelImpl implements CollageProjectModel {
   public CollageProjectModelImpl(int canvasHeight, int canvasWidth) {
     this.canvasHeight = canvasHeight;
     this.canvasWidth = canvasWidth;
-  }
-
-  @Override
-  public int getHeight(String name) {
-    return this.canvasHeight;
-  }
-
-
-  @Override
-  public int getWidth(String name) {
-    return this.canvasWidth;
   }
 
   //new-project canvas-height canvas-width:
@@ -47,19 +37,23 @@ public class CollageProjectModelImpl implements CollageProjectModel {
   //should throw an exception if there is any attempt at
   // creating another layer with the same name
   @Override
-  public void addLayerToProject() {
-    Layer layer1 = new Layer("layer1");
-    project.add(layer1);
+  public void addLayerToProject(String layerName) {
+    Layer layer = new Layer(layerName);
+    project.add(layer);
   }
 
 
   //places an image on the layer such that the top left corner
   // of the image is at (x-pos, y-pos)
   @Override
-  public void addImageToLayer(ArrayList<Pixel> imageToAdd, int xPos, int yPos) {
+  public void addImageToLayer(String layerName, ArrayList<Pixel> imageToAdd, int xPos, int yPos) {
+    for (Layer layer : this.project) {
+      if (layer.getName().equals(layerName)) {
+        //imageToAdd.add()
+      }
+    }
     //take the pixels from the image I want to add,
-    Layer layer1 = new Layer("layer1");
-    //imageToAdd.add()
+
   }
 
 
@@ -78,8 +72,17 @@ public class CollageProjectModelImpl implements CollageProjectModel {
 
   }
 
-  @Override
-  public void savePPMProject(String filePath, Pixel[][] loadedImages) throws IOException, FileNotFoundException {
+  /**
+   * Allows the user to save a project as a PPM file.
+   * <p>
+   * //  * @param fileName     the name of the file they want to give to their project.
+   *
+   * @param filePath     the location where the file will be stored.
+   * @param loadedImages the images in the project at the time they saved it.
+   * @throws IllegalArgumentException if the file has no contents/images.
+   * @throws FileNotFoundException    if the file
+   */
+  private void savePPMProject(String filePath, Pixel[][] loadedImages) throws IOException {
     if (loadedImages == null || loadedImages.length == 0) {
       throw new IllegalArgumentException("File cannot be empty");
     }
@@ -99,9 +102,8 @@ public class CollageProjectModelImpl implements CollageProjectModel {
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         Pixel c = loadedImages[i][j];
-        fileWriter.write(c.getRedComponent() + "\n");
-        fileWriter.write(c.getGreenComponent() + "\n");
-        fileWriter.write(c.getBlueComponent() + "\n");
+        fileWriter.write(c.getRedComponent() + " " + c.getGreenComponent() + " " +
+            c.getBlueComponent() + " " + c.getAlphaComponent() + "\n");
       }
     }
     fileWriter.close();
@@ -135,13 +137,6 @@ public class CollageProjectModelImpl implements CollageProjectModel {
     return new CollageProjectModelImpl(this.canvasHeight, this.canvasWidth);
   }
 
-
-  //key value pairs
-  private void UpdateCollageDirectory(String layerName, ArrayList<ArrayList<Pixel>> layer) {
-    //this.collageDirectory.put(layerName, layer);
-  }
-
-
   //set-filter layer-name filter-option:
   // sets the filter of the given layer where filter-option is one of the following at the moment
 
@@ -152,6 +147,7 @@ public class CollageProjectModelImpl implements CollageProjectModel {
     switch (filterOption) {
       case "red-component":
         //get the pixels in that layer and set blue and green comps to 0
+        MacroCollageEffects bulkAssign;
         break;
       case "green-component":
         //setting reg and blue comps to 0
@@ -198,7 +194,5 @@ public class CollageProjectModelImpl implements CollageProjectModel {
 //      }
 //    }
 //    UpdateCollageDirectory(layerName, layer);
-
-
   }
 }
