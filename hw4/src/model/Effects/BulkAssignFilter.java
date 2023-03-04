@@ -8,7 +8,6 @@ import model.Layer;
 public class BulkAssignFilter {
 
   Layer layer;
-
   int startRow;
 
   int startCol;

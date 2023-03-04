@@ -3,7 +3,8 @@ package model.Effects;
 import model.Layer;
 
 /**
- * A Marcro for the adding effects to the Layer of the CollageProjectModelImpl.
+ * A Macro for the adding effects to the Layer of the CollageProjectModelImpl.
+ * Represents the command interface.
  */
 public interface MacroCollageEffects {
   /**

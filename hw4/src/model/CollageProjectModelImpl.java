@@ -6,27 +6,21 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class CollageProjectModelImpl implements CollageProjectModel {
 
-  //Hashmap that internally matches a layer to its pixels.
-  //the directory of layers stored in the Collage program.
-  //the directory of layers maps a name String to a list of pixels.
-  private final Map<String, ArrayList<ArrayList<Pixel>>> collageDirectory;
+  private ArrayList<Layer> project;
+
   private final int canvasHeight;
   private final int canvasWidth;
 
   private Image image;
-  private final Layer layer;
 
 
   public CollageProjectModelImpl(int canvasHeight, int canvasWidth) {
     this.canvasHeight = canvasHeight;
     this.canvasWidth = canvasWidth;
-    this.collageDirectory = new HashMap<>();
-    this.layer = new Layer(this.canvasHeight, this.canvasWidth, " ");
   }
 
   @Override
@@ -53,23 +47,24 @@ public class CollageProjectModelImpl implements CollageProjectModel {
   //should throw an exception if there is any attempt at
   // creating another layer with the same name
   @Override
-  public void addLayerToProject(String layerName, ArrayList<ArrayList<Pixel>> defaultLayer) {
-    this.collageDirectory.put(layerName, defaultLayer);
+  public void addLayerToProject() {
+    Layer layer1 = new Layer("layer1");
+    project.add(layer1);
   }
 
 
   //places an image on the layer such that the top left corner
   // of the image is at (x-pos, y-pos)
   @Override
-  public void addImageToLayer(String layerName, ArrayList<Pixel> imageToAdd, int xPos, int yPos) {
-    //this.collageDirectory.get(layer).add((xPos * yPos), imageToAdd);
-    this.collageDirectory.get(xPos).set(yPos,imageToAdd);
-
+  public void addImageToLayer(ArrayList<Pixel> imageToAdd, int xPos, int yPos) {
+    //take the pixels from the image I want to add,
+    Layer layer1 = new Layer("layer1");
+    //imageToAdd.add()
   }
 
 
   @Override
-  public void saveProject(String fileName, String filePath, Color[][] loadedImages) throws IllegalArgumentException {
+  public void saveProject(String fileName, String filePath, Pixel[][] loadedImages) throws IllegalArgumentException {
     String[] cd = filePath.split("\\.");
     String fileFormat = cd[1];
 
@@ -84,7 +79,7 @@ public class CollageProjectModelImpl implements CollageProjectModel {
   }
 
   @Override
-  public void savePPMProject(String filePath, Color[][] loadedImages) throws IOException {
+  public void savePPMProject(String filePath, Pixel[][] loadedImages) throws IOException, FileNotFoundException {
     if (loadedImages == null || loadedImages.length == 0) {
       throw new IllegalArgumentException("File cannot be empty");
     }
@@ -100,16 +95,13 @@ public class CollageProjectModelImpl implements CollageProjectModel {
     //depends on what ever the colors in the project are
     fileWriter.write("256\n"); //because the max value of each pixel can be 256
 
-
-
     //get each value the number of height times width times.
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
-        Color c = loadedImages[i][j];
-        fileWriter.write(c.getRed() + " ");
-        fileWriter.write(c.getGreen() + " ");
-        fileWriter.write(c.getBlue() + " ");
-        fileWriter.write(c.getAlpha() + "\n");
+        Pixel c = loadedImages[i][j];
+        fileWriter.write(c.getRedComponent() + "\n");
+        fileWriter.write(c.getGreenComponent() + "\n");
+        fileWriter.write(c.getBlueComponent() + "\n");
       }
     }
     fileWriter.close();
@@ -117,7 +109,7 @@ public class CollageProjectModelImpl implements CollageProjectModel {
 
 
   @Override
-  public void saveImage(String filePath, Color[][] imagePixels) throws IllegalArgumentException {
+  public void saveImage(String filePath, Pixel[][] imagePixels) throws IllegalArgumentException {
 
     try {
       if (filePath.endsWith(".ppm")) {
@@ -138,7 +130,7 @@ public class CollageProjectModelImpl implements CollageProjectModel {
 
     ArrayList<ArrayList<Layer>> projectContents;
 
-   // projectContents = ImageUtil.readPPM(fileName);
+    // projectContents = ImageUtil.readPPM(fileName);
 
     return new CollageProjectModelImpl(this.canvasHeight, this.canvasWidth);
   }
@@ -146,7 +138,7 @@ public class CollageProjectModelImpl implements CollageProjectModel {
 
   //key value pairs
   private void UpdateCollageDirectory(String layerName, ArrayList<ArrayList<Pixel>> layer) {
-    this.collageDirectory.put(layerName, layer);
+    //this.collageDirectory.put(layerName, layer);
   }
 
 
@@ -157,25 +149,56 @@ public class CollageProjectModelImpl implements CollageProjectModel {
   @Override
   public void setFilter(String layerName, String filterOption, double[] filterValue) {
 
-    //get the layer that we want to add a filter to
-    ArrayList<ArrayList<Pixel>> layer = collageDirectory.get(layerName);
-
-    for (int row = 0; row < layer.size(); row++) {
-      for (int col = 0; col < layer.get(0).size(); col++) {
-
-        //getting the rgb values on the current layer
-        Pixel currentLayer = layer.get(row).get(col);
-
-        int red = currentLayer.getRedComponent();
-        int green = currentLayer.getGreenComponent();
-        int blue = currentLayer.getBlueComponent();
-
-
-        int newRedColor = (int) Math.round((filterValue[0] * red) + (filterValue[1] * green) + (filterValue[2] * blue));
-        int newGreenColor = (int) Math.round((filterValue[3] * red) + (filterValue[4] * green) + (filterValue[5] * blue));
-        int newBlueColor = (int) Math.round((filterValue[6] * red) + (filterValue[7] * green) + (filterValue[8] * blue));
-      }
+    switch (filterOption) {
+      case "red-component":
+        //get the pixels in that layer and set blue and green comps to 0
+        break;
+      case "green-component":
+        //setting reg and blue comps to 0
+        break;
+      case "blue-component":
+        //setting red and green comps to 0
+        break;
+      case "brighten-value":
+        break;
+      case "brighten-luma":
+        break;
+      case "brighten-intensity":
+        break;
+      case "darken-intensity":
+        break;
+      case "darken-luma":
+        break;
+      case "darken-value":
+        break;
+      default:
+        //normal-does nothing to the image
     }
-    UpdateCollageDirectory(layerName, layer);
+
+
+    //get the layer that we want to add a filter to
+    //ArrayList<ArrayList<Pixel>> layer = collageDirectory.get(layerName);
+    Layer layer = new Layer("layer1");
+
+//    for (int row = 0; row < layer.size(); row++) {
+//      for (int col = 0; col < layer.get(0).size(); col++) {
+//
+//        //getting the rgb values on the current layer
+//        Pixel currentLayer = layer.get(row).get(col);
+//
+//        int red = currentLayer.getRedComponent();
+//        int green = currentLayer.getGreenComponent();
+//        int blue = currentLayer.getBlueComponent();
+//
+//
+//        int newRedColor = (int) Math.round((filterValue[0] * red) + (filterValue[1] * green) + (filterValue[2] * blue));
+//        int newGreenColor = (int) Math.round((filterValue[3] * red) + (filterValue[4] * green) + (filterValue[5] * blue));
+//        int newBlueColor = (int) Math.round((filterValue[6] * red) + (filterValue[7] * green) + (filterValue[8] * blue));
+//
+//      }
+//    }
+//    UpdateCollageDirectory(layerName, layer);
+
+
   }
 }
