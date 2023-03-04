@@ -74,9 +74,6 @@ public class CollageProjectModelImpl implements CollageProject {
 
   /**
    * Allows the user to save a project as a PPM file.
-   * <p>
-   * //  * @param fileName     the name of the file they want to give to their project.
-   *
    * @param filePath     the location where the file will be stored.
    * @param loadedImages the images in the project at the time they saved it.
    * @throws IllegalArgumentException if the file has no contents/images.
