@@ -69,7 +69,6 @@ public class CollageProjectModelImpl implements CollageProject {
         throw new IllegalArgumentException("Was not able to save");
       }
     }
-
   }
 
   /**
@@ -109,7 +108,6 @@ public class CollageProjectModelImpl implements CollageProject {
 
   @Override
   public void saveImage(String filePath, Pixel[][] imagePixels) throws IllegalArgumentException {
-
     try {
       if (filePath.endsWith(".ppm")) {
         savePPMProject(filePath, imagePixels);
@@ -123,13 +121,15 @@ public class CollageProjectModelImpl implements CollageProject {
 
   //load-project path-to-project-file: loads a project into the program
 
-  private CollageProjectModelImpl loadProject(String filePath, String fileName) throws IOException {
+  private CollageProjectModelImpl loadProject(String filePath) throws IOException {
 
     FileReader loader = new FileReader(filePath);
+    ArrayList<Layer> projectContents;
 
-    ArrayList<ArrayList<Layer>> projectContents;
+    // projectContents = model.ImageUtil.readPPM(fileName);
+    if(filePath.endsWith(".ppm")){
 
-    // projectContents = ImageUtil.readPPM(fileName);
+    }
 
     return new CollageProjectModelImpl(this.canvasHeight, this.canvasWidth);
   }
