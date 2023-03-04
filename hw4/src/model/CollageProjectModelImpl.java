@@ -19,7 +19,6 @@ public class CollageProjectModelImpl implements CollageProjectModel {
   private final int canvasWidth;
 
   private Image image;
-
   private final Layer layer;
 
 
@@ -85,7 +84,7 @@ public class CollageProjectModelImpl implements CollageProjectModel {
   }
 
   @Override
-  public void savePPMProject(String filePath, Color[][] loadedImages) throws IOException, FileNotFoundException {
+  public void savePPMProject(String filePath, Color[][] loadedImages) throws IOException {
     if (loadedImages == null || loadedImages.length == 0) {
       throw new IllegalArgumentException("File cannot be empty");
     }
@@ -101,13 +100,16 @@ public class CollageProjectModelImpl implements CollageProjectModel {
     //depends on what ever the colors in the project are
     fileWriter.write("256\n"); //because the max value of each pixel can be 256
 
+
+
     //get each value the number of height times width times.
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         Color c = loadedImages[i][j];
-        fileWriter.write(c.getRed() + "\n");
-        fileWriter.write(c.getGreen() + "\n");
-        fileWriter.write(c.getBlue() + "\n");
+        fileWriter.write(c.getRed() + " ");
+        fileWriter.write(c.getGreen() + " ");
+        fileWriter.write(c.getBlue() + " ");
+        fileWriter.write(c.getAlpha() + "\n");
       }
     }
     fileWriter.close();
