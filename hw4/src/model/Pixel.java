@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 /**
  * Represents a pixel of an image.
  */
@@ -214,5 +216,10 @@ public class Pixel {
         throw new IllegalArgumentException("choose one of the three components to check");
     }
   }
+
+
+
+
+
 
 }

@@ -3,6 +3,7 @@ package model;
 import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -23,8 +24,8 @@ public class ImageUtil {
       throw new IllegalArgumentException("No directory to the file has been provided. Unable to load");
     }
 
+    ArrayList<ArrayList<Pixel>>  project;
     Scanner sc = null;
-
 
     try {
       sc = new Scanner(new FileInputStream(filename));
@@ -43,9 +44,7 @@ public class ImageUtil {
 
     //now set up the scanner to read from the string we just built
     sc = new Scanner(builder.toString());
-
     String token;
-
     token = sc.next();
     if (!token.equals("P3")) {
       System.out.println("Invalid PPM file: plain RAW file should begin with P3");
@@ -55,9 +54,10 @@ public class ImageUtil {
     int height = sc.nextInt();
     System.out.println("Height of image: " + height);
     int maxValue = sc.nextInt();
-    //System.out.println("Maximum value of a color in this file (usually 255): " + maxValue);
+    System.out.println("Maximum value of a color in this file (usually 255): " + maxValue);
 
-    Image[][] collageContents = new Image[height][width];
+    Image[][]  collageContents = new Image[height][width];
+
 
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
@@ -69,8 +69,6 @@ public class ImageUtil {
     }
     return collageContents;
   }
-
-
 
 
 }

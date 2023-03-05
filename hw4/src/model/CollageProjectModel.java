@@ -8,11 +8,11 @@ public interface CollageProjectModel {
   /**
    * Creates a new Project with a name and a set of dimensions.
    * DEFAULT: every project has a white background layer by default.
-   * @param projectName the name of the new project that user is creating.
+   //* @param projectName the name of the new project that user is creating.
    * @param canvasHeight the height of the project desired by the user.
    * @param canvasWidth the width of the project desired by the user.
    */
-  void newProject(String projectName, int canvasHeight,int canvasWidth);
+  void newProject(int canvasHeight,int canvasWidth);
 
 
   /**

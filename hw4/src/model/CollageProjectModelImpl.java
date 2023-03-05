@@ -6,28 +6,36 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
 import model.Effects.MacroCollageEffects;
 
 
 public class CollageProjectModelImpl implements CollageProject {
 
-  private ArrayList<Layer> project;
+  private final ArrayList<Layer> project;
+
+  //maps a list of layer names as Strings to their layers
+  private final LinkedHashMap<ArrayList<String>, ArrayList<Layer>> collageDirectory;
 
   private final int canvasHeight;
   private final int canvasWidth;
 
   private Image image;
-
+  
 
   public CollageProjectModelImpl(int canvasHeight, int canvasWidth) {
     this.canvasHeight = canvasHeight;
     this.canvasWidth = canvasWidth;
+    this.project = new ArrayList<>();
+    this.collageDirectory = new LinkedHashMap<>();
   }
 
   //new-project canvas-height canvas-width:
   @Override
-  public void newProject(String projectName, int canvasHeight, int canvasWidth) {
+  public void newProject(int canvasHeight, int canvasWidth) {
     CollageProjectModelImpl projectModel = new CollageProjectModelImpl(canvasHeight, canvasWidth);
+
   }
 
 
@@ -47,9 +55,11 @@ public class CollageProjectModelImpl implements CollageProject {
   // of the image is at (x-pos, y-pos)
   @Override
   public void addImageToLayer(String layerName, ArrayList<Pixel> imageToAdd, int xPos, int yPos) {
+
     for (Layer layer : this.project) {
       if (layer.getName().equals(layerName)) {
         //imageToAdd.add()
+
       }
     }
     //take the pixels from the image I want to add,
@@ -73,6 +83,7 @@ public class CollageProjectModelImpl implements CollageProject {
 
   /**
    * Allows the user to save a project as a PPM file.
+   *
    * @param filePath     the location where the file will be stored.
    * @param loadedImages the images in the project at the time they saved it.
    * @throws IllegalArgumentException if the file has no contents/images.
@@ -99,7 +110,7 @@ public class CollageProjectModelImpl implements CollageProject {
       for (int j = 0; j < width; j++) {
         Pixel c = loadedImages[i][j];
         fileWriter.write(c.getRedComponent() + " " + c.getGreenComponent() + " " +
-            c.getBlueComponent() + " " + c.getAlphaComponent() + "\n");
+                c.getBlueComponent() + " " + c.getAlphaComponent() + "\n");
       }
     }
     fileWriter.close();
@@ -126,12 +137,10 @@ public class CollageProjectModelImpl implements CollageProject {
     FileReader loader = new FileReader(filePath);
     ArrayList<Layer> projectContents;
 
-    // projectContents = model.ImageUtil.readPPM(fileName);
-    if(filePath.endsWith(".ppm")){
-
+    if (filePath.endsWith(".ppm")) {
+      //projectContents =  ImageUtil.readPPM(filePath);
     }
-
-    return new CollageProjectModelImpl(this.canvasHeight, this.canvasWidth);
+    return new CollageProjectModelImpl(canvasHeight, canvasWidth);
   }
 
   //set-filter layer-name filter-option:
