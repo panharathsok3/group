@@ -6,61 +6,61 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
+import java.util.Map;
+import model.Effects.BulkAssignFilter;
 import model.Effects.MacroCollageEffects;
 
-
+/**
+ * Creates a collage to work on.
+ */
 public class CollageProjectModelImpl implements CollageProject {
 
-  private final ArrayList<Layer> project;
-
-  //maps a list of layer names as Strings to their layers
-  private final LinkedHashMap<String, ArrayList<Layer>> collageDirectory;
-
+  private final List<Layer> project;
   private final int canvasHeight;
   private final int canvasWidth;
+  private boolean backgroundMade;
 
-
+  /**
+   * Creates a CollageProjectModelImpl to work on
+   * @param canvasHeight the height of the canvas
+   * @param canvasWidth the width of the canvas
+   */
   public CollageProjectModelImpl(int canvasHeight, int canvasWidth) {
     this.canvasHeight = canvasHeight;
     this.canvasWidth = canvasWidth;
-    this.project = new ArrayList<>();
-    this.collageDirectory = new LinkedHashMap<>();
+    this.project = new LinkedList<>();
+    this.backgroundMade = false;
   }
-
-
 
 
   //new-project canvas-height canvas-width:
   @Override
   public void newProject(int canvasHeight, int canvasWidth) {
     CollageProjectModelImpl projectModel = new CollageProjectModelImpl(canvasHeight, canvasWidth);
-
+    this.addLayerToProject("Background");
+    this.backgroundMade = true;
   }
 
-
-  /**
-   * Checks if there is already a layer with the same name as the user is trying to give.
-   *
-   * @param layerName the name of the new layer that the user wants to add.
-   */
-  private void checkLayerName(String layerName) {
-    if (collageDirectory.containsKey(layerName)) {
-      throw new IllegalArgumentException("There is already a layer" +
-              "with the name you are trying to use");
-    }
-  }
-
-  //add-layer layer-name: adds a new layer with the given name
-
-  // to the top of the whole project.
-  //should throw an exception if there is any attempt at
-  // creating another layer with the same name
   @Override
-  public void addLayerToProject(String layerName) {
-    Layer layer = new Layer(layerName,this.canvasHeight,this.canvasWidth);
-    checkLayerName(layerName);
+  public void addLayerToProject(String layerName) throws IllegalStateException {
+    Layer layer;
+    if (!this.backgroundMade) {
+      layer = new Layer(layerName, this.canvasHeight, this.canvasWidth, 0);
+    }
+    else {
+      layer = new Layer(layerName, this.canvasHeight, this.canvasWidth, 255);
+    }
+
+    for (Layer currentLayer : project) {
+      if (currentLayer.getName().equals(layer.getName())) {
+        throw new IllegalStateException("There is already a layer with "
+            + "the name you are trying to use");
+      }
+    }
+
     this.project.add(layer);
   }
 
@@ -124,51 +124,54 @@ public class CollageProjectModelImpl implements CollageProject {
 
 
   @Override
-  public void saveProject(String fileName, String filePath, Pixel[][] loadedImages) throws IllegalArgumentException {
+  public void saveProject(String filePath) throws IllegalArgumentException {
     String[] cd = filePath.split("\\.");
     String fileFormat = cd[1];
 
-    if (fileFormat.equals("ppm")) {
-      try {
-        savePPMProject(fileName, loadedImages);
-      } catch (IOException e) {
-        throw new IllegalArgumentException("Was not able to save");
-      }
-    }
+//    if (fileFormat.equals("ppm")) {
+//      try {
+//        savePPMProject(fileName, loadedImages);
+//      } catch (IOException e) {
+//        throw new IllegalArgumentException("Was not able to save");
+//      }
+//    }
   }
 
   /**
    * Allows the user to save a project as a PPM file.
    *
-   * @param filePath     the location where the file will be stored.
-   * @param loadedImages the images in the project at the time they saved it.
+   * @param filePath the location where the file will be stored.
    * @throws IllegalArgumentException if the file has no contents/images.
    * @throws FileNotFoundException    if the file
    */
-  private void savePPMProject(String filePath, Pixel[][] loadedImages) throws IOException {
-    if (loadedImages == null || loadedImages.length == 0) {
-      throw new IllegalArgumentException("File cannot be empty");
-    }
+  private void savePPMProject(String filePath) throws IOException {
+
     //write the new file to this path
     FileWriter fileWriter = new FileWriter(filePath);
 
-    //following the format on the specification
-    int height = loadedImages.length;
-    int width = loadedImages[0].length;
-
     fileWriter.write("C1\n");
-    fileWriter.write(String.format("%d %d\n", width, height));
+    fileWriter.write(this.canvasWidth + " " + this.canvasHeight + "\n");
     //depends on what ever the colors in the project are
     fileWriter.write("256\n"); //because the max value of each pixel can be 256
 
-    //get each value the number of height times width times.
-    for (int i = 0; i < height; i++) {
-      for (int j = 0; j < width; j++) {
-        Pixel c = loadedImages[i][j];
-        fileWriter.write(c.getRedComponent() + " " + c.getGreenComponent() + " " +
-                c.getBlueComponent() + " " + c.getAlphaComponent() + "\n");
+    for (int i = 0; i < this.project.size(); i++) {
+      Layer layer = this.project.get(i);
+      fileWriter.write(layer.getName() + "\n");
+
+      ArrayList<ArrayList<Pixel>> pixels = layer.getPixelsOnLayer();
+
+      for (int j = 0; j < this.canvasHeight; j++) {
+        for (int k = 0; k < this.canvasWidth; k++) {
+          int redComponent = pixels.get(i).get(j).getRedComponent();
+          int greenComponent = pixels.get(i).get(j).getGreenComponent();
+          int blueComponent = pixels.get(i).get(j).getBlueComponent();
+          int alphaComponent = pixels.get(i).get(j).getAlphaComponent();
+          fileWriter.write(redComponent + " " + greenComponent + " " + blueComponent + " "
+          + " " + alphaComponent + "\n");
+        }
       }
     }
+
     fileWriter.close();
   }
 
@@ -187,8 +190,8 @@ public class CollageProjectModelImpl implements CollageProject {
   }
 
   //load-project path-to-project-file: loads a project into the program
-
-  private CollageProjectModelImpl loadProject(String filePath) throws IOException {
+  @Override
+  public CollageProjectModelImpl loadProject(String filePath) throws IOException {
 
     FileReader loader = new FileReader(filePath);
     ArrayList<Layer> projectContents;
@@ -204,18 +207,30 @@ public class CollageProjectModelImpl implements CollageProject {
 
 
   @Override
-  public void setFilter(String layerName, String filterOption, double[] filterValue) {
+  public void setFilter(String layerName, String filterOption) {
+    MacroCollageEffects bulkAssign;
+    Layer currentLayer = null;
+
+    for (Layer layer : project) {
+      if (layerName.equals(layer.getName())) {
+        currentLayer = layer;
+      }
+    }
 
     switch (filterOption) {
+      case "normal":
+        break;
       case "red-component":
-        //get the pixels in that layer and set blue and green comps to 0
-        MacroCollageEffects bulkAssign;
+        bulkAssign = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filterOption);
+        bulkAssign.executeMacro(currentLayer);
         break;
       case "green-component":
-        //setting reg and blue comps to 0
+        bulkAssign = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filterOption);
+        bulkAssign.executeMacro(currentLayer);
         break;
       case "blue-component":
-        //setting red and green comps to 0
+        bulkAssign = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filterOption);
+        bulkAssign.executeMacro(currentLayer);
         break;
       case "brighten-value":
         break;
@@ -232,29 +247,5 @@ public class CollageProjectModelImpl implements CollageProject {
       default:
         //normal-does nothing to the image
     }
-
-
-    //get the layer that we want to add a filter to
-    //ArrayList<ArrayList<Pixel>> layer = collageDirectory.get(layerName);
-    //Layer layer = new Layer("layer1");
-
-//    for (int row = 0; row < layer.size(); row++) {
-//      for (int col = 0; col < layer.get(0).size(); col++) {
-//
-//        //getting the rgb values on the current layer
-//        Pixel currentLayer = layer.get(row).get(col);
-//
-//        int red = currentLayer.getRedComponent();
-//        int green = currentLayer.getGreenComponent();
-//        int blue = currentLayer.getBlueComponent();
-//
-//
-//        int newRedColor = (int) Math.round((filterValue[0] * red) + (filterValue[1] * green) + (filterValue[2] * blue));
-//        int newGreenColor = (int) Math.round((filterValue[3] * red) + (filterValue[4] * green) + (filterValue[5] * blue));
-//        int newBlueColor = (int) Math.round((filterValue[6] * red) + (filterValue[7] * green) + (filterValue[8] * blue));
-//
-//      }
-//    }
-//    UpdateCollageDirectory(layerName, layer);
   }
 }

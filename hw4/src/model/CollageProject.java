@@ -11,10 +11,10 @@ public interface CollageProject extends CollageProjectModel {
    * Adds a layer with a given name to the top of the whole project.
    * DEFAULT: a fully transparent white image and the normal filter.
    * @param layerName the name of the layer
-   * @throws IllegalArgumentException if there already exists a layer with the name
+   * @throws IllegalStateException if there already exists a layer with the name
    * that the user is trying to give. Program should continue running.
    */
-  void addLayerToProject(String layerName) throws IllegalArgumentException;
+  void addLayerToProject(String layerName) throws IllegalStateException;
 
   /**
    * Places an image on a layer at given dimensions.

@@ -122,23 +122,36 @@ public class Pixel {
    * @param add   true if and only if the value is being added to and false otherwise which makes it
    *              subtract instead
    * @throws IllegalArgumentException if the given component is null
+   *                                  or if the brightnessOptions is not brighten-luma,
+   *                                  brighten-value, or brighten-intensity
    */
   public void modifyComponentByBrightness(String brightnessOptions, boolean add)
           throws IllegalArgumentException {
     if (brightnessOptions == null) {
       throw new IllegalArgumentException("the component cannot be null.");
     }
+    int brightness;
 
-    switch (brightnessOptions) {
-      case "luma":
-
+    if (brightnessOptions.equals("brighten-luma") || brightnessOptions.equals("darken-luma")) {
+      brightness = this.luma();
+    }
+    else if (brightnessOptions.equals("brighten-value")
+        || brightnessOptions.equals("darken-value")) {
+      brightness = this.value();
+    }
+    else if (brightnessOptions.equals("brighten-intensity")
+        || brightnessOptions.equals("darken-intensity")) {
+      brightness = this.intensity();
+    }
+    else {
+      throw new IllegalArgumentException("The brightnessOptions must be brighten-luma, "
+          + "brighten-value, or brighten-intensity");
     }
 
-
     if (add) {
-      this.add(brightnessOptions);
+      this.add(brightness);
     } else {
-      this.subtract(brightnessOptions);
+      this.subtract(brightness);
     }
   }
 
@@ -170,10 +183,6 @@ public class Pixel {
         throw new IllegalArgumentException("the option must be red, green, or blue");
     }
   }
-
-
-
-
 
   /**
    * Adds the value to the given component.
