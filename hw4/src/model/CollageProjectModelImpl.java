@@ -30,13 +30,7 @@ public class CollageProjectModelImpl implements CollageProject {
   }
 
 
-  public int getCanvasHeight() {
-    return this.canvasHeight;
-  }
 
-  public int getCanvasWidth() {
-    return this.canvasWidth;
-  }
 
   //new-project canvas-height canvas-width:
   @Override
@@ -65,7 +59,7 @@ public class CollageProjectModelImpl implements CollageProject {
   // creating another layer with the same name
   @Override
   public void addLayerToProject(String layerName) {
-    Layer layer = new Layer(layerName, this.canvasHeight, this.canvasWidth);
+    Layer layer = new Layer(layerName,this.canvasHeight,this.canvasWidth);
     checkLayerName(layerName);
     this.project.add(layer);
   }
@@ -242,7 +236,7 @@ public class CollageProjectModelImpl implements CollageProject {
 
     //get the layer that we want to add a filter to
     //ArrayList<ArrayList<Pixel>> layer = collageDirectory.get(layerName);
-
+    //Layer layer = new Layer("layer1");
 
 //    for (int row = 0; row < layer.size(); row++) {
 //      for (int col = 0; col < layer.get(0).size(); col++) {

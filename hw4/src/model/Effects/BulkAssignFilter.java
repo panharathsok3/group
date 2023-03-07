@@ -5,36 +5,30 @@ import model.Layer;
 /**
  * A command that assigns a specified filter to a layer.
  */
-public class BulkAssignFilter {
+public class BulkAssignFilter implements MacroCollageEffects {
 
-  Layer layer;
-  int startRow;
-  int startCol;
+  private final int row;
+  private final int col;
+  private final String optionFilter;
 
-  int endRow;
-  int endCol;
-
-  public BulkAssignFilter(int startCol, int endCol) {
-
+  /**
+   * Creates a macroFilter.
+   * @param row the row of the layer to filter
+   * @param col the column of the layer to filter
+   * @param optionFilter the filter option
+   */
+  public BulkAssignFilter(int row, int col, String optionFilter) {
+    this.row = row;
+    this.col = col;
+    this.optionFilter = optionFilter;
   }
 
-  public void executesFilter() {
-    // should iterate through row and columns and set values
-    //i to length of rows
-    //j to length of columns
-
-    for(int i = this.startRow; i < this.endRow; i++) {
-      for(int j = this.startCol; i < this.endCol; i++) {
-        //get all the pixels on that layer and apply a filter onto it.
-
+  @Override
+  public void executeMacro(Layer layer) {
+    for (int i = 0; i < this.row; i++) {
+      for (int j = 0; j < this.col; j++) {
+        layer.getPixelsOnLayer().get(i).get(j).setFilter(this.optionFilter);
       }
     }
-
-
   }
-
-
-
-
-
 }

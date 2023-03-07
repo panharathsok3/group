@@ -29,6 +29,12 @@ public class Brighten extends Filter {
   }
 
 
+
+
+
+
+
+
   //add a positive number to the red , green and blue comps.
 //  public Layer setBrighten(String layerName) {
 //

@@ -35,7 +35,7 @@ public interface CollageProjectModel {
    *                 //* @param imageComponents the rgb values in that image after the filter(s) have been applied.
    * @throws IllegalArgumentException is the user is not able to save their new image.
    */
-  void saveImage(String filePath,Pixel[][] imagePixels) throws IllegalArgumentException;
+  void saveImage(String filePath, Pixel[][] imagePixels) throws IllegalArgumentException;
 
 
 
