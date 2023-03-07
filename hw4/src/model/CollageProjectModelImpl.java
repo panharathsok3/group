@@ -1,12 +1,12 @@
 package model;
 
-import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import model.Effects.MacroCollageEffects;
 
@@ -16,13 +16,11 @@ public class CollageProjectModelImpl implements CollageProject {
   private final ArrayList<Layer> project;
 
   //maps a list of layer names as Strings to their layers
-  private final LinkedHashMap<ArrayList<String>, ArrayList<Layer>> collageDirectory;
+  private final LinkedHashMap<String, ArrayList<Layer>> collageDirectory;
 
   private final int canvasHeight;
   private final int canvasWidth;
 
-  private Image image;
-  
 
   public CollageProjectModelImpl(int canvasHeight, int canvasWidth) {
     this.canvasHeight = canvasHeight;
@@ -30,6 +28,9 @@ public class CollageProjectModelImpl implements CollageProject {
     this.project = new ArrayList<>();
     this.collageDirectory = new LinkedHashMap<>();
   }
+
+
+
 
   //new-project canvas-height canvas-width:
   @Override
@@ -39,6 +40,18 @@ public class CollageProjectModelImpl implements CollageProject {
   }
 
 
+  /**
+   * Checks if there is already a layer with the same name as the user is trying to give.
+   *
+   * @param layerName the name of the new layer that the user wants to add.
+   */
+  private void checkLayerName(String layerName) {
+    if (collageDirectory.containsKey(layerName)) {
+      throw new IllegalArgumentException("There is already a layer" +
+              "with the name you are trying to use");
+    }
+  }
+
   //add-layer layer-name: adds a new layer with the given name
 
   // to the top of the whole project.
@@ -46,24 +59,67 @@ public class CollageProjectModelImpl implements CollageProject {
   // creating another layer with the same name
   @Override
   public void addLayerToProject(String layerName) {
-    Layer layer = new Layer(layerName);
-    project.add(layer);
+    Layer layer = new Layer(layerName,this.canvasHeight,this.canvasWidth);
+    checkLayerName(layerName);
+    this.project.add(layer);
   }
 
+
+    /*
+  add-image-to-layer layer-name image-name x-pos y-pos:
+  places an image on the layer such that the top left corner of the image is at (x-pos, y-pos)
+   */
+
+
+  private boolean isPositionOccupied(String layerName, int row, int col) {
+    if (row < this.canvasHeight || row > this.canvasHeight || col < this.canvasWidth || col > this.canvasWidth) {
+      throw new IllegalArgumentException("The Row and column that you specified " +
+              "are out of the bounds of this layer. Please Try again");
+    }
+
+    Pixel pixels = new Pixel(0, 0, 0);
+    List<Integer> possibleCoordinates = new ArrayList<>();
+    List<List<Integer>> occupiedPixels = new ArrayList<>();
+
+    //get every position on a layer
+    // check if they have an image(pixels)
+    // return false if they do else return true
+
+    for (int i = 0; i < this.canvasHeight; i++) {
+      for (int j = 0; j < this.canvasWidth; j++) {
+        possibleCoordinates.add(i, j);
+      }
+    }
+
+    //These are pixels that are on the grid currently
+    List<Integer> listOfPixels = new ArrayList<>() {{
+      int r = possibleCoordinates.get(pixels.getRedComponent());
+      int g = possibleCoordinates.get(pixels.getGreenComponent());
+      int b = possibleCoordinates.get(pixels.getGreenComponent());
+    }};
+
+    occupiedPixels.add(listOfPixels);
+
+    if ((occupiedPixels.contains(row) && (occupiedPixels.contains(col)))) {
+      return true;
+    }
+    return false;
+  }
 
   //places an image on the layer such that the top left corner
   // of the image is at (x-pos, y-pos)
   @Override
   public void addImageToLayer(String layerName, ArrayList<Pixel> imageToAdd, int xPos, int yPos) {
+//before we add an image to a layer, we want to check if x and y are occupied or not,
+    if (!isPositionOccupied(layerName, xPos, yPos)) {
+      for (Layer layer : this.project) {
+        if (layer.getName().equals(layerName)) {
+          //imageToAdd.add()
 
-    for (Layer layer : this.project) {
-      if (layer.getName().equals(layerName)) {
-        //imageToAdd.add()
-
+        }
       }
     }
     //take the pixels from the image I want to add,
-
   }
 
 
@@ -180,7 +236,7 @@ public class CollageProjectModelImpl implements CollageProject {
 
     //get the layer that we want to add a filter to
     //ArrayList<ArrayList<Pixel>> layer = collageDirectory.get(layerName);
-    Layer layer = new Layer("layer1");
+    //Layer layer = new Layer("layer1");
 
 //    for (int row = 0; row < layer.size(); row++) {
 //      for (int col = 0; col < layer.get(0).size(); col++) {

@@ -3,7 +3,6 @@ package model;
 import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -24,9 +23,7 @@ public class ImageUtil {
       throw new IllegalArgumentException("No directory to the file has been provided. Unable to load");
     }
 
-    ArrayList<ArrayList<Pixel>>  project;
     Scanner sc = null;
-
     try {
       sc = new Scanner(new FileInputStream(filename));
     } catch (FileNotFoundException e) {
@@ -56,7 +53,7 @@ public class ImageUtil {
     int maxValue = sc.nextInt();
     System.out.println("Maximum value of a color in this file (usually 255): " + maxValue);
 
-    Image[][]  collageContents = new Image[height][width];
+    Image[][] collageContents = new Image[height][width];
 
 
     for (int i = 0; i < height; i++) {
@@ -69,7 +66,6 @@ public class ImageUtil {
     }
     return collageContents;
   }
-
 
 }
 

@@ -12,9 +12,15 @@ public class Layer {
   private ArrayList<ArrayList<Pixel>> layers;
 
 
-  public Layer(String layerName) {
+  public ArrayList<Pixel> layer;
+
+
+
+  public Layer(String layerName, int height, int width) {
     this.layerName = layerName;
   }
+
+
 
   public String getName() {
     return this.layerName;

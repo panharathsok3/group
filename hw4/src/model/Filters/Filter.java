@@ -4,7 +4,10 @@ public class Filter {
 
   private final String filterType; //the type of filter.
 
-  public Filter(String filterType) {
+
+  private final String layerName; //the layer to apply this filter on.
+  public Filter(String layerName,String filterType) {
+    this.layerName = layerName;
     this.filterType = filterType;
   }
 

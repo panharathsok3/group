@@ -9,11 +9,14 @@ public class BulkAssignFilter {
 
   Layer layer;
   int startRow;
-
   int startCol;
 
   int endRow;
   int endCol;
+
+  public BulkAssignFilter(int startCol, int endCol) {
+
+  }
 
   public void executesFilter() {
     // should iterate through row and columns and set values
