@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import model.Effects.BulkAssignFilter;
 import model.Effects.MacroCollageEffects;
 
 
@@ -59,7 +60,7 @@ public class CollageProjectModelImpl implements CollageProject {
   // creating another layer with the same name
   @Override
   public void addLayerToProject(String layerName) {
-    Layer layer = new Layer(layerName,this.canvasHeight,this.canvasWidth);
+    Layer layer = new Layer(layerName, this.canvasHeight, this.canvasWidth);
     checkLayerName(layerName);
     this.project.add(layer);
   }
@@ -204,18 +205,36 @@ public class CollageProjectModelImpl implements CollageProject {
 
 
   @Override
-  public void setFilter(String layerName, String filterOption, double[] filterValue) {
+  public void setFilter(String layerName, String filterOption) {
+    MacroCollageEffects bulkAssign;
+    Layer currentLayer;
+
+    for (Layer layer : project) {
+      if (layer.getName().equals(layerName)) {
+        currentLayer = layer;
+      }
+      else {
+        throw new IllegalArgumentException("Layer doesn't exist");
+      }
+    }
 
     switch (filterOption) {
+      case "normal":
+        break;
       case "red-component":
         //get the pixels in that layer and set blue and green comps to 0
-        MacroCollageEffects bulkAssign;
+        bulkAssign = new BulkAssignFilter(this.canvasWidth, this.canvasHeight, filterOption);
+        bulkAssign.executeMacro(currentLayer);
         break;
       case "green-component":
         //setting reg and blue comps to 0
+        bulkAssign = new BulkAssignFilter(this.canvasWidth, this.canvasHeight, filterOption);
+        bulkAssign.executeMacro(currentLayer);
         break;
       case "blue-component":
         //setting red and green comps to 0
+        bulkAssign = new BulkAssignFilter(this.canvasWidth, this.canvasHeight, filterOption);
+        bulkAssign.executeMacro(currentLayer);
         break;
       case "brighten-value":
         break;
@@ -233,28 +252,5 @@ public class CollageProjectModelImpl implements CollageProject {
         //normal-does nothing to the image
     }
 
-
-    //get the layer that we want to add a filter to
-    //ArrayList<ArrayList<Pixel>> layer = collageDirectory.get(layerName);
-    //Layer layer = new Layer("layer1");
-
-//    for (int row = 0; row < layer.size(); row++) {
-//      for (int col = 0; col < layer.get(0).size(); col++) {
-//
-//        //getting the rgb values on the current layer
-//        Pixel currentLayer = layer.get(row).get(col);
-//
-//        int red = currentLayer.getRedComponent();
-//        int green = currentLayer.getGreenComponent();
-//        int blue = currentLayer.getBlueComponent();
-//
-//
-//        int newRedColor = (int) Math.round((filterValue[0] * red) + (filterValue[1] * green) + (filterValue[2] * blue));
-//        int newGreenColor = (int) Math.round((filterValue[3] * red) + (filterValue[4] * green) + (filterValue[5] * blue));
-//        int newBlueColor = (int) Math.round((filterValue[6] * red) + (filterValue[7] * green) + (filterValue[8] * blue));
-//
-//      }
-//    }
-//    UpdateCollageDirectory(layerName, layer);
   }
 }

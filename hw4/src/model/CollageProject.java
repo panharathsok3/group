@@ -33,6 +33,6 @@ public interface CollageProject extends CollageProjectModel {
    * @param layerName the name of the layer we want to apply this filter on.
    * @param filterOption the option of filter that the client desires.
    */
-  void setFilter(String layerName, String filterOption, double[] filterValue);
+  void setFilter(String layerName, String filterOption);
 
 }
