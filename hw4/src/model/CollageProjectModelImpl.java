@@ -207,7 +207,7 @@ public class CollageProjectModelImpl implements CollageProject {
   @Override
   public void setFilter(String layerName, String filterOption) {
     MacroCollageEffects bulkAssign;
-    Layer currentLayer;
+    Layer currentLayer = null;
 
     for (Layer layer : project) {
       if (layer.getName().equals(layerName)) {
