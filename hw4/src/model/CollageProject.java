@@ -1,9 +1,7 @@
 package model;
 
-import java.util.ArrayList;
-
 /**
- *
+ * An interface to represent the canvas operations that can be done with our program.
  */
 public interface CollageProject extends CollageProjectModel {
 
@@ -14,16 +12,20 @@ public interface CollageProject extends CollageProjectModel {
    * @throws IllegalStateException if there already exists a layer with the name
    * that the user is trying to give. Program should continue running.
    */
-  void addLayerToProject(String layerName) throws IllegalStateException;
+  void addLayer(String layerName) throws IllegalStateException;
 
   /**
    * Places an image on a layer at given dimensions.
    * @param layerName the layer that is being added to
-   * @param imageToAdd the image the user wants to add to the layer.
-   * @param xPos the position of the x-coordinate.
-   * @param yPos the position of the y-coordinate.
+   * @param filePath the image the user wants to add to the layer
+   * @param xPos the position of the x-coordinate
+   * @param yPos the position of the y-coordinate
+   * @throws IllegalArgumentException if the layer doesn't exist or is null
+   *                                  or if the filePath doesn't exist
+   *                                  or if the x or y position is not on the canvas
    */
-  void addImageToLayer(String layerName, ArrayList<Pixel> imageToAdd, int xPos, int yPos);
+  void addImageToLayer(String layerName, String filePath, int xPos, int yPos)
+      throws IllegalArgumentException;
 
 
   /**
@@ -32,7 +34,9 @@ public interface CollageProject extends CollageProjectModel {
    * brighten-value,brighten-intensity,brighten-luma, etc.
    * @param layerName the name of the layer we want to apply this filter on.
    * @param filterOption the option of filter that the client desires.
+   * @throws IllegalArgumentException if the given layerName is null or doesn't exist
+   *                                  or if the filterOptions is null or doesn't exist
    */
-  void setFilter(String layerName, String filterOption);
+  void setFilter(String layerName, String filterOption) throws IllegalArgumentException;
 
 }

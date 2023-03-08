@@ -4,12 +4,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import java.util.Map;
+import model.Effects.BrightenDarkenMacro;
 import model.Effects.BulkAssignFilter;
 import model.Effects.MacroCollageEffects;
 
@@ -19,33 +21,36 @@ import model.Effects.MacroCollageEffects;
 public class CollageProjectModelImpl implements CollageProject {
 
   private final List<Layer> project;
-  private final int canvasHeight;
-  private final int canvasWidth;
+  private int canvasHeight;
+  private int canvasWidth;
   private boolean backgroundMade;
+  private boolean createdProject;
 
   /**
-   * Creates a CollageProjectModelImpl to work on
-   * @param canvasHeight the height of the canvas
-   * @param canvasWidth the width of the canvas
+   * Creates a CollageProjectModelImpl to work on.
    */
-  public CollageProjectModelImpl(int canvasHeight, int canvasWidth) {
-    this.canvasHeight = canvasHeight;
-    this.canvasWidth = canvasWidth;
+  public CollageProjectModelImpl() {
     this.project = new LinkedList<>();
     this.backgroundMade = false;
+    this.createdProject = false;
   }
 
-
-  //new-project canvas-height canvas-width:
   @Override
   public void newProject(int canvasHeight, int canvasWidth) {
-    CollageProjectModelImpl projectModel = new CollageProjectModelImpl(canvasHeight, canvasWidth);
-    this.addLayerToProject("Background");
+    CollageProjectModelImpl projectModel = new CollageProjectModelImpl();
+    this.addLayer("Background");
+    this.canvasHeight = canvasHeight;
+    this.canvasWidth = canvasWidth;
     this.backgroundMade = true;
+    this.createdProject = true;
   }
 
   @Override
-  public void addLayerToProject(String layerName) throws IllegalStateException {
+  public void addLayer(String layerName) throws IllegalStateException {
+    if (!createdProject) {
+      this.throwExceptionProjectNotMade();
+    }
+
     Layer layer;
     if (!this.backgroundMade) {
       layer = new Layer(layerName, this.canvasHeight, this.canvasWidth, 0);
@@ -64,87 +69,57 @@ public class CollageProjectModelImpl implements CollageProject {
     this.project.add(layer);
   }
 
-
-    /*
-  add-image-to-layer layer-name image-name x-pos y-pos:
-  places an image on the layer such that the top left corner of the image is at (x-pos, y-pos)
-   */
-
-
-  private boolean isPositionOccupied(String layerName, int row, int col) {
-    if (row < this.canvasHeight || row > this.canvasHeight || col < this.canvasWidth || col > this.canvasWidth) {
-      throw new IllegalArgumentException("The Row and column that you specified " +
-              "are out of the bounds of this layer. Please Try again");
-    }
-
-    Pixel pixels = new Pixel(0, 0, 0);
-    List<Integer> possibleCoordinates = new ArrayList<>();
-    List<List<Integer>> occupiedPixels = new ArrayList<>();
-
-    //get every position on a layer
-    // check if they have an image(pixels)
-    // return false if they do else return true
-
-    for (int i = 0; i < this.canvasHeight; i++) {
-      for (int j = 0; j < this.canvasWidth; j++) {
-        possibleCoordinates.add(i, j);
-      }
-    }
-
-    //These are pixels that are on the grid currently
-    List<Integer> listOfPixels = new ArrayList<>() {{
-      int r = possibleCoordinates.get(pixels.getRedComponent());
-      int g = possibleCoordinates.get(pixels.getGreenComponent());
-      int b = possibleCoordinates.get(pixels.getGreenComponent());
-    }};
-
-    occupiedPixels.add(listOfPixels);
-
-    if ((occupiedPixels.contains(row) && (occupiedPixels.contains(col)))) {
-      return true;
-    }
-    return false;
-  }
-
-  //places an image on the layer such that the top left corner
+  //places an image on the layer such that the top left corner TODO
   // of the image is at (x-pos, y-pos)
   @Override
-  public void addImageToLayer(String layerName, ArrayList<Pixel> imageToAdd, int xPos, int yPos) {
-//before we add an image to a layer, we want to check if x and y are occupied or not,
-    if (!isPositionOccupied(layerName, xPos, yPos)) {
-      for (Layer layer : this.project) {
-        if (layer.getName().equals(layerName)) {
-          //imageToAdd.add()
-
-        }
-      }
+  public void addImageToLayer(String layerName, String filePath, int xPos, int yPos) {
+    if (!createdProject) {
+      this.throwExceptionProjectNotMade();
     }
+
+
+
+    //before we add an image to a layer, we want to check if x and y are occupied or not,
+//    if (!isPositionOccupied(layerName, xPos, yPos)) {
+//      for (Layer layer : this.project) {
+//        if (layer.getName().equals(layerName)) {
+//          //imageToAdd.add()
+//
+//        }
+//      }
+//    }
     //take the pixels from the image I want to add,
   }
 
 
   @Override
-  public void saveProject(String filePath) throws IllegalArgumentException {
-    String[] cd = filePath.split("\\.");
-    String fileFormat = cd[1];
+  public void saveProject(String filePath, String projectType) throws IllegalArgumentException, IllegalStateException {
+    if (filePath == null) {
+      throw new IllegalArgumentException("Cannot give null as an argument");
+    }
+    if (!createdProject) {
+      this.throwExceptionProjectNotMade();
+    }
 
-//    if (fileFormat.equals("ppm")) {
-//      try {
-//        savePPMProject(fileName, loadedImages);
-//      } catch (IOException e) {
-//        throw new IllegalArgumentException("Was not able to save");
-//      }
-//    }
+    if (projectType.equals("PPM")) {
+      try {
+        savePPMProject(filePath);
+      } catch (IOException e) {
+        throw new IllegalArgumentException("Was not able to save");
+      }
+    }
   }
 
   /**
    * Allows the user to save a project as a PPM file.
-   *
    * @param filePath the location where the file will be stored.
-   * @throws IllegalArgumentException if the file has no contents/images.
-   * @throws FileNotFoundException    if the file
+   * @throws IllegalArgumentException if the file has no contents/images
+   *                                  or if the given filePath is null
    */
   private void savePPMProject(String filePath) throws IOException {
+    if (filePath == null) {
+      throw new IllegalArgumentException("Cannot give null as an argument");
+    }
 
     //write the new file to this path
     FileWriter fileWriter = new FileWriter(filePath);
@@ -175,9 +150,12 @@ public class CollageProjectModelImpl implements CollageProject {
     fileWriter.close();
   }
 
-
   @Override
-  public void saveImage(String filePath, Pixel[][] imagePixels) throws IllegalArgumentException {
+  public void saveImage(String filePath) throws IllegalArgumentException {
+    if (!createdProject) {
+      this.throwExceptionProjectNotMade();
+    }
+
     try {
       if (filePath.endsWith(".ppm")) {
         savePPMProject(filePath);
@@ -189,31 +167,43 @@ public class CollageProjectModelImpl implements CollageProject {
     }
   }
 
-  //load-project path-to-project-file: loads a project into the program
+  //load-project path-to-project-file: loads a project into the program TODO
   @Override
   public CollageProjectModelImpl loadProject(String filePath) throws FileNotFoundException {
+    this.createdProject = true;
+    this.backgroundMade = true;
 
     FileReader loader = new FileReader(filePath);
+
     ArrayList<Layer> projectContents;
 
     if (filePath.endsWith(".ppm")) {
       //projectContents =  ImageUtil.readPPM(filePath);
     }
-    return new CollageProjectModelImpl(canvasHeight, canvasWidth);
+
+
+    return new CollageProjectModelImpl();
   }
 
-  //set-filter layer-name filter-option:
-  // sets the filter of the given layer where filter-option is one of the following at the moment
-
-
   @Override
-  public void setFilter(String layerName, String filterOption) {
-    MacroCollageEffects bulkAssign;
+  public void setFilter(String layerName, String filterOption) throws IllegalArgumentException {
+    if (!createdProject) {
+      this.throwExceptionProjectNotMade();
+    }
+
+    if (layerName == null || filterOption == null) {
+      throw new IllegalArgumentException("Arguments can't be null");
+    }
+
+    MacroCollageEffects macro;
     Layer currentLayer = null;
 
     for (Layer layer : project) {
       if (layerName.equals(layer.getName())) {
         currentLayer = layer;
+      }
+      else {
+        throw new IllegalArgumentException("Layer not found");
       }
     }
 
@@ -221,31 +211,50 @@ public class CollageProjectModelImpl implements CollageProject {
       case "normal":
         break;
       case "red-component":
-        bulkAssign = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filterOption);
-        bulkAssign.executeMacro(currentLayer);
+        macro = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filterOption);
+        macro.executeMacro(currentLayer);
         break;
       case "green-component":
-        bulkAssign = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filterOption);
-        bulkAssign.executeMacro(currentLayer);
+        macro = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filterOption);
+        macro.executeMacro(currentLayer);
         break;
       case "blue-component":
-        bulkAssign = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filterOption);
-        bulkAssign.executeMacro(currentLayer);
+        macro = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filterOption);
+        macro.executeMacro(currentLayer);
         break;
       case "brighten-value":
+        macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, true);
+        macro.executeMacro(currentLayer);
         break;
       case "brighten-luma":
+        macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, true);
+        macro.executeMacro(currentLayer);
         break;
       case "brighten-intensity":
+        macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, true);
+        macro.executeMacro(currentLayer);
         break;
       case "darken-intensity":
+        macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, false);
+        macro.executeMacro(currentLayer);
         break;
       case "darken-luma":
+        macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, false);
+        macro.executeMacro(currentLayer);
         break;
       case "darken-value":
+        macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, false);
+        macro.executeMacro(currentLayer);
         break;
       default:
-        //normal-does nothing to the image
+        throw new IllegalArgumentException("Filter not found");
     }
+  }
+
+  /**
+   * Helper method for throwing an exception when the project has not been created.
+   */
+  private void throwExceptionProjectNotMade() {
+    throw new IllegalStateException("The project has not been created");
   }
 }

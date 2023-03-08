@@ -2,7 +2,7 @@
 import controller.CollageController;
 import controller.CollageControllerImpl;
 import java.io.InputStreamReader;
-import model.CollageProjectModel;
+import model.CollageProject;
 import model.CollageProjectModelImpl;
 import model.ImageUtil;
 import view.CollageTextView;
@@ -15,7 +15,7 @@ public class Main {
 
     String filename;
     Appendable out = new StringBuilder();
-    CollageProjectModel collage = new CollageProjectModelImpl(100, 100);
+    CollageProject collage = new CollageProjectModelImpl();
     CollageView view = new CollageTextView(collage, System.out);
     CollageController controller = new CollageControllerImpl(new InputStreamReader(System.in)
         , collage, view);

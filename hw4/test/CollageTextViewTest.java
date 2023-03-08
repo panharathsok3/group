@@ -2,6 +2,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import model.CollageProject;
 import model.CollageProjectModel;
 import model.CollageProjectModelImpl;
 import org.junit.Test;
@@ -12,7 +13,7 @@ public class CollageTextViewTest {
 
   Appendable out;
   CollageView view;
-  CollageProjectModel collage;
+  CollageProject collage;
 
   @Test
   public void testInvalidConstructor() {
@@ -23,7 +24,7 @@ public class CollageTextViewTest {
       //do nothing
     }
 
-    this.collage = new CollageProjectModelImpl(10, 10);
+    this.collage = new CollageProjectModelImpl();
 
     try {
       this.view = new CollageTextView(this.collage, null);
@@ -35,7 +36,7 @@ public class CollageTextViewTest {
 
   @Test
   public void renderMessage() {
-    this.collage = new CollageProjectModelImpl(100, 100);
+    this.collage = new CollageProjectModelImpl();
     this.out = new StringBuilder();
     this.view = new CollageTextView(this.collage, this.out);
 

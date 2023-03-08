@@ -28,10 +28,6 @@ public class CollageImplTest {
     this.layer1 = new Layer("L1", 10, 10, 0);
     this.layer2 = new Layer("L2", 10, 10, 0);
     this.layer3 = new Layer("L3", 10, 10, 0);
-    this.project1 = new CollageProjectModelImpl(20, 20);
-    this.project2 = new CollageProjectModelImpl(10, 10);
-    this.project3 = new CollageProjectModelImpl(100, 100);
-    this.project4 = new CollageProjectModelImpl(15, 20);
   }
 
 
@@ -58,7 +54,7 @@ public class CollageImplTest {
 
   @Test
   public void testAddLayerToProject() {
-    this.project1.addLayerToProject(layer1.getName());
+    this.project1.addLayer(layer1.getName());
 
     this.layer1.getPixelsOnLayer().get(1).get(1);
 
@@ -67,7 +63,7 @@ public class CollageImplTest {
 
   @Test
   public void addLayerWithUsedName() {
-    this.project2.addLayerToProject("");
+    this.project2.addLayer("");
   }
 
 }

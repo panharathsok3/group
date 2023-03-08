@@ -64,4 +64,42 @@ method that takes in a value and a boolean; adds for brightness , subtracts for 
             "'To quit the program, quit' quits the project and loses all unsaved work");
   }
 
+    /*
+  add-image-to-layer layer-name image-name x-pos y-pos:
+  places an image on the layer such that the top left corner of the image is at (x-pos, y-pos)
+   */
+  private boolean isPositionOccupied(String layerName, int row, int col) {
+    if (row < this.canvasHeight || row > this.canvasHeight || col < this.canvasWidth || col > this.canvasWidth) {
+      throw new IllegalArgumentException("The Row and column that you specified " +
+              "are out of the bounds of this layer. Please Try again");
+    }
+
+    Pixel pixels = new Pixel(0, 0, 0);
+    List<Integer> possibleCoordinates = new ArrayList<>();
+    List<List<Integer>> occupiedPixels = new ArrayList<>();
+
+    //get every position on a layer
+    // check if they have an image(pixels)
+    // return false if they do else return true
+
+    for (int i = 0; i < this.canvasHeight; i++) {
+      for (int j = 0; j < this.canvasWidth; j++) {
+        possibleCoordinates.add(i, j);
+      }
+    }
+
+    //These are pixels that are on the grid currently
+    List<Integer> listOfPixels = new ArrayList<>() {{
+      int r = possibleCoordinates.get(pixels.getRedComponent());
+      int g = possibleCoordinates.get(pixels.getGreenComponent());
+      int b = possibleCoordinates.get(pixels.getGreenComponent());
+    }};
+
+    occupiedPixels.add(listOfPixels);
+
+    if ((occupiedPixels.contains(row) && (occupiedPixels.contains(col)))) {
+      return true;
+    }
+    return false;
+  }
 

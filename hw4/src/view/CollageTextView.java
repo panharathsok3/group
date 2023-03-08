@@ -1,6 +1,7 @@
 package view;
 
 import java.io.IOException;
+import model.CollageProject;
 import model.CollageProjectModel;
 
 /**
@@ -8,7 +9,7 @@ import model.CollageProjectModel;
  */
 public class CollageTextView implements CollageView {
 
-  private final CollageProjectModel collage;
+  private final CollageProject collage;
   private final Appendable out;
 
   /**
@@ -17,7 +18,7 @@ public class CollageTextView implements CollageView {
    * @param out the output for the collage
    * @throws IllegalArgumentException when the given arguments are null
    */
-  public CollageTextView(CollageProjectModel collage, Appendable out)
+  public CollageTextView(CollageProject collage, Appendable out)
       throws IllegalArgumentException {
     if (collage == null || out == null) {
       throw new IllegalArgumentException("Arguments can't be null");
