@@ -180,7 +180,7 @@ public class CollageProjectModelImpl implements CollageProject {
   public void saveImage(String filePath, Pixel[][] imagePixels) throws IllegalArgumentException {
     try {
       if (filePath.endsWith(".ppm")) {
-        savePPMProject(filePath, imagePixels);
+        savePPMProject(filePath);
       }
     } catch (FileNotFoundException e) {
       throw new IllegalArgumentException("The image you are trying to save cannot be found");
@@ -191,7 +191,7 @@ public class CollageProjectModelImpl implements CollageProject {
 
   //load-project path-to-project-file: loads a project into the program
   @Override
-  public CollageProjectModelImpl loadProject(String filePath) throws IOException {
+  public CollageProjectModelImpl loadProject(String filePath) throws FileNotFoundException {
 
     FileReader loader = new FileReader(filePath);
     ArrayList<Layer> projectContents;

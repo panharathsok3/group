@@ -65,7 +65,7 @@ add-image-to-layer tako-blue image/tako.ppm 100 50
           this.collage.newProject(height, width);
           break;
         case "load-project":
-          this.collage.lo
+          //this.collage.lo
         default:
           throw new IllegalArgumentException("");
 

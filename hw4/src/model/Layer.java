@@ -45,7 +45,6 @@ public class Layer {
 
   /**
    * Creates a 2d array of pixels in this layer.
-   * @param alpha the alpha value for the pixel
    */
   private void addPixels() {
     for (int i = 0; i < this.height; i++) {

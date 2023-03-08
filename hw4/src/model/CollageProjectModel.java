@@ -1,5 +1,7 @@
 package model;
 
+import java.io.FileNotFoundException;
+
 /**
  * An interface to represent the operations that can be done with our program.
  */
@@ -13,7 +15,7 @@ public interface CollageProjectModel {
    */
   void newProject(int canvasHeight,int canvasWidth);
 
-  void loadProject(String filePath)
+  CollageProjectModelImpl loadProject(String filePath) throws FileNotFoundException;
 
 
   /**
