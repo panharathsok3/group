@@ -4,13 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import java.util.Map;
 import model.Effects.BrightenDarkenMacro;
 import model.Effects.BulkAssignFilter;
 import model.Effects.MacroCollageEffects;
@@ -211,37 +208,19 @@ public class CollageProjectModelImpl implements CollageProject {
       case "normal":
         break;
       case "red-component":
-        macro = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filterOption);
-        macro.executeMacro(currentLayer);
-        break;
       case "green-component":
-        macro = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filterOption);
-        macro.executeMacro(currentLayer);
-        break;
       case "blue-component":
         macro = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filterOption);
         macro.executeMacro(currentLayer);
         break;
       case "brighten-value":
-        macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, true);
-        macro.executeMacro(currentLayer);
-        break;
       case "brighten-luma":
-        macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, true);
-        macro.executeMacro(currentLayer);
-        break;
       case "brighten-intensity":
         macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, true);
         macro.executeMacro(currentLayer);
         break;
       case "darken-intensity":
-        macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, false);
-        macro.executeMacro(currentLayer);
-        break;
       case "darken-luma":
-        macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, false);
-        macro.executeMacro(currentLayer);
-        break;
       case "darken-value":
         macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, false);
         macro.executeMacro(currentLayer);

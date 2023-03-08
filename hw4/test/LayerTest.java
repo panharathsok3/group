@@ -75,6 +75,7 @@ public class LayerTest {
 
   @Test
   public void testGetPixelsOnALayer() {
+    this.init();
     ArrayList<ArrayList<Pixel>> whiteLayer = this.layer1.getPixelsOnLayer();
     Pixel whiteBackgroundPixel = new Pixel(255, 255, 255, 255);
 
