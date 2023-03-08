@@ -245,7 +245,7 @@ public class EffectsTest {
 
 
     try {
-      MacroCollageEffects macro = new BulkAssignFilter(10, 10, "green-component");
+      MacroCollageEffects macro = new BulkAssignFilter(4, 4, "green-component");
       macro.executeMacro(this.layer1);
 
       assertEquals(0, layer1.getPixelsOnLayer().get(10).get(10).getRedComponent());

@@ -51,15 +51,14 @@ public class CollageProjectModelImpl implements CollageProject {
     Layer layer;
     if (!this.backgroundMade) {
       layer = new Layer(layerName, this.canvasHeight, this.canvasWidth, 0);
-    }
-    else {
+    } else {
       layer = new Layer(layerName, this.canvasHeight, this.canvasWidth, 255);
     }
 
     for (Layer currentLayer : project) {
       if (currentLayer.getName().equals(layer.getName())) {
         throw new IllegalStateException("There is already a layer with "
-            + "the name you are trying to use");
+                + "the name you are trying to use");
       }
     }
 
@@ -74,6 +73,21 @@ public class CollageProjectModelImpl implements CollageProject {
       this.throwExceptionProjectNotMade();
     }
 
+
+    ArrayList<ArrayList<Pixel>> pixels = new ArrayList<>();
+
+    Pixel newImage = new Pixel(1, 1, 1);
+
+
+    for (Layer layer : this.project) {
+      if (getPixelAtCoordinate(xPos, yPos).contains(pixels)) {
+        ArrayList<Pixel> row = layer.getPixelsOnLayer().get(xPos);
+        row.set(yPos, newImage);
+      } else {
+        Layer row = project.get(xPos);
+        row.getPixelsOnLayer().get(yPos).set(yPos, newImage);
+      }
+    }
 
 
     //before we add an image to a layer, we want to check if x and y are occupied or not,
@@ -109,6 +123,7 @@ public class CollageProjectModelImpl implements CollageProject {
 
   /**
    * Allows the user to save a project as a PPM file.
+   *
    * @param filePath the location where the file will be stored.
    * @throws IllegalArgumentException if the file has no contents/images
    *                                  or if the given filePath is null
@@ -139,7 +154,7 @@ public class CollageProjectModelImpl implements CollageProject {
           int blueComponent = pixels.get(i).get(j).getBlueComponent();
           int alphaComponent = pixels.get(i).get(j).getAlphaComponent();
           fileWriter.write(redComponent + " " + greenComponent + " " + blueComponent + " "
-          + " " + alphaComponent + "\n");
+                  + " " + alphaComponent + "\n");
         }
       }
     }
@@ -198,8 +213,7 @@ public class CollageProjectModelImpl implements CollageProject {
     for (Layer layer : project) {
       if (layerName.equals(layer.getName())) {
         currentLayer = layer;
-      }
-      else {
+      } else {
         throw new IllegalArgumentException("Layer not found");
       }
     }
@@ -236,4 +250,12 @@ public class CollageProjectModelImpl implements CollageProject {
   private void throwExceptionProjectNotMade() {
     throw new IllegalStateException("The project has not been created");
   }
+
+  private ArrayList<ArrayList<Pixel>> getPixelAtCoordinate(int row, int col) {
+    if (row < 0 || row > this.canvasHeight || col < 0 || col > this.canvasWidth) {
+      throw new IllegalArgumentException("coordinates provided are out of bounds");
+    }
+    return this.project.get(canvasHeight).getPixelsOnLayer();
+  }
+
 }
