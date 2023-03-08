@@ -11,6 +11,7 @@ import java.util.List;
 import model.Effects.BrightenDarkenMacro;
 import model.Effects.BulkAssignFilter;
 import model.Effects.MacroCollageEffects;
+import model.ImageUtil;
 
 /**
  * Creates a collage to work on.
@@ -20,6 +21,7 @@ public class CollageProjectModelImpl implements CollageProject {
   private final List<Layer> project;
   private int canvasHeight;
   private int canvasWidth;
+  private String projectName;
   private boolean backgroundMade;
   private boolean createdProject;
 
@@ -33,8 +35,10 @@ public class CollageProjectModelImpl implements CollageProject {
   }
 
   @Override
-  public void newProject(int canvasHeight, int canvasWidth) {
-    CollageProjectModelImpl projectModel = new CollageProjectModelImpl();
+  public void newProject(String name, int canvasHeight, int canvasWidth)
+      throws IllegalArgumentException {
+
+    this.projectName = name;
     this.addLayer("Background");
     this.canvasHeight = canvasHeight;
     this.canvasWidth = canvasWidth;
@@ -65,41 +69,23 @@ public class CollageProjectModelImpl implements CollageProject {
     this.project.add(layer);
   }
 
-  //places an image on the layer such that the top left corner TODO
-  // of the image is at (x-pos, y-pos)
   @Override
-  public void addImageToLayer(String layerName, String filePath, int xPos, int yPos) {
+  public void addImageToLayer(String layerName, String filePath, int xPos, int yPos)
+      throws IllegalArgumentException {
     if (!createdProject) {
       this.throwExceptionProjectNotMade();
     }
 
+    ArrayList<ArrayList<Pixel>> image = new ImageUtil().readPPM(filePath);
 
-    ArrayList<ArrayList<Pixel>> pixels = new ArrayList<>();
-
-    Pixel newImage = new Pixel(1, 1, 1);
-
-
-    for (Layer layer : this.project) {
-      if (getPixelAtCoordinate(xPos, yPos).contains(pixels)) {
-        ArrayList<Pixel> row = layer.getPixelsOnLayer().get(xPos);
-        row.set(yPos, newImage);
-      } else {
-        Layer row = project.get(xPos);
-        row.getPixelsOnLayer().get(yPos).set(yPos, newImage);
+    for (Layer layer: this.project) {
+      if (layerName.equals(layer.getName())) {
+        layer.addImage(xPos, yPos, image);
+        return;
       }
     }
 
-
-    //before we add an image to a layer, we want to check if x and y are occupied or not,
-//    if (!isPositionOccupied(layerName, xPos, yPos)) {
-//      for (Layer layer : this.project) {
-//        if (layer.getName().equals(layerName)) {
-//          //imageToAdd.add()
-//
-//        }
-//      }
-//    }
-    //take the pixels from the image I want to add,
+    throw new IllegalArgumentException("Layer not found");
   }
 
 
@@ -136,7 +122,7 @@ public class CollageProjectModelImpl implements CollageProject {
     //write the new file to this path
     FileWriter fileWriter = new FileWriter(filePath);
 
-    fileWriter.write("C1\n");
+    fileWriter.write(this.projectName + "\n");
     fileWriter.write(this.canvasWidth + " " + this.canvasHeight + "\n");
     //depends on what ever the colors in the project are
     fileWriter.write("256\n"); //because the max value of each pixel can be 256
@@ -182,10 +168,10 @@ public class CollageProjectModelImpl implements CollageProject {
   //load-project path-to-project-file: loads a project into the program TODO
   @Override
   public CollageProjectModelImpl loadProject(String filePath) throws FileNotFoundException {
+    FileReader loader = new FileReader(filePath);
+
     this.createdProject = true;
     this.backgroundMade = true;
-
-    FileReader loader = new FileReader(filePath);
 
     ArrayList<Layer> projectContents;
 

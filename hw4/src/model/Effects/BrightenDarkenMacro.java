@@ -20,6 +20,8 @@ public class BrightenDarkenMacro implements MacroCollageEffects {
    * @param optionFilter the option the pixel can be changed by using its brightness
    * @param brighten true if and only if the pixel is getting brightened and false if and only if
    *                 the pixel is getting darkened
+   * @throws IllegalArgumentException if the given optionFilter is null
+   *                                  or ...
    */
   public BrightenDarkenMacro(int row, int col, String optionFilter, boolean brighten) {
     this.row = row;

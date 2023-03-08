@@ -117,6 +117,101 @@ public class PixelTest {
   }
 
   @Test
+  public void invalidModifyComponentByBrightness() {
+    this.init();
+
+    try {
+      this.pixel1.modifyComponentByBrightness(null, true);
+    } catch (IllegalArgumentException e) {
+      //do nothing
+    }
+  }
+
+  @Test
+  public void testModifyComponentByBrightnessBrightening() {
+    this.init();
+
+    this.pixel1 = new Pixel(0, 0, 0, 1);
+    this.pixel2 = new Pixel(120, 72, 99);
+    this.pixel3 = new Pixel(21, 50, 68, 100);
+    this.pixel4 = new Pixel(12, 11, 10);
+    this.pixel5 = new Pixel(1, 1, 1);
+
+    this.pixel1.modifyComponentByBrightness("brighten-luma", true);
+    this.pixel2.modifyComponentByBrightness("brighten-luma", true);
+    this.pixel3.modifyComponentByBrightness("brighten-value", true);
+    this.pixel4.modifyComponentByBrightness("brighten-intensity", true);
+
+    assertEquals(0, this.pixel1.getRedComponent());
+    assertEquals(0, this.pixel1.getGreenComponent());
+    assertEquals(0, this.pixel1.getBlueComponent());
+
+    assertEquals(205, this.pixel2.getRedComponent());
+    assertEquals(157, this.pixel2.getGreenComponent());
+    assertEquals(184, this.pixel2.getBlueComponent());
+
+    assertEquals(89, this.pixel3.getRedComponent());
+    assertEquals(118, this.pixel3.getGreenComponent());
+    assertEquals(136, this.pixel3.getBlueComponent());
+
+    assertEquals(23, this.pixel4.getRedComponent());
+    assertEquals(22, this.pixel4.getGreenComponent());
+    assertEquals(21, this.pixel4.getBlueComponent());
+
+    this.pixel2.modifyComponentByBrightness("brighten-intensity", true);
+    assertEquals(255, this.pixel2.getRedComponent());
+    assertEquals(255, this.pixel2.getGreenComponent());
+    assertEquals(255, this.pixel2.getBlueComponent());
+
+    this.pixel2.modifyComponentByBrightness("brighten-value", true);
+    assertEquals(255, this.pixel2.getRedComponent());
+    assertEquals(255, this.pixel2.getGreenComponent());
+    assertEquals(255, this.pixel2.getBlueComponent());
+  }
+
+  @Test
+  public void testModifyComponentByBrightnessDarkening() {
+    this.init();
+
+    this.pixel1 = new Pixel(0, 0, 0, 1);
+    this.pixel2 = new Pixel(120, 72, 99);
+    this.pixel3 = new Pixel(21, 50, 68, 100);
+    this.pixel4 = new Pixel(12, 11, 10);
+    this.pixel5 = new Pixel(1, 1, 1);
+
+    this.pixel1.modifyComponentByBrightness("darken-luma", false);
+    this.pixel2.modifyComponentByBrightness("darken-luma", false);
+    this.pixel3.modifyComponentByBrightness("darken-value", false);
+    this.pixel4.modifyComponentByBrightness("darken-intensity", false);
+
+    assertEquals(0, this.pixel1.getRedComponent());
+    assertEquals(0, this.pixel1.getGreenComponent());
+    assertEquals(0, this.pixel1.getBlueComponent());
+
+    assertEquals(35, this.pixel2.getRedComponent());
+    assertEquals(0, this.pixel2.getGreenComponent());
+    assertEquals(14, this.pixel2.getBlueComponent());
+
+    assertEquals(0, this.pixel3.getRedComponent());
+    assertEquals(0, this.pixel3.getGreenComponent());
+    assertEquals(0, this.pixel3.getBlueComponent());
+
+    assertEquals(1, this.pixel4.getRedComponent());
+    assertEquals(0, this.pixel4.getGreenComponent());
+    assertEquals(0, this.pixel4.getBlueComponent());
+
+    this.pixel2.modifyComponentByBrightness("darken-intensity", false);
+    assertEquals(19, this.pixel2.getRedComponent());
+    assertEquals(0, this.pixel2.getGreenComponent());
+    assertEquals(0, this.pixel2.getBlueComponent());
+
+    this.pixel2.modifyComponentByBrightness("darken-value", false);
+    assertEquals(0, this.pixel2.getRedComponent());
+    assertEquals(0, this.pixel2.getGreenComponent());
+    assertEquals(0, this.pixel2.getBlueComponent());
+  }
+
+  @Test
   public void testSetFilter() {
     this.init();
 

@@ -10,7 +10,6 @@ import java.util.TreeSet;
 public class Layer {
   private final String layerName;
   private ArrayList<ArrayList<Pixel>> pixelsOnLayer;
-  private Set<Integer> occupiedPixels;
   private final int height;
   private final int width;
   private final int alpha;
@@ -34,7 +33,6 @@ public class Layer {
     this.width = width;
     this.alpha = alpha;
     this.pixelsOnLayer = new ArrayList<>();
-    this.occupiedPixels = new TreeSet<>();
     this.addPixels();
   }
 
@@ -55,6 +53,24 @@ public class Layer {
   }
 
   /**
+   * Adds a given image to this layer.
+   * @param xPos the x position of the pixel on this layer
+   * @param yPos the y position of the pixel on this layer
+   * @param image the image that will be placed on this layer
+   */
+  public void addImage(int xPos, int yPos, ArrayList<ArrayList<Pixel>> image) {
+    for (int i = xPos; i < this.height; i++) {
+      for (int j = yPos; j < this.width; j++) {
+        for (ArrayList<Pixel> list : image) {
+          for (Pixel p : list) {
+            this.pixelsOnLayer.get(i).set(j, p);
+          }
+        }
+      }
+    }
+  }
+
+  /**
    * Creates a 2d array of pixels in this layer.
    */
   private void addPixels() {
@@ -62,21 +78,6 @@ public class Layer {
       this.pixelsOnLayer.add(new ArrayList<>());
       for (int j = 0; j < this.width; j++) {
         this.pixelsOnLayer.get(i).add(new Pixel(255, 255, 255, this.alpha));
-      }
-    }
-  }
-
-
-
-  /**
-   * Adds the coordinate that has been occupied by pixels.
-   * @param x the x position on the layer that's being occupied
-   * @param y the y position on the layer that's being occupied
-   */
-  private void occupy(int x, int y) {
-    for (int i = x; i < this.height; i++) {
-      for (int j = y; j < this.width; j++) {
-        this.occupiedPixels.add(i + j);
       }
     }
   }

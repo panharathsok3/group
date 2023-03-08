@@ -54,7 +54,7 @@ public class CollageImplTest {
   @Test
   public void testCreateNewProject() {
     this.init();
-    this.project4.newProject(100, 100);
+    this.project4.newProject("C1", 100, 100);
   }
 
 
@@ -62,7 +62,7 @@ public class CollageImplTest {
   public void testAddLayerToProject() {
     this.init();
 
-    this.project2.newProject(5, 5);
+    this.project2.newProject("C1", 5, 5);
 
     this.project2.addLayer(this.layer2.getName());
     this.project2.addLayer(this.layer3.getName());
@@ -85,7 +85,7 @@ public class CollageImplTest {
   @Test
   public void addLayerWithUsedName() {
     this.init();
-    this.project1.newProject(20, 2);
+    this.project1.newProject("C1", 20, 2);
     this.project1.addLayer(this.layer1.getName());
     this.project1.addLayer(this.layer2.getName());
     this.project1.addLayer(this.layer3.getName());

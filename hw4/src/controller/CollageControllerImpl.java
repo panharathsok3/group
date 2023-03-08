@@ -61,9 +61,10 @@ add-image-to-layer tako-blue image/tako.ppm 100 50
           running = false;
           break;
         case "new-project":
+          String name = this.readValueString(sc);
           int height = this.readValueInteger(sc);
           int width = this.readValueInteger(sc);
-          this.collage.newProject(height, width);
+          this.collage.newProject(name, height, width);
           break;
         case "load-project":
           String filename = this.readValueString(sc);
@@ -99,7 +100,7 @@ add-image-to-layer tako-blue image/tako.ppm 100 50
           this.collage.saveImage(fileName);
           break;
         default:
-          try{
+          try {
             this.view.renderMessage("Command doesn't exist");
           } catch (IOException e) {
             throw new IllegalStateException("Unexpected IOException");

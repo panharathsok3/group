@@ -1,10 +1,10 @@
 
 import controller.CollageController;
 import controller.CollageControllerImpl;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import model.CollageProject;
 import model.CollageProjectModelImpl;
-import model.ImageUtil;
 import view.CollageTextView;
 import view.CollageView;
 
@@ -26,7 +26,7 @@ public class Main {
     } else {
       filename = "src/tako.ppm";
     }
-    ImageUtil.readPPM(filename);
+
   }
 
 }

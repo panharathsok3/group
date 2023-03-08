@@ -15,7 +15,8 @@ public interface CollageProject extends CollageProjectModel {
   void addLayer(String layerName) throws IllegalStateException;
 
   /**
-   * Places an image on a layer at given dimensions.
+   * Places an image on a layer at given dimensions where the top left is 0, 0.
+   * The x values increases to the right and the y values increases downwards.
    * @param layerName the layer that is being added to
    * @param filePath the image the user wants to add to the layer
    * @param xPos the position of the x-coordinate
