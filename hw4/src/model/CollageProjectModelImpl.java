@@ -38,16 +38,26 @@ public class CollageProjectModelImpl implements CollageProject {
   public void newProject(String name, int canvasHeight, int canvasWidth)
       throws IllegalArgumentException {
 
+    if (name == null || canvasHeight < 1 || canvasWidth < 1) {
+      throw new IllegalArgumentException("the name of the project can't be null and the"
+          + "canvas height and width can't be less than 1");
+    }
+
     this.projectName = name;
+    this.createdProject = true;
     this.addLayer("Background");
     this.canvasHeight = canvasHeight;
     this.canvasWidth = canvasWidth;
     this.backgroundMade = true;
-    this.createdProject = true;
+
   }
 
   @Override
-  public void addLayer(String layerName) throws IllegalStateException {
+  public void addLayer(String layerName) throws IllegalStateException, IllegalArgumentException {
+    if (layerName == null) {
+      throw new IllegalArgumentException("Arguments can't be null");
+    }
+
     if (!createdProject) {
       this.throwExceptionProjectNotMade();
     }

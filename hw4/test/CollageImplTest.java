@@ -106,7 +106,7 @@ public class CollageImplTest {
     try {
       this.project1.addLayer(this.layer1.getName());
       fail("A project has not been created yet");
-    } catch (IllegalArgumentException projectNotMade) {
+    } catch (IllegalStateException projectNotMade) {
       // do nothing because we want it to fail;
     }
 
@@ -121,14 +121,14 @@ public class CollageImplTest {
     try{
       this.project1.setFilter(this.layer3.getName(),"darken-luma");
       fail("A project has not been created yet");
-    } catch (IllegalArgumentException projectNotMade) {
+    } catch (IllegalStateException projectNotMade) {
       // do nothing because we want it to fail;
     }
 
     try{
       this.project1.saveImage("src/tako.ppm");
       fail("A project has not been created yet");
-    }catch (IllegalArgumentException projectNotMade) {
+    }catch (IllegalStateException projectNotMade) {
       // do nothing because we want it to fail;
     }
 

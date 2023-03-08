@@ -13,9 +13,9 @@ import static org.junit.Assert.assertEquals;
 
 
 /**
- * Tests the brighten and darken effects.
+ * A test class for BrightenDarkenMacro.
  */
-public class EffectsTest {
+public class BrightenDarkenMacroTest {
 
   Pixel pixel1;
   Pixel pixel2;
@@ -24,6 +24,7 @@ public class EffectsTest {
   Pixel pixel5;
   Layer layer1;
   Layer layer2;
+  Layer layer3;
 
   public void init() {
     this.pixel1 = new Pixel(0, 0, 0, 1);
@@ -33,6 +34,37 @@ public class EffectsTest {
     this.pixel5 = new Pixel(1, 1, 1);
     this.layer1 = new Layer("L1", 10, 20, 255);
     this.layer2 = new Layer("L2", 10, 15, 0);
+    this.layer3 = new Layer("L3", 2, 2, 255);
+  }
+
+  @Test
+  public void testBrightenLuma() {
+    this.init();
+
+    ArrayList<ArrayList<Pixel>> pixels = new ArrayList<>();
+    Pixel pixel = new Pixel(5, 5, 5);
+
+    for (int i = 0; i < 2; i++) {
+      pixels.add(new ArrayList<>());
+      for (int j = 0; j < 2; j++) {
+        pixels.get(i).add(pixel);
+      }
+    }
+
+    this.layer3.addImage(0, 0, pixels);
+
+    MacroCollageEffects brightenMacroLuma =
+        new BrightenDarkenMacro(2, 2, "brighten-luma", true);
+    brightenMacroLuma.executeMacro(this.layer3);
+
+    for (ArrayList<Pixel> list : this.layer3.getPixelsOnLayer()) {
+      for (Pixel p : list) {
+        assertEquals(80, p.getRedComponent());
+        assertEquals(80, p.getGreenComponent());
+        assertEquals(80, p.getBlueComponent());
+        assertEquals(255, p.getAlphaComponent());
+      }
+    }
   }
 
   @Test

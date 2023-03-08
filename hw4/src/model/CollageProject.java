@@ -11,8 +11,9 @@ public interface CollageProject extends CollageProjectModel {
    * @param layerName the name of the layer
    * @throws IllegalStateException if there already exists a layer with the name
    * that the user is trying to give. Program should continue running.
+   * @throws IllegalArgumentException if the given layerName is null
    */
-  void addLayer(String layerName) throws IllegalStateException;
+  void addLayer(String layerName) throws IllegalStateException, IllegalArgumentException;
 
   /**
    * Places an image on a layer at given dimensions where the top left is 0, 0.

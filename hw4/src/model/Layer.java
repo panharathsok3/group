@@ -57,8 +57,15 @@ public class Layer {
    * @param xPos the x position of the pixel on this layer
    * @param yPos the y position of the pixel on this layer
    * @param image the image that will be placed on this layer
+   * @throws IllegalArgumentException if the given image is null
+   *                                  or if the xPos or yPos is not in the bounds of the Layer
    */
-  public void addImage(int xPos, int yPos, ArrayList<ArrayList<Pixel>> image) {
+  public void addImage(int xPos, int yPos, ArrayList<ArrayList<Pixel>> image)
+      throws IllegalArgumentException {
+    if (image == null || xPos < 0 || xPos > this.height || yPos < 0 || yPos > this.width) {
+      throw new IllegalArgumentException("Arguments can't be null and they can't be negative");
+    }
+
     for (int i = xPos; i < this.height; i++) {
       for (int j = yPos; j < this.width; j++) {
         for (ArrayList<Pixel> list : image) {

@@ -15,8 +15,8 @@ public class LayerTest {
 
   Layer layer1;
   Layer layer2;
-
   Layer layer3;
+  Layer layer4;
 
   Pixel pixel1;
   Pixel pixel2;
@@ -28,6 +28,7 @@ public class LayerTest {
     this.layer1 = new Layer("L1",10,20,255);
     this.layer2 = new Layer("L2",10,15,0);
     this.layer3 = new Layer("L3",10,10,0);
+    this.layer4 = new Layer("L4", 2, 2, 255);
     this.pixel1 = new Pixel(0,0,0, 1);
     this.pixel2 = new Pixel(120,72,99);
     this.pixel3 = new Pixel(21,50,68,100);
@@ -70,7 +71,51 @@ public class LayerTest {
     assertEquals("L1",layer1.getName());
     assertEquals("L2",layer2.getName());
     assertEquals("L3",layer3.getName());
+  }
 
+  @Test
+  public void testInvalidAddImage() {
+    try {
+      this.layer1.addImage(-1, 0, new ArrayList<>(3));
+    } catch (IllegalArgumentException e) {
+      //do nothing
+    }
+
+    try {
+      this.layer1.addImage(0, -1, new ArrayList<>(3));
+    } catch (IllegalArgumentException e) {
+      //do nothing
+    }
+
+    try {
+      this.layer1.addImage(0, 0, null);
+    } catch (IllegalArgumentException e) {
+      //do nothing
+    }
+  }
+
+  @Test
+  public void testAddImage() {
+    ArrayList<ArrayList<Pixel>> pixels = new ArrayList<>();
+    Pixel pixel = new Pixel(5, 5, 5);
+
+    for (int i = 0; i < 2; i++) {
+      pixels.add(new ArrayList<>());
+      for (int j = 0; j < 2; j++) {
+        pixels.get(i).add(pixel);
+      }
+    }
+
+    this.layer4.addImage(0, 0, pixels);
+
+    for (ArrayList<Pixel> list : this.layer4.getPixelsOnLayer()) {
+      for (Pixel p : list) {
+        assertEquals(p.getRedComponent(), pixel.getRedComponent());
+        assertEquals(p.getGreenComponent(), pixel.getGreenComponent());
+        assertEquals(p.getBlueComponent(), pixel.getBlueComponent());
+        assertEquals(p.getAlphaComponent(), pixel.getAlphaComponent());
+      }
+    }
   }
 
   @Test
