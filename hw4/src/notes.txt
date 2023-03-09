@@ -103,3 +103,20 @@ method that takes in a value and a boolean; adds for brightness , subtracts for 
     return false;
   }
 
+
+
+    this.collage1.setFilter(this.layer2.getName(), "red-component");
+
+    this.collage1.setFilter(this.layer2.getName(), "red-component");
+    this.collage1.setFilter(this.layer2.getName(), "darken-luma");
+
+    this.collage1.setFilter(this.layer3.getName(), "green-component");
+    this.collage1.setFilter(this.layer1.getName(), "brightness-value");
+
+
+    int blueAfterRedFilter = this.layer2.getPixelsOnLayer().get(5).get(5).getBlueComponent();
+    int greenAfterRedFilter = this.layer2.getPixelsOnLayer().get(5).get(5).getBlueComponent();
+
+    assertEquals(0, blueAfterRedFilter);
+    assertEquals(0, greenAfterRedFilter);
+

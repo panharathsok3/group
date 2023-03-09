@@ -11,7 +11,6 @@ import java.util.List;
 import model.Effects.BrightenDarkenMacro;
 import model.Effects.BulkAssignFilter;
 import model.Effects.MacroCollageEffects;
-import model.ImageUtil;
 
 /**
  * Creates a collage to work on.
@@ -36,11 +35,11 @@ public class CollageProjectModelImpl implements CollageProject {
 
   @Override
   public void newProject(String name, int canvasHeight, int canvasWidth)
-      throws IllegalArgumentException {
+          throws IllegalArgumentException {
 
-    if (name == null || canvasHeight < 1 || canvasWidth < 1) {
+    if (name == null || name.equals("") || canvasHeight < 1 || canvasWidth < 1) {
       throw new IllegalArgumentException("the name of the project can't be null and the"
-          + "canvas height and width can't be less than 1");
+              + "canvas height and width can't be less than 1");
     }
 
     this.projectName = name;
@@ -81,14 +80,21 @@ public class CollageProjectModelImpl implements CollageProject {
 
   @Override
   public void addImageToLayer(String layerName, String filePath, int xPos, int yPos)
-      throws IllegalArgumentException {
+          throws IllegalArgumentException {
+
+    if (layerName == null || layerName.equals("") || filePath == null || filePath.equals("")
+            || xPos < 0 || xPos > this.canvasHeight || yPos < 0 || yPos > this.canvasWidth) {
+      throw new IllegalArgumentException("layer name and file path cannot be null, x and y positions have to be" +
+              "within the boundaries of the canvas");
+    }
+
     if (!createdProject) {
       this.throwExceptionProjectNotMade();
     }
 
     ArrayList<ArrayList<Pixel>> image = new ImageUtil().readPPM(filePath);
 
-    for (Layer layer: this.project) {
+    for (Layer layer : this.project) {
       if (layerName.equals(layer.getName())) {
         layer.addImage(xPos, yPos, image);
         return;

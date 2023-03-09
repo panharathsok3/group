@@ -15,15 +15,21 @@ public class BrightenDarkenMacro implements MacroCollageEffects {
 
   /**
    * Creates a Macro for brightening and darkening a pixel.
-   * @param row the row of the pixel that will be darkened/brightened
-   * @param col the column of the pixel that will be darkened/brightened
+   *
+   * @param row          the row of the pixel that will be darkened/brightened
+   * @param col          the column of the pixel that will be darkened/brightened
    * @param optionFilter the option the pixel can be changed by using its brightness
-   * @param brighten true if and only if the pixel is getting brightened and false if and only if
-   *                 the pixel is getting darkened
+   * @param brighten     true if and only if the pixel is getting brightened and false if and only if
+   *                     the pixel is getting darkened
    * @throws IllegalArgumentException if the given optionFilter is null
-   *                                  or ...
+   *                                  or if the row or column is negative.
    */
   public BrightenDarkenMacro(int row, int col, String optionFilter, boolean brighten) {
+
+    if (row < 0 || col < 0 || optionFilter == null || optionFilter.equals("")) {
+      throw new IllegalArgumentException("The arguments cannot be null or less than 0");
+    }
+
     this.row = row;
     this.col = col;
     this.optionFilter = optionFilter;
@@ -38,8 +44,7 @@ public class BrightenDarkenMacro implements MacroCollageEffects {
           layer.getPixelsOnLayer().get(i).get(j).modifyComponentByBrightness(this.optionFilter, true);
         }
       }
-    }
-    else {
+    } else {
       for (int i = 0; i < this.row; i++) {
         for (int j = 0; j < this.col; j++) {
           layer.getPixelsOnLayer().get(i).get(j).modifyComponentByBrightness(this.optionFilter, false);

@@ -13,14 +13,15 @@ public class BulkAssignFilter implements MacroCollageEffects {
 
   /**
    * Creates a macroFilter.
-   * @param row the row of the layer to filter
-   * @param col the column of the layer to filter
+   *
+   * @param row          the row of the layer to filter
+   * @param col          the column of the layer to filter
    * @param optionFilter the filter option
    * @throws IllegalArgumentException if the optionFilter is null
    *                                  or if the row and column is negative
    */
   public BulkAssignFilter(int row, int col, String optionFilter) throws IllegalArgumentException {
-    if (optionFilter == null || row < 0 || col < 0) {
+    if (optionFilter == null || optionFilter.equals("") || row < 0 || col < 0) {
       throw new IllegalArgumentException("Arguments can't be null or negative");
     }
     this.row = row;

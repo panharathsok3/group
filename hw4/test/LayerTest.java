@@ -22,6 +22,11 @@ public class LayerTest {
   Pixel pixel2;
   Pixel pixel3;
 
+  Pixel pixel4;
+  Pixel pixel5;
+  Pixel pixel6;
+
+
 
   @Before
   public void init() {
@@ -32,6 +37,8 @@ public class LayerTest {
     this.pixel1 = new Pixel(0,0,0, 1);
     this.pixel2 = new Pixel(120,72,99);
     this.pixel3 = new Pixel(21,50,68,100);
+    this.pixel5 = new Pixel(1, 1, 1);
+    this.pixel6 = new Pixel(33, 55, 99);
   }
 
   @Test
@@ -157,4 +164,200 @@ public class LayerTest {
     }
 
   }
+
+
+  @Test
+  public void testBrightenLayerByIntensity() {
+    this.init();
+
+    ArrayList<Pixel> lop = new ArrayList<>();
+    ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
+    currentLayer.add(lop);
+    lop.add(this.pixel3);
+
+    for (int i = 0; i < currentLayer.size(); i++) {
+      for (int j = 0; j < currentLayer.get(0).size(); j++) {
+
+        currentLayer.get(i).get(j).modifyComponentByBrightness("brighten-intensity", true);
+
+        int newRed = currentLayer.get(i).get(j).getRedComponent();
+        int newGreen = currentLayer.get(i).get(j).getGreenComponent();
+        int newBlue = currentLayer.get(i).get(j).getBlueComponent();
+        int newAlpha = currentLayer.get(i).get(j).getAlphaComponent();
+
+
+        assertEquals(newRed, this.pixel3.getRedComponent());
+        assertEquals(newGreen, this.pixel3.getGreenComponent());
+        assertEquals(newBlue, this.pixel3.getBlueComponent());
+        assertEquals(newAlpha, this.pixel3.getAlphaComponent());
+
+        assertEquals(67,this.pixel3.getRedComponent());
+        assertEquals(96,this.pixel3.getGreenComponent());
+        assertEquals(114,this.pixel3.getBlueComponent());
+        assertEquals(100, this.pixel3.getAlphaComponent());
+
+      }
+    }
+  }
+
+  @Test
+  public void testBrightenLayerByValue() {
+    this.init();
+
+    ArrayList<Pixel> lop = new ArrayList<>();
+    ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
+    currentLayer.add(lop);
+    lop.add(this.pixel3);
+
+    for (int i = 0; i < currentLayer.size(); i++) {
+      for (int j = 0; j < currentLayer.get(0).size(); j++) {
+
+        currentLayer.get(i).get(j).modifyComponentByBrightness("brighten-value", true);
+
+        int newRed = currentLayer.get(i).get(j).getRedComponent();
+        int newGreen = currentLayer.get(i).get(j).getGreenComponent();
+        int newBlue = currentLayer.get(i).get(j).getBlueComponent();
+        int newAlpha = currentLayer.get(i).get(j).getAlphaComponent();
+
+
+        assertEquals(newRed, this.pixel3.getRedComponent());
+        assertEquals(newGreen, this.pixel3.getGreenComponent());
+        assertEquals(newBlue, this.pixel3.getBlueComponent());
+        assertEquals(newAlpha, this.pixel3.getAlphaComponent());
+
+        assertEquals(89,this.pixel3.getRedComponent());
+        assertEquals(118,this.pixel3.getGreenComponent());
+        assertEquals(136,this.pixel3.getBlueComponent());
+        assertEquals(100, this.pixel3.getAlphaComponent());
+      }
+    }
+  }
+
+  @Test
+  public void testBrightenLayerByLuma() {
+    this.init();
+
+    ArrayList<Pixel> lop = new ArrayList<>();
+    ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
+    currentLayer.add(lop);
+    lop.add(this.pixel3);
+
+    for (int i = 0; i < currentLayer.size(); i++) {
+      for (int j = 0; j < currentLayer.get(0).size(); j++) {
+
+        currentLayer.get(i).get(j).modifyComponentByBrightness("brighten-luma", true);
+
+        int newRed = currentLayer.get(i).get(j).getRedComponent();
+        int newGreen = currentLayer.get(i).get(j).getGreenComponent();
+        int newBlue = currentLayer.get(i).get(j).getBlueComponent();
+        int newAlpha = currentLayer.get(i).get(j).getAlphaComponent();
+
+
+        assertEquals(newRed, this.pixel3.getRedComponent());
+        assertEquals(newGreen, this.pixel3.getGreenComponent());
+        assertEquals(newBlue, this.pixel3.getBlueComponent());
+        assertEquals(newAlpha, this.pixel3.getAlphaComponent());
+
+        assertEquals(66,this.pixel3.getRedComponent());
+        assertEquals(95,this.pixel3.getGreenComponent());
+        assertEquals(113,this.pixel3.getBlueComponent());
+        assertEquals(100, this.pixel3.getAlphaComponent());
+      }
+    }
+  }
+
+  @Test
+  public void testDarkenByValue() {
+    this.init();
+
+    ArrayList<Pixel> lop = new ArrayList<>();
+    ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
+    currentLayer.add(lop);
+    lop.add(this.pixel5);
+
+
+
+    for (int i = 0; i < currentLayer.size(); i++) {
+      for (int j = 0; j < currentLayer.get(0).size(); j++) {
+
+        currentLayer.get(i).get(j).modifyComponentByBrightness("darken-value", false);
+
+        int newRed = currentLayer.get(i).get(j).getRedComponent();
+        int newGreen = currentLayer.get(i).get(j).getGreenComponent();
+        int newBlue = currentLayer.get(i).get(j).getBlueComponent();
+        int newAlpha = currentLayer.get(i).get(j).getAlphaComponent();
+
+        assertEquals(newRed, this.pixel5.getRedComponent());
+        assertEquals(newGreen, this.pixel5.getGreenComponent());
+        assertEquals(newBlue, this.pixel5.getBlueComponent());
+        assertEquals(newAlpha, this.pixel5.getAlphaComponent());
+      }
+    }
+  }
+
+  @Test
+  public void testDarkenLayerByIntensity() {
+    this.init();
+    ArrayList<Pixel> lop = new ArrayList<>();
+    ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
+    currentLayer.add(lop);
+    lop.add(this.pixel5);
+
+    for (ArrayList<Pixel> pixels : currentLayer) {
+      for (int j = 0; j < currentLayer.get(0).size(); j++) {
+
+        pixels.get(j).modifyComponentByBrightness("darken-intensity", false);
+
+        int newRed = pixels.get(j).getRedComponent();
+        int newGreen = pixels.get(j).getGreenComponent();
+        int newBlue = pixels.get(j).getBlueComponent();
+        int newAlpha = pixels.get(j).getAlphaComponent();
+
+        assertEquals(newRed, this.pixel5.getRedComponent());
+        assertEquals(newGreen, this.pixel5.getGreenComponent());
+        assertEquals(newBlue, this.pixel5.getBlueComponent());
+        assertEquals(newAlpha, this.pixel5.getAlphaComponent());
+
+        assertEquals(0, this.pixel5.getRedComponent());
+        assertEquals(0, this.pixel5.getGreenComponent());
+        assertEquals(0, this.pixel5.getBlueComponent());
+
+      }
+    }
+  }
+
+  @Test
+  public void testDarkenByLuma() {
+    this.init();
+
+    ArrayList<Pixel> lop = new ArrayList<>();
+    ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
+
+    currentLayer.add(lop);
+    lop.add(this.pixel2);
+
+    for (ArrayList<Pixel> pixels : currentLayer) {
+      for (int j = 0; j < currentLayer.get(0).size(); j++) {
+
+        pixels.get(j).modifyComponentByBrightness("darken-luma", false);
+
+        int newRed = pixels.get(j).getRedComponent();
+        int newGreen = pixels.get(j).getGreenComponent();
+        int newBlue = pixels.get(j).getBlueComponent();
+        int newAlpha = pixels.get(j).getAlphaComponent();
+
+        assertEquals(newRed, this.pixel2.getRedComponent());
+        assertEquals(newGreen, this.pixel2.getGreenComponent());
+        assertEquals(newBlue, this.pixel2.getBlueComponent());
+        assertEquals(newAlpha, this.pixel2.getAlphaComponent());
+
+        assertEquals(35, this.pixel2.getRedComponent());
+        assertEquals(0, this.pixel2.getGreenComponent());
+        assertEquals(14, this.pixel2.getBlueComponent());
+
+      }
+    }
+  }
+
+
 }
