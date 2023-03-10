@@ -138,98 +138,55 @@ public class PixelTest {
   public void testModifyComponentByBrightnessBrightening() {
     this.init();
 
-    try {
-      this.pixel1.modifyComponentByBrightness("brighten-luma", true);
-      this.pixel1.modifyComponentByBrightness("brighten-value", true);
-      this.pixel1.modifyComponentByBrightness("brighten-intensity", true);
+    this.pixel1.modifyComponentByBrightness("brighten-luma", true);
+    this.pixel1.modifyComponentByBrightness("brighten-value", true);
+    this.pixel1.modifyComponentByBrightness("brighten-intensity", true);
 
-      assertEquals(0, this.pixel1.getRedComponent());
-      assertEquals(0, this.pixel1.getGreenComponent());
-      assertEquals(0, this.pixel1.getBlueComponent());
-    } catch (IllegalArgumentException iae) {
-      //
-    }
+    this.pixel2.modifyComponentByBrightness("brighten-luma", true);
+    assertEquals(205, this.pixel2.getRedComponent());
+    assertEquals(157, this.pixel2.getGreenComponent());
+    assertEquals(184, this.pixel2.getBlueComponent());
 
-    try {
-      this.pixel2.modifyComponentByBrightness("brighten-luma", true);
-      assertEquals(205, this.pixel2.getRedComponent());
-      assertEquals(157, this.pixel2.getGreenComponent());
-      assertEquals(184, this.pixel2.getBlueComponent());
-    } catch (IllegalArgumentException iae) {
-      //
-    }
+    this.pixel2.modifyComponentByBrightness("brighten-intensity", true);
+    assertEquals(255, this.pixel2.getRedComponent());
+    assertEquals(255, this.pixel2.getGreenComponent());
+    assertEquals(255, this.pixel2.getBlueComponent());
 
-    try {
-      this.pixel2.modifyComponentByBrightness("brighten-intensity", true);
-      assertEquals(255, this.pixel2.getRedComponent());
-      assertEquals(255, this.pixel2.getGreenComponent());
-      assertEquals(255, this.pixel2.getBlueComponent());
-    } catch (IllegalArgumentException iae) {
-      //
-    }
+    this.pixel2.modifyComponentByBrightness("brighten-value", true);
+    assertEquals(255, this.pixel2.getRedComponent());
+    assertEquals(255, this.pixel2.getGreenComponent());
+    assertEquals(255, this.pixel2.getBlueComponent());
 
-    try {
-      this.pixel2.modifyComponentByBrightness("brighten-value", true);
-      assertEquals(255, this.pixel2.getRedComponent());
-      assertEquals(255, this.pixel2.getGreenComponent());
-      assertEquals(255, this.pixel2.getBlueComponent());
-    } catch (IllegalArgumentException iae) {
-      //
-    }
+    this.pixel3.modifyComponentByBrightness("brighten-value", true);
+    assertEquals(89, this.pixel3.getRedComponent());
+    assertEquals(118, this.pixel3.getGreenComponent());
+    assertEquals(136, this.pixel3.getBlueComponent());
 
-    try {
-      this.pixel3.modifyComponentByBrightness("brighten-value", true);
-      assertEquals(89, this.pixel3.getRedComponent());
-      assertEquals(118, this.pixel3.getGreenComponent());
-      assertEquals(136, this.pixel3.getBlueComponent());
-    } catch (IllegalArgumentException iae) {
-      //
-    }
+    this.pixel3.modifyComponentByBrightness("brighten-intensity", true);
+    assertEquals(203, this.pixel3.getRedComponent());
+    assertEquals(232, this.pixel3.getGreenComponent());
+    assertEquals(250, this.pixel3.getBlueComponent());
 
-    try {
-      this.pixel3.modifyComponentByBrightness("brighten-intensity", true);
-      assertEquals(203, this.pixel3.getRedComponent());
-      assertEquals(232, this.pixel3.getGreenComponent());
-      assertEquals(250, this.pixel3.getBlueComponent());
-    } catch (IllegalArgumentException iae) {
-      //
-    }
+    this.pixel3.modifyComponentByBrightness("brighten-luma", true);
+    assertEquals(255, this.pixel3.getRedComponent());
+    assertEquals(255, this.pixel3.getGreenComponent());
+    assertEquals(255, this.pixel3.getBlueComponent());
 
-    try {
-      this.pixel3.modifyComponentByBrightness("brighten-luma", true);
-      assertEquals(255, this.pixel3.getRedComponent());
-      assertEquals(255, this.pixel3.getGreenComponent());
-      assertEquals(255, this.pixel3.getBlueComponent());
-    } catch (IllegalArgumentException iae) {
-      //
-    }
+    this.pixel4.modifyComponentByBrightness("brighten-intensity", true);
+    assertEquals(23, this.pixel4.getRedComponent());
+    assertEquals(22, this.pixel4.getGreenComponent());
+    assertEquals(21, this.pixel4.getBlueComponent());
 
-    try {
-      this.pixel4.modifyComponentByBrightness("brighten-intensity", true);
-      assertEquals(23, this.pixel4.getRedComponent());
-      assertEquals(22, this.pixel4.getGreenComponent());
-      assertEquals(21, this.pixel4.getBlueComponent());
-    } catch (IllegalArgumentException iae) {
-      //
-    }
+    this.pixel4.modifyComponentByBrightness("brighten-value", true);
+    assertEquals(46, this.pixel4.getRedComponent());
+    assertEquals(45, this.pixel4.getGreenComponent());
+    assertEquals(44, this.pixel4.getBlueComponent());
 
-    try {
-      this.pixel4.modifyComponentByBrightness("brighten-value", true);
-      assertEquals(46, this.pixel4.getRedComponent());
-      assertEquals(45, this.pixel4.getGreenComponent());
-      assertEquals(44, this.pixel4.getBlueComponent());
-    } catch (IllegalArgumentException iae) {
-      //
-    }
+    this.pixel4.modifyComponentByBrightness("brighten-luma", true);
+    assertEquals(91, this.pixel4.getRedComponent());
+    assertEquals(90, this.pixel4.getGreenComponent());
+    assertEquals(89, this.pixel4.getBlueComponent());
 
-    try {
-      this.pixel4.modifyComponentByBrightness("brighten-luma", true);
-      assertEquals(91, this.pixel4.getRedComponent());
-      assertEquals(90, this.pixel4.getGreenComponent());
-      assertEquals(89, this.pixel4.getBlueComponent());
-    } catch (IllegalArgumentException iae) {
-      //
-    }
 
   }
 

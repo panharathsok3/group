@@ -103,14 +103,14 @@ public class CollageImplTest {
       this.collage1.addLayer(null);
       fail("layer name cannot be null");
     } catch (IllegalArgumentException illegalArgumentException) {
-      // do nothing because we want it to fail.
+      // do nothing
     }
 
     try{
       this.collage2.addLayer("L0");
       fail("A  project must be created first");
     } catch (IllegalStateException illegalStateException) {
-      //do nothing because we want it to fail.
+      //do nothing
     }
 
     try{
@@ -125,7 +125,7 @@ public class CollageImplTest {
       this.collage2.addLayer("L2");
       fail("Cant make a layer with an already used name");
     } catch (IllegalStateException illegalStateException) {
-      //do nothing because we want it to fail.
+      //do nothing
     }
   }
 

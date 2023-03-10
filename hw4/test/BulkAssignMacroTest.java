@@ -46,7 +46,6 @@ public class BulkAssignMacroTest {
     }
 
     try {
-
       new BulkAssignFilter(2, -2000, "brighten-value");
       fail("arguments cannot be null or negative");
     } catch (IllegalArgumentException iae) {
@@ -54,7 +53,6 @@ public class BulkAssignMacroTest {
     }
 
     try {
-
       new BulkAssignFilter(0, 0, null);
       fail("arguments cannot be null or negative");
     } catch (IllegalArgumentException iae) {
@@ -62,7 +60,6 @@ public class BulkAssignMacroTest {
     }
 
     try {
-
       new BulkAssignFilter(2, 4, "");
       fail("arguments cannot be null or negative");
     } catch (IllegalArgumentException iae) {
@@ -89,22 +86,16 @@ public class BulkAssignMacroTest {
     this.layer2.addImage(0, 0, pixelsOnCurrentLayer);
 
 
-    try {
+    MacroCollageEffects macro = new BulkAssignFilter(10, 15, "red-component");
+    macro.executeMacro(this.layer2);
 
-      MacroCollageEffects macro = new BulkAssignFilter(10, 15, "red-component");
-      macro.executeMacro(this.layer2);
-
-      for (ArrayList<Pixel> lop1 : this.layer2.getPixelsOnLayer()) {
-        for (Pixel p : lop1) {
-          assertEquals(21, p.getRedComponent());
-          assertEquals(0, p.getGreenComponent());
-          assertEquals(0, p.getBlueComponent());
-          assertEquals(100, p.getAlphaComponent());
-        }
+    for (ArrayList<Pixel> lop1 : this.layer2.getPixelsOnLayer()) {
+      for (Pixel p : lop1) {
+        assertEquals(21, p.getRedComponent());
+        assertEquals(0, p.getGreenComponent());
+        assertEquals(0, p.getBlueComponent());
+        assertEquals(100, p.getAlphaComponent());
       }
-
-    } catch (IllegalArgumentException iae) {
-      //
     }
 
   }

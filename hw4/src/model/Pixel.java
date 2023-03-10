@@ -8,8 +8,6 @@ public class Pixel {
   private int greenComponent;
   private int blueComponent;
   private int alphaComponent;
-  static final int maxValue = 255;
-
 
   /**
    * Creates a color using rgb values.
