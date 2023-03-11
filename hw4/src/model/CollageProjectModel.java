@@ -22,7 +22,7 @@ public interface CollageProjectModel {
    * Loads the project onto the program to resume the process.
    * @param filePath the file path to the file to be loaded
    * @return
-   * @throws FileNotFoundException
+   * @throws FileNotFoundException if the filePath to the file doesn't exist or cannot be open
    */
   CollageProjectModelImpl loadProject(String filePath) throws FileNotFoundException;
 

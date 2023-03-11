@@ -48,7 +48,6 @@ public class ImageUtil {
 
     int width = sc.nextInt();
     int height = sc.nextInt();
-    int maxValue = sc.nextInt();
 
     ArrayList<ArrayList<Pixel>> pixelsOnImage = new ArrayList<>();
 

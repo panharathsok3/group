@@ -51,7 +51,8 @@ public class Layer {
   }
 
   /**
-   * Adds a given image to this layer.
+   * Adds a given image to this layer. It doesn't resize the image, so if the image is bigger than
+   * the layer, it will only get the top left portion of the image and not the entire image.
    * @param xPos the x position of the pixel on this layer
    * @param yPos the y position of the pixel on this layer
    * @param image the image that will be placed on this layer
@@ -64,13 +65,18 @@ public class Layer {
       throw new IllegalArgumentException("Arguments can't be null and they can't be negative");
     }
 
-    for (int i = xPos; i < this.height; i++) {
-      for (int j = yPos; j < this.width; j++) {
-        for (ArrayList<Pixel> list : image) {
-          for (Pixel p : list) {
-            this.pixelsOnLayer.get(i).set(j, p);
-          }
-        }
+    int height = image.size();
+    int width = image.get(0).size();
+    if (image.size() > this.height) {
+      height = this.height;
+    }
+    if (image.get(0).size() > this.width) {
+      width = this.width;
+    }
+
+    for (int i = xPos; i < height; i++) {
+      for (int j = yPos; j < width; j++) {
+        this.pixelsOnLayer.get(i).set(j, image.get(i).get(j));
       }
     }
   }

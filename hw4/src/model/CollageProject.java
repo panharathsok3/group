@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 /**
  * An interface to represent the canvas operations that can be done with our program.
  */
@@ -40,5 +42,11 @@ public interface CollageProject extends CollageProjectModel {
    *                                  or if the filterOptions is null or doesn't exist
    */
   void setFilter(String layerName, String filterOption) throws IllegalArgumentException;
+
+  /**
+   * Returns a copy of the layers on the collage.
+   * @return a copy of the layers on the collage
+   */
+  ArrayList<Layer> getLayers();
 
 }

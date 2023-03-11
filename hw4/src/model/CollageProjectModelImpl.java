@@ -5,9 +5,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import java.util.Map;
 import model.Effects.BrightenDarkenMacro;
 import model.Effects.BulkAssignFilter;
 import model.Effects.MacroCollageEffects;
@@ -23,6 +25,7 @@ public class CollageProjectModelImpl implements CollageProject {
   private String projectName;
   private boolean backgroundMade;
   private boolean createdProject;
+  Map<String, String> layerFilter;
 
   /**
    * Creates a CollageProjectModelImpl to work on.
@@ -31,6 +34,7 @@ public class CollageProjectModelImpl implements CollageProject {
     this.project = new LinkedList<>();
     this.backgroundMade = false;
     this.createdProject = false;
+    this.layerFilter = new HashMap<>();
   }
 
   @Override
@@ -44,11 +48,10 @@ public class CollageProjectModelImpl implements CollageProject {
 
     this.projectName = name;
     this.createdProject = true;
-    this.addLayer("Background");
     this.canvasHeight = canvasHeight;
     this.canvasWidth = canvasWidth;
+    this.addLayer("Background");
     this.backgroundMade = true;
-
   }
 
   @Override
@@ -62,20 +65,20 @@ public class CollageProjectModelImpl implements CollageProject {
     }
 
     Layer layer;
-    if (!this.backgroundMade) {
+    if (this.backgroundMade) {
       layer = new Layer(layerName, this.canvasHeight, this.canvasWidth, 0);
     } else {
       layer = new Layer(layerName, this.canvasHeight, this.canvasWidth, 255);
     }
-
     for (Layer currentLayer : project) {
       if (currentLayer.getName().equals(layer.getName())) {
         throw new IllegalStateException("There is already a layer with "
-                + "the name you are trying to use");
+            + "the name you are trying to use");
       }
     }
 
     this.project.add(layer);
+    this.setFilter(layerName, "normal");
   }
 
   @Override
@@ -103,7 +106,6 @@ public class CollageProjectModelImpl implements CollageProject {
 
     throw new IllegalArgumentException("Layer not found");
   }
-
 
   @Override
   public void saveProject(String filePath, String projectType) throws IllegalArgumentException, IllegalStateException {
@@ -141,22 +143,23 @@ public class CollageProjectModelImpl implements CollageProject {
     fileWriter.write(this.projectName + "\n");
     fileWriter.write(this.canvasWidth + " " + this.canvasHeight + "\n");
     //depends on what ever the colors in the project are
-    fileWriter.write("256\n"); //because the max value of each pixel can be 256
+    fileWriter.write("255\n"); //because the max value of each pixel can be 255
 
     for (int i = 0; i < this.project.size(); i++) {
       Layer layer = this.project.get(i);
-      fileWriter.write(layer.getName() + "\n");
+      String filter = this.layerFilter.get(layer.getName());
+      fileWriter.write(layer.getName() + " " + filter + "\n");
 
       ArrayList<ArrayList<Pixel>> pixels = layer.getPixelsOnLayer();
 
       for (int j = 0; j < this.canvasHeight; j++) {
         for (int k = 0; k < this.canvasWidth; k++) {
-          int redComponent = pixels.get(i).get(j).getRedComponent();
-          int greenComponent = pixels.get(i).get(j).getGreenComponent();
-          int blueComponent = pixels.get(i).get(j).getBlueComponent();
-          int alphaComponent = pixels.get(i).get(j).getAlphaComponent();
+          int redComponent = pixels.get(j).get(k).getRedComponent();
+          int greenComponent = pixels.get(j).get(k).getGreenComponent();
+          int blueComponent = pixels.get(j).get(k).getBlueComponent();
+          int alphaComponent = pixels.get(j).get(k).getAlphaComponent();
           fileWriter.write(redComponent + " " + greenComponent + " " + blueComponent + " "
-                  + " " + alphaComponent + "\n");
+                  + alphaComponent + "\n");
         }
       }
     }
@@ -211,14 +214,21 @@ public class CollageProjectModelImpl implements CollageProject {
 
     MacroCollageEffects macro;
     Layer currentLayer = null;
+    boolean layerFound = false;
 
-    for (Layer layer : project) {
+    for (Layer layer : this.project) {
       if (layerName.equals(layer.getName())) {
         currentLayer = layer;
-      } else {
-        throw new IllegalArgumentException("Layer not found");
+        layerFound = true;
+        this.layerFilter.put(layerName, filterOption);
       }
     }
+
+    if (!layerFound) {
+      throw new IllegalArgumentException("Layer not found");
+    }
+
+
 
     switch (filterOption) {
       case "normal":
@@ -246,18 +256,16 @@ public class CollageProjectModelImpl implements CollageProject {
     }
   }
 
+  @Override
+  public ArrayList<Layer> getLayers() {
+    return new ArrayList<>(this.project);
+  }
+
   /**
    * Helper method for throwing an exception when the project has not been created.
    */
   private void throwExceptionProjectNotMade() {
     throw new IllegalStateException("The project has not been created");
-  }
-
-  private ArrayList<ArrayList<Pixel>> getPixelAtCoordinate(int row, int col) {
-    if (row < 0 || row > this.canvasHeight || col < 0 || col > this.canvasWidth) {
-      throw new IllegalArgumentException("coordinates provided are out of bounds");
-    }
-    return this.project.get(canvasHeight).getPixelsOnLayer();
   }
 
 }
