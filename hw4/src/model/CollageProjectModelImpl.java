@@ -231,7 +231,8 @@ public class CollageProjectModelImpl implements CollageProject {
     sc.next(); // background
     sc.next(); // normal
 
-    this.addImageToLayer(sc);
+    int layerNum = 0;
+    this.addImageToLayer(sc, layerNum);
 
     while (sc.hasNext()) {
       String currentLayer = sc.next();
@@ -239,26 +240,16 @@ public class CollageProjectModelImpl implements CollageProject {
       this.addLayer(currentLayer);
       this.setFilter(currentLayer, filterType);
 
-      this.addImageToLayer(sc);
+      layerNum += 1;
+      this.addImageToLayer(sc, 1);
     }
-
-//    FileReader loader = new FileReader(filePath);
-//
-//    ArrayList<Layer> projectContents;
-//
-//    if (filePath.endsWith(".ppm")) {
-//      //projectContents =  ImageUtil.readPPM(filePath);
-//    }
-//
-//
-//    return new CollageProjectModelImpl();
   }
 
   /**
    * Adds the content of the image from the file and place it on the Layer.
    * @param sc the scanner to read from the file
    */
-  private void addImageToLayer(Scanner sc) {
+  private void addImageToLayer(Scanner sc, int layerNum) {
     ArrayList<ArrayList<Pixel>> image = new ArrayList<>();
 
     for (int i = 0; i < this.canvasHeight; i++) {
@@ -268,7 +259,7 @@ public class CollageProjectModelImpl implements CollageProject {
       }
     }
 
-    this.getLayers().get(0).addImage(0, 0, image);
+    this.getLayers().get(layerNum).addImage(0, 0, image);
   }
 
   @Override

@@ -936,7 +936,9 @@ public class CollageImplTest {
   public void testValidLoadProjectAfterAddingLayer() {
     this.init();
 
-    this.collage1.loadProject("src/saveProjectAndLoadImmediately");
+    this.collage1.addLayer("L1");
+    this.collage1.saveProject("src/saveProjectAndLoadAfterAddingLayer", "PPM");
+    this.collage1.loadProject("src/saveProjectAndLoadAfterAddingLayer");
     assertEquals("C1", this.collage1.getProjectName());
     assertEquals(2, this.collage1.getHeight());
     assertEquals(2, this.collage1.getWidth());
@@ -960,6 +962,90 @@ public class CollageImplTest {
             backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
       }
     }
+
+    backgroundLayer = this.collage1.getLayers().get(1);
+    assertEquals("L1", backgroundLayer.getName());
+
+    layerWithFilter = this.collage1.getFiltersOnProject();
+    assertEquals("normal", layerWithFilter.get("L1"));
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(0,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+  }
+
+  @Test
+  public void testValidLoadProjectAfterAddingLayerAndModifying() {
+    this.init();
+
+    this.collage1.addLayer("L1");
+    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    this.collage1.setFilter("L1", "darken-intensity");
+    this.collage1.saveProject("src/saveProjectAndLoadAfterAddingLayerAndModifying",
+        "PPM");
+    this.collage1.loadProject("src/saveProjectAndLoadAfterAddingLayerAndModifying");
+    assertEquals("C1", this.collage1.getProjectName());
+    assertEquals(2, this.collage1.getHeight());
+    assertEquals(2, this.collage1.getWidth());
+    assertEquals(255, this.collage1.getMaxValue());
+
+    Layer backgroundLayer = this.collage1.getLayers().get(0);
+    assertEquals("Background", backgroundLayer.getName());
+
+    Map<String, String> layerWithFilter = this.collage1.getFiltersOnProject();
+    assertEquals("normal", layerWithFilter.get("Background"));
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+
+    backgroundLayer = this.collage1.getLayers().get(1);
+    assertEquals("L1", backgroundLayer.getName());
+
+    layerWithFilter = this.collage1.getFiltersOnProject();
+    assertEquals("darken-intensity", layerWithFilter.get("L1"));
+
+    assertEquals(53, backgroundLayer.getPixelsOnLayer().get(0).get(0).getRedComponent());
+    assertEquals(0, backgroundLayer.getPixelsOnLayer().get(0).get(0).getGreenComponent());
+    assertEquals(0, backgroundLayer.getPixelsOnLayer().get(0).get(0).getBlueComponent());
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(0).get(0).getAlphaComponent());
+
+    assertEquals(0, backgroundLayer.getPixelsOnLayer().get(0).get(1).getRedComponent());
+    assertEquals(6, backgroundLayer.getPixelsOnLayer().get(0).get(1).getGreenComponent());
+    assertEquals(12, backgroundLayer.getPixelsOnLayer().get(0).get(1).getBlueComponent());
+    assertEquals(255,
+        backgroundLayer.getPixelsOnLayer().get(0).get(1).getAlphaComponent());
+
+    assertEquals(0, backgroundLayer.getPixelsOnLayer().get(1).get(0).getRedComponent());
+    assertEquals(6, backgroundLayer.getPixelsOnLayer().get(1).get(0).getGreenComponent());
+    assertEquals(12, backgroundLayer.getPixelsOnLayer().get(1).get(0).getBlueComponent());
+    assertEquals(255,
+        backgroundLayer.getPixelsOnLayer().get(1).get(0).getAlphaComponent());
+
+    assertEquals(0, backgroundLayer.getPixelsOnLayer().get(1).get(1).getRedComponent());
+    assertEquals(6, backgroundLayer.getPixelsOnLayer().get(1).get(1).getGreenComponent());
+    assertEquals(12, backgroundLayer.getPixelsOnLayer().get(1).get(1).getBlueComponent());
+    assertEquals(255,
+        backgroundLayer.getPixelsOnLayer().get(1).get(1).getAlphaComponent());
+
   }
 
   @Test
