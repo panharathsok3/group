@@ -1,5 +1,6 @@
 package model;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -10,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import java.util.Map;
+import java.util.Scanner;
 import model.Effects.BrightenDarkenMacro;
 import model.Effects.BulkAssignFilter;
 import model.Effects.MacroCollageEffects;
@@ -19,22 +21,21 @@ import model.Effects.MacroCollageEffects;
  */
 public class CollageProjectModelImpl implements CollageProject {
 
-  private final List<Layer> project;
+  private List<Layer> project;
   private int canvasHeight;
   private int canvasWidth;
   private String projectName;
   private boolean backgroundMade;
   private boolean createdProject;
   Map<String, String> layerFilter;
+  private final int maxValue;
 
   /**
    * Creates a CollageProjectModelImpl to work on.
    */
   public CollageProjectModelImpl() {
-    this.project = new LinkedList<>();
-    this.backgroundMade = false;
     this.createdProject = false;
-    this.layerFilter = new HashMap<>();
+    this.maxValue = 255;
   }
 
   @Override
@@ -46,10 +47,13 @@ public class CollageProjectModelImpl implements CollageProject {
               + "canvas height and width can't be less than 1");
     }
 
+    this.backgroundMade = false;
     this.projectName = name;
     this.createdProject = true;
     this.canvasHeight = canvasHeight;
     this.canvasWidth = canvasWidth;
+    this.project = new LinkedList<>();
+    this.layerFilter = new HashMap<>();
     this.addLayer("Background");
     this.backgroundMade = true;
   }
@@ -60,9 +64,7 @@ public class CollageProjectModelImpl implements CollageProject {
       throw new IllegalArgumentException("Arguments can't be null");
     }
 
-    if (!createdProject) {
-      this.throwExceptionProjectNotMade();
-    }
+    this.throwExceptionProjectNotMade();
 
     Layer layer;
     if (this.backgroundMade) {
@@ -70,6 +72,7 @@ public class CollageProjectModelImpl implements CollageProject {
     } else {
       layer = new Layer(layerName, this.canvasHeight, this.canvasWidth, 255);
     }
+
     for (Layer currentLayer : project) {
       if (currentLayer.getName().equals(layer.getName())) {
         throw new IllegalStateException("There is already a layer with "
@@ -85,14 +88,12 @@ public class CollageProjectModelImpl implements CollageProject {
   public void addImageToLayer(String layerName, String filePath, int xPos, int yPos)
           throws IllegalArgumentException {
 
+    this.throwExceptionProjectNotMade();
+
     if (layerName == null || layerName.equals("") || filePath == null || filePath.equals("")
             || xPos < 0 || xPos > this.canvasHeight || yPos < 0 || yPos > this.canvasWidth) {
-      throw new IllegalArgumentException("layer name and file path cannot be null, x and y positions have to be" +
-              "within the boundaries of the canvas");
-    }
-
-    if (!createdProject) {
-      this.throwExceptionProjectNotMade();
+      throw new IllegalArgumentException("layer name and file path cannot be null, x and y positions"
+          + " have to be within the boundaries of the canvas");
     }
 
     ArrayList<ArrayList<Pixel>> image = new ImageUtil().readPPM(filePath);
@@ -112,9 +113,7 @@ public class CollageProjectModelImpl implements CollageProject {
     if (filePath == null) {
       throw new IllegalArgumentException("Cannot give null as an argument");
     }
-    if (!createdProject) {
-      this.throwExceptionProjectNotMade();
-    }
+    this.throwExceptionProjectNotMade();
 
     if (projectType.equals("PPM")) {
       try {
@@ -133,9 +132,7 @@ public class CollageProjectModelImpl implements CollageProject {
    *                                  or if the given filePath is null
    */
   private void savePPMProject(String filePath) throws IOException {
-    if (filePath == null) {
-      throw new IllegalArgumentException("Cannot give null as an argument");
-    }
+    this.throwExceptionProjectNotMade();
 
     //write the new file to this path
     FileWriter fileWriter = new FileWriter(filePath);
@@ -167,11 +164,10 @@ public class CollageProjectModelImpl implements CollageProject {
     fileWriter.close();
   }
 
+  //TODO
   @Override
   public void saveImage(String filePath) throws IllegalArgumentException {
-    if (!createdProject) {
-      this.throwExceptionProjectNotMade();
-    }
+    this.throwExceptionProjectNotMade();
 
     try {
       if (filePath.endsWith(".ppm")) {
@@ -184,29 +180,101 @@ public class CollageProjectModelImpl implements CollageProject {
     }
   }
 
-  //load-project path-to-project-file: loads a project into the program TODO
   @Override
-  public CollageProjectModelImpl loadProject(String filePath) throws FileNotFoundException {
-    FileReader loader = new FileReader(filePath);
+  public void loadProject(String filePath) throws IllegalArgumentException,
+      IllegalStateException {
 
-    this.createdProject = true;
-    this.backgroundMade = true;
-
-    ArrayList<Layer> projectContents;
-
-    if (filePath.endsWith(".ppm")) {
-      //projectContents =  ImageUtil.readPPM(filePath);
+    if (filePath == null) {
+      throw new IllegalArgumentException("Arguments can't be null");
     }
 
+    Scanner sc;
 
-    return new CollageProjectModelImpl();
+    try {
+      sc = new Scanner(new FileInputStream(filePath));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    if (!sc.hasNextLine()) {
+      throw new IllegalStateException("Nothing inside the file to load");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    sc = new Scanner(builder.toString());
+
+    String projectName = sc.next();
+
+    if (!sc.hasNextInt()) {
+      throw new IllegalStateException("this file cannot create a new project");
+    }
+    int canvasHeight = sc.nextInt();
+
+    if (!sc.hasNextInt()) {
+      throw new IllegalStateException("this file cannot create a new project");
+    }
+    int canvasWidth = sc.nextInt();
+
+    if (!sc.hasNext()) {
+      throw new IllegalStateException("this file cannot create a new project");
+    }
+
+    this.newProject(projectName, canvasHeight, canvasWidth);
+    sc.next(); // max color
+    sc.next(); // background
+    sc.next(); // normal
+
+    this.addImageToLayer(sc);
+
+    while (sc.hasNext()) {
+      String currentLayer = sc.next();
+      String filterType = sc.next();
+      this.addLayer(currentLayer);
+      this.setFilter(currentLayer, filterType);
+
+      this.addImageToLayer(sc);
+    }
+
+//    FileReader loader = new FileReader(filePath);
+//
+//    ArrayList<Layer> projectContents;
+//
+//    if (filePath.endsWith(".ppm")) {
+//      //projectContents =  ImageUtil.readPPM(filePath);
+//    }
+//
+//
+//    return new CollageProjectModelImpl();
+  }
+
+  /**
+   * Adds the content of the image from the file and place it on the Layer.
+   * @param sc the scanner to read from the file
+   */
+  private void addImageToLayer(Scanner sc) {
+    ArrayList<ArrayList<Pixel>> image = new ArrayList<>();
+
+    for (int i = 0; i < this.canvasHeight; i++) {
+      image.add(new ArrayList<>());
+      for (int j = 0; j < this.canvasWidth; j++) {
+        image.get(i).add(new Pixel(sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.nextInt()));
+      }
+    }
+
+    this.getLayers().get(0).addImage(0, 0, image);
   }
 
   @Override
-  public void setFilter(String layerName, String filterOption) throws IllegalArgumentException {
-    if (!createdProject) {
-      this.throwExceptionProjectNotMade();
-    }
+  public void setFilter(String layerName, String filterOption) throws IllegalArgumentException,
+      IllegalStateException {
+    this.throwExceptionProjectNotMade();
 
     if (layerName == null || filterOption == null) {
       throw new IllegalArgumentException("Arguments can't be null");
@@ -227,8 +295,6 @@ public class CollageProjectModelImpl implements CollageProject {
     if (!layerFound) {
       throw new IllegalArgumentException("Layer not found");
     }
-
-
 
     switch (filterOption) {
       case "normal":
@@ -257,15 +323,48 @@ public class CollageProjectModelImpl implements CollageProject {
   }
 
   @Override
-  public ArrayList<Layer> getLayers() {
+  public ArrayList<Layer> getLayers() throws IllegalStateException {
+    this.throwExceptionProjectNotMade();
     return new ArrayList<>(this.project);
+  }
+
+  @Override
+  public String getProjectName() throws IllegalStateException {
+    this.throwExceptionProjectNotMade();
+    return this.projectName;
+  }
+
+  @Override
+  public int getHeight() throws IllegalStateException {
+    this.throwExceptionProjectNotMade();
+    return this.canvasHeight;
+  }
+
+  @Override
+  public int getWidth() throws IllegalStateException {
+    this.throwExceptionProjectNotMade();
+    return this.canvasWidth;
+  }
+
+  @Override
+  public int getMaxValue() throws IllegalStateException {
+    this.throwExceptionProjectNotMade();
+    return this.maxValue;
+  }
+
+  @Override
+  public Map<String, String> getFiltersOnProject() {
+    this.throwExceptionProjectNotMade();
+    return new HashMap<>(this.layerFilter);
   }
 
   /**
    * Helper method for throwing an exception when the project has not been created.
    */
   private void throwExceptionProjectNotMade() {
-    throw new IllegalStateException("The project has not been created");
+    if (!createdProject) {
+      throw new IllegalStateException("The project has not been created");
+    }
   }
 
 }

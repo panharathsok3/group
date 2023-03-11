@@ -68,11 +68,7 @@ add-image-to-layer tako-blue image/tako.ppm 100 50
           break;
         case "load-project":
           String filename = this.readValueString(sc);
-          try {
-            this.collage.loadProject(filename);
-          } catch (FileNotFoundException e) {
-            //do sth
-          }
+          this.collage.loadProject(filename);
           break;
         case "save-project":
           String filePath = this.readValueString(sc);

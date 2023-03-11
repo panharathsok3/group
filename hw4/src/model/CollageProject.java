@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * An interface to represent the canvas operations that can be done with our program.
@@ -12,7 +13,7 @@ public interface CollageProject extends CollageProjectModel {
    * DEFAULT: a fully transparent white image and the normal filter.
    * @param layerName the name of the layer
    * @throws IllegalStateException if there already exists a layer with the name
-   * that the user is trying to give. Program should continue running.
+   *                               or if the project has not been made yet
    * @throws IllegalArgumentException if the given layerName is null
    */
   void addLayer(String layerName) throws IllegalStateException, IllegalArgumentException;
@@ -27,6 +28,7 @@ public interface CollageProject extends CollageProjectModel {
    * @throws IllegalArgumentException if the layer doesn't exist or is null
    *                                  or if the filePath doesn't exist
    *                                  or if the x or y position is not on the canvas
+   * @throws IllegalStateException if the project has not been made yet
    */
   void addImageToLayer(String layerName, String filePath, int xPos, int yPos)
       throws IllegalArgumentException;
@@ -40,13 +42,51 @@ public interface CollageProject extends CollageProjectModel {
    * @param filterOption the option of filter that the client desires.
    * @throws IllegalArgumentException if the given layerName is null or doesn't exist
    *                                  or if the filterOptions is null or doesn't exist
+   * @throws IllegalStateException if the project has not been made yet
    */
-  void setFilter(String layerName, String filterOption) throws IllegalArgumentException;
+  void setFilter(String layerName, String filterOption) throws IllegalArgumentException,
+      IllegalStateException;
 
   /**
    * Returns a copy of the layers on the collage.
    * @return a copy of the layers on the collage
+   * @throws IllegalStateException if the project has not been made yet
    */
-  ArrayList<Layer> getLayers();
+  ArrayList<Layer> getLayers() throws IllegalStateException;
+
+  /**
+   * Returns the name of this project.
+   * @return the name of this project
+   * @throws IllegalStateException if the project has not been made yet
+   */
+  String getProjectName() throws IllegalStateException;
+
+  /**
+   * Returns the width of this collageProject.
+   * @return the width of this collageProject
+   * @throws IllegalStateException if the project has not been made yet
+   */
+  int getWidth() throws IllegalStateException;
+
+  /**
+   * Returns the height of this collageProject.
+   * @return the height of this collageProject
+   * @throws IllegalStateException if the project has not been made yet
+   */
+  int getHeight() throws IllegalStateException;
+
+  /**
+   * Returns the maximum value of a color of this collageProject.
+   * @return the maximum value of a color of this collageProject
+   * @throws IllegalStateException if the project has not been made yet
+   */
+  int getMaxValue() throws IllegalStateException;
+
+  /**
+   * Returns a map of a Layer name and its filter of this collageProject.
+   * @return a map of a Layer name and its filter of this collageProject
+   * @throws IllegalStateException if the project has not been made yet
+   */
+  Map<String, String> getFiltersOnProject() throws IllegalStateException;
 
 }

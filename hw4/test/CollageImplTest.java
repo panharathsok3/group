@@ -1,9 +1,11 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 import model.ImageUtil;
-import org.junit.Before;
 import org.junit.Test;
 
 import model.CollageProject;
@@ -29,7 +31,6 @@ public class CollageImplTest {
   CollageProject collage4;
 
 
-  @Before
   public void init() {
     this.pixel1 = new Pixel(0, 0, 0, 1);
     this.pixel2 = new Pixel(120, 72, 99);
@@ -45,6 +46,9 @@ public class CollageImplTest {
     this.collage2 = new CollageProjectModelImpl();
     this.collage3 = new CollageProjectModelImpl();
     this.collage4 = new CollageProjectModelImpl();
+
+    this.collage1.newProject("C1", 2, 2);
+    this.collage1.saveProject("src/saveProjectAndLoadImmediately", "PPM");
   }
 
   @Test
@@ -54,8 +58,6 @@ public class CollageImplTest {
     this.collage2.newProject("C2", 20, 20);
     this.collage3.newProject("C3", 10, 10);
     this.collage4.newProject("C4", 2, 2);
-
-
   }
 
   @Test
@@ -101,24 +103,25 @@ public class CollageImplTest {
 
   @Test
   public void testInvalidAddLayer() {
-    this.init();
 
+    this.collage2 = new CollageProjectModelImpl();
+    try {
+      this.collage2.addLayer("L0");
+      fail("A  project must be created first");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+
+    this.init();
     try {
       this.collage1.newProject("C1", 5, 5);
       this.collage1.addLayer(null);
       fail("layer name cannot be null");
-    } catch (IllegalArgumentException illegalArgumentException) {
+    } catch (IllegalArgumentException e) {
       // do nothing
     }
 
-    try{
-      this.collage2.addLayer("L0");
-      fail("A  project must be created first");
-    } catch (IllegalStateException illegalStateException) {
-      //do nothing
-    }
-
-    try{
+    try {
       this.collage1.newProject("C1", 5, 5);
       this.collage1.addLayer("L1");
       this.collage1.addLayer("L1");
@@ -129,7 +132,7 @@ public class CollageImplTest {
       this.collage2.addLayer("L1");
       this.collage2.addLayer("L2");
       fail("Cant make a layer with an already used name");
-    } catch (IllegalStateException illegalStateException) {
+    } catch (IllegalStateException e) {
       //do nothing
     }
   }
@@ -149,46 +152,6 @@ public class CollageImplTest {
     assertEquals("L1", this.collage1.getLayers().get(3).getName());
     assertEquals("L3", this.collage1.getLayers().get(2).getName());
     assertEquals("L2", this.collage1.getLayers().get(1).getName());
-  }
-
-  @Test
-  public void testCommandsWithoutCreatingNewProject() {
-    this.init();
-
-    try {
-      this.collage1.addLayer(this.layer1.getName());
-      fail("A project has not been created yet");
-    } catch (IllegalStateException projectNotMade) {
-      // do nothing
-    }
-
-    try {
-      this.collage1.addImageToLayer(this.layer2.getName(), "src/tako.ppm", 2, 2);
-      fail("A project has not been created yet");
-    } catch (IllegalArgumentException projectNotMade) {
-      // do nothing
-    }
-
-    try {
-      this.collage1.setFilter(this.layer3.getName(), "darken-luma");
-      fail("A project has not been created yet");
-    } catch (IllegalStateException projectNotMade) {
-      // do nothing
-    }
-
-    try {
-      this.collage1.saveImage("src/tako.ppm");
-      fail("A project has not been created yet");
-    } catch (IllegalStateException projectNotMade) {
-      // do nothing
-    }
-
-    try {
-      this.collage1.saveProject("src/a", "PPM");
-      fail("A project has not been created yet");
-    } catch (IllegalStateException projectNotMade) {
-      // do nothing
-    }
   }
 
   @Test
@@ -216,7 +179,15 @@ public class CollageImplTest {
   }
 
   @Test
-  public void testInvalidArgsAddImageToLayer() {
+  public void testInvalidAddImageToLayer() {
+    this.collage1 = new CollageProjectModelImpl();
+    try {
+      this.collage1.addImageToLayer("L1", "src/tako.ppm",0,0);
+      fail("Didn't start a new project yet");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+
     this.init();
 
     try {
@@ -475,8 +446,17 @@ public class CollageImplTest {
   }
 
   @Test
-  public void nullArgsForSaveProjects() {
+  public void testInvalidSaveProjects() {
+    this.collage1 = new CollageProjectModelImpl();
+    try {
+      this.collage1.saveProject("src/new", "ppm");
+      fail("The project hasn't been made yet");
+    } catch (IllegalStateException e) {
+      // do nothing
+    }
+
     this.init();
+
     this.collage1.newProject("C1", 1, 1);
 
     try {
@@ -852,6 +832,15 @@ public class CollageImplTest {
 
   @Test
   public void testInvalidSetFilter() {
+
+    this.collage1 = new CollageProjectModelImpl();
+    try {
+      this.collage1.setFilter("L1", "Brighten-Luma");
+      fail("Project hasn't been made yet");
+    } catch (IllegalStateException e) {
+      //do thing
+    }
+
     this.init();
     this.collage1.newProject("C1", 1, 1);
 
@@ -902,6 +891,279 @@ public class CollageImplTest {
         list.get(1).getName());
   }
 
-  //Need to test load project and save image
+  @Test
+  public void testInvalidGetLayers() {
+    this.collage1 = new CollageProjectModelImpl();
+    try {
+      this.collage1.getLayers();
+      fail("project hasn't been made yet");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+  }
+
+  @Test
+  public void testValidLoadProjectImmediately() {
+    this.init();
+
+    this.collage1.loadProject("src/saveProjectAndLoadImmediately");
+    assertEquals("C1", this.collage1.getProjectName());
+    assertEquals(2, this.collage1.getHeight());
+    assertEquals(2, this.collage1.getWidth());
+    assertEquals(255, this.collage1.getMaxValue());
+
+    Layer backgroundLayer = this.collage1.getLayers().get(0);
+    assertEquals("Background", backgroundLayer.getName());
+
+    Map<String, String> layerWithFilter = this.collage1.getFiltersOnProject();
+    assertEquals("normal", layerWithFilter.get("Background"));
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+  }
+
+  @Test
+  public void testValidLoadProjectAfterAddingLayer() {
+    this.init();
+
+    this.collage1.loadProject("src/saveProjectAndLoadImmediately");
+    assertEquals("C1", this.collage1.getProjectName());
+    assertEquals(2, this.collage1.getHeight());
+    assertEquals(2, this.collage1.getWidth());
+    assertEquals(255, this.collage1.getMaxValue());
+
+    Layer backgroundLayer = this.collage1.getLayers().get(0);
+    assertEquals("Background", backgroundLayer.getName());
+
+    Map<String, String> layerWithFilter = this.collage1.getFiltersOnProject();
+    assertEquals("normal", layerWithFilter.get("Background"));
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+  }
+
+  @Test
+  public void testInvalidLoadProject() {
+    this.init();
+    try {
+      this.collage1.loadProject(null);
+      fail("Arguments can't be null");
+    } catch (IllegalArgumentException e) {
+      // do nothing
+    }
+
+    try {
+      this.collage1.loadProject("a");
+      fail("File not found");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+
+    try {
+      FileWriter fileWriter = new FileWriter("src/nothingInside");
+      fileWriter.close();
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException");
+    }
+
+    try {
+      this.collage1.loadProject("src/nothingInside");
+      fail("Nothing is inside the file");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+
+    try {
+      FileWriter fileWriter = new FileWriter("src/nothingInside");
+      fileWriter.write("C1" + "\n");
+      fileWriter.close();
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException");
+    }
+
+    try {
+      this.collage1.loadProject("src/nothingInside");
+      fail("Not enough to make a project");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+
+    try {
+      FileWriter fileWriter = new FileWriter("src/nothingInside");
+      fileWriter.write("C1" + "\n");
+      fileWriter.write("100 100" + "\n");
+      fileWriter.close();
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException");
+    }
+
+    try {
+      this.collage1.loadProject("src/nothingInside");
+      fail("Not enough to make a project");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+
+    try {
+      FileWriter fileWriter = new FileWriter("src/nothingInside");
+      fileWriter.write("C1" + "\n");
+      fileWriter.write("a 100" + "\n");
+      fileWriter.write("255" + "\n");
+      fileWriter.close();
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException");
+    }
+
+    try {
+      this.collage1.loadProject("src/nothingInside");
+      fail("Not enough to make a project");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+
+    try {
+      FileWriter fileWriter = new FileWriter("src/nothingInside");
+      fileWriter.write("C1" + "\n");
+      fileWriter.write("100 a" + "\n");
+      fileWriter.write("255" + "\n");
+      fileWriter.close();
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException");
+    }
+
+    try {
+      this.collage1.loadProject("src/nothingInside");
+      fail("Not enough to make a project");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+  }
+
+  @Test
+  public void testValidGetProjectNames() {
+    this.init();
+    this.collage1.newProject("C1", 2, 2);
+    assertEquals("C1", this.collage1.getProjectName());
+
+    this.collage2.newProject("C2", 2, 2);
+    assertEquals("C2", this.collage2.getProjectName());
+  }
+
+  @Test
+  public void testInvalidGetProjectNames() {
+    this.collage1 = new CollageProjectModelImpl();
+    try {
+      this.collage1.getProjectName();
+      fail("project hasn't been made yet");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+  }
+
+  @Test
+  public void testValidGetHeight() {
+    this.init();
+    this.collage1.newProject("C1", 2, 3);
+    assertEquals(2, this.collage1.getHeight());
+
+    this.collage2.newProject("C2", 4, 5);
+    assertEquals(4, this.collage2.getHeight());
+  }
+
+  @Test
+  public void testInvalidGetHeight() {
+    this.collage1 = new CollageProjectModelImpl();
+    try {
+      this.collage1.getHeight();
+      fail("project hasn't been made yet");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+  }
+
+  @Test
+  public void testValidGetWidth() {
+    this.init();
+    this.collage1.newProject("C1", 2, 3);
+    assertEquals(3, this.collage1.getWidth());
+
+    this.collage2.newProject("C2", 4, 5);
+    assertEquals(5, this.collage2.getWidth());
+  }
+
+  @Test
+  public void testInvalidGetWidth() {
+    this.collage1 = new CollageProjectModelImpl();
+    try {
+      this.collage1.getWidth();
+      fail("project hasn't been made yet");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+  }
+
+  @Test
+  public void testValidGetMaxValue() {
+    this.init();
+    this.collage1.newProject("C1", 2, 3);
+    assertEquals(255, this.collage1.getMaxValue());
+
+    this.collage2.newProject("C2", 4, 5);
+    assertEquals(255, this.collage2.getMaxValue());
+  }
+
+  @Test
+  public void testInvalidGetMaxValue() {
+    this.collage1 = new CollageProjectModelImpl();
+    try {
+      this.collage1.getMaxValue();
+      fail("project hasn't been made yet");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+  }
+
+  @Test
+  public void testValidGetFiltersOnProject() {
+    this.init();
+    this.collage1.newProject("C1", 2, 3);
+    assertEquals("normal", this.collage1.getFiltersOnProject().get("Background"));
+
+    this.collage2.newProject("C2", 4, 5);
+    assertEquals("normal", this.collage2.getFiltersOnProject().get("Background"));
+  }
+
+  @Test
+  public void testInvalidGetFiltersOnProject() {
+    this.collage1 = new CollageProjectModelImpl();
+    try {
+      this.collage1.getFiltersOnProject();
+      fail("project hasn't been made yet");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+  }
+
+  //TODO: Need to test save image
 
 }
