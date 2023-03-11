@@ -1,13 +1,19 @@
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.junit.Test;
 
 import java.io.IOException;
+import java.io.StringReader;
+
+import controller.CollageController;
+import controller.CollageControllerImpl;
 import model.CollageProject;
-import model.CollageProjectModel;
 import model.CollageProjectModelImpl;
-import org.junit.Test;
 import view.CollageTextView;
 import view.CollageView;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class CollageTextViewTest {
 
@@ -56,5 +62,47 @@ public class CollageTextViewTest {
 
     assertEquals("aDo something", this.out.toString());
 
+    assertTrue(this.renderMessageWithMock());
   }
+
+  /**
+   * Test for rendering message.
+   *
+   * @param view    the appendable.
+   * @param message the message to be rendered.
+   * @return true if the exception was not thrown, false otherwise.
+   */
+  public boolean renderMessage(CollageView view, String message) {
+    try {
+      view.renderMessage(message);
+      return true;
+    } catch (IOException e) {
+      return false;
+    }
+  }
+
+  /**
+   * More test for render message.
+   *
+   * @return
+   */
+  public boolean renderMessageWithMock() {
+
+    this.out = new StringBuilder();
+    this.view = new CollageTextView(this.collage, this.out);
+
+    Appendable badAppendable = new BadAppendable();
+    CollageView badView = new CollageTextView(this.collage, badAppendable);
+
+    assertTrue(renderMessage(this.view, "Welcome to the Collage "));
+    assertEquals("Welcome to the Collage ", this.out.toString());
+    assertTrue(renderMessage(this.view, " To Quit, press q."));
+    assertEquals("Welcome to the Collage  To Quit, press q.", this.out.toString());
+
+    assertFalse(renderMessage(badView, "Should throw exception"));
+    return true;
+  }
+
+
+
 }
