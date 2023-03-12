@@ -1,2 +1,113 @@
-# group
- 
+
+# Collager
+
+We divided our Collager Application into three sections; adhering to the Model, View, Controller
+pattern in Software design pattern.
+
+# Pixel
+
+The Pixel class represents a single pixel that makes up images. We made our Pixel class backwards
+compatible with other forms of Images in case there is no alpha value which we set to 255. We have
+one constructor that takes in all 4 components from an image and one take takes only the rgb values.
+
+We also have methods that allow the user to modify the pixel and calculate for the brightness of the
+pixel. There are also observers in the pixel class in case the user wants to know the specific
+component of the pixels.
+
+# Layer
+
+The Layer class represents a layer that is used on the collage. It has functionality that allows the
+user to add an image onto the layer and observers for the user to know what the name of the layer
+they are working on as well as the content on the layer so that they can modify it as they see fit.
+
+# Model
+
+We initially had one interface in our model that housed all the methods necessary to run our program
+but as we developed more understanding of the requirements, we felt that it would be best to have
+two different interfaces because it was made clear to us that we need the two interfaces to do
+different things.
+
+They are organized such that they allow for extensibility in the cases where we are asked to 
+implement more functionality.
+
+# CollageProjectModel
+
+The CollageProjectModel interface represents file operations that can be performed on classes
+that inherits it. It gives functionality to make, save, and load a project and also the ability to
+save an image.
+
+# CollageProject
+
+The CollageProject interface represents operations that can be done on the application of a collage.
+It gives functionality to add a layer, add an image to a layer, set a filter onto a layer, and
+clear the project if the user wants to redo their project. Finally, there are also a bunch of
+observers that the user can query if they need to use it. This is information the user has already
+known from using the methods mentioned above. So, if they need information about something they
+forgot, the observers are there to help them.
+
+This interface extends the CollageProjectModel interface so that users can work on this 
+CollageProject and perform some file operations.
+
+# CollageProjectModelImpl
+
+The CollageProjectModelImpl class is the model of our program. It inherits the CollageProject. This
+TODO
+
+# ImageUtil
+
+The ImageUtil class is a utility class that is used to read an image file in the PPM format and 
+returns the pixels on the image as a 2D array.
+
+# Effects
+
+We have an Effects package that holds the macros that is used in the model.
+
+# MacroCollageEffects
+
+The MacroCollageEffects interface is our macro and we came to an agreement that since macros are a
+scalable way to create a growing extended set of functionality, it would be best to use the command
+design pattern to support a set of effects/ filters that our program offers. This way, our design is
+loosely coupled and if we have to add more operations(effects), we can just add new classes that
+inherits this interface.
+
+It is also a way to ensure that when a new tool/class is added, it doesn't affect the functionality
+of the tools/class that already exists.
+
+# BrightenDarkenMacro
+
+The BrightenDarkenMacro class is a macro that implements the MacroCollageEffects interface. It 
+allows the user reduce or increase the brightness all the pixels on a layer.
+
+# BulkAssignFilter
+
+The BulkAssignFilter class is a macro that implements the MacroCollageEffects interface. It allows
+the user to filter all the pixels on a layer and set them to one of their components(red, green, 
+blue).
+
+# CollageView
+
+The CollageView interface represents a way for the user to see what they are working on. Though
+currently it is a text-based implementation on the program so there is nothing to see in real time.
+So, right now, it has only one method which is to send a message to the user.
+
+# CollageTextView TODO
+
+The CollageTextView class inherits the CollageView
+
+# CollageController
+
+The CollageController interface represents a controller for the CollageProjectModelImpl. It is used
+to run the program which accept user input and perform some actions.
+
+# CollageControllerImpl TODO
+
+The CollageControllerImpl class inherits the CollageController
+
+# Main
+
+The Main class is used to accepts command line arguments that allow the program to be used.
+
+
+Citations :
+Copyright © 1994-2021, Oracle and/or its affiliates. All rights reserved.
+
