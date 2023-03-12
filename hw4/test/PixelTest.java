@@ -28,6 +28,7 @@ public class PixelTest {
 
   @Test
   public void testInvalidConstructor() {
+
     try {
       Pixel pixel1 = new Pixel(-1, 0, 0);
       fail("the given component can't be negative");

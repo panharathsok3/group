@@ -9,6 +9,7 @@ import controller.CollageControllerImpl;
 import model.CollageProject;
 import model.CollageProjectModelImpl;
 import view.CollageTextView;
+import view.CollageView;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -55,7 +56,7 @@ public class CollageProjectControllerTest {
   }
 
   @Test
-  public void outOfInputs() {
+  public void outOfInputsMessage() {
 
     Appendable out = new StringBuilder();
 
@@ -70,12 +71,61 @@ public class CollageProjectControllerTest {
     }
   }
 
+
   @Test
-  public void testRunProgram() {
+  public void outOfInputs() {
+    this.in = new StringReader("new-project C1 3 3");
+    this.out = new StringBuilder("");
 
+    this.collageModel = new CollageProjectModelImpl();
+    this.collageTextView = new CollageTextView(this.collageModel,new StringBuilder(""));
+    this.collageController = new CollageControllerImpl(this.in,this.collageModel,this.collageTextView);
 
-
+    try {
+      this.collageController.runProgram();
+      fail("out of inputs");
+    } catch(IllegalStateException ise) {
+      //
+      }
   }
+
+  @Test
+  public void testCreateNewProject() {
+
+    Readable r = new StringReader("new-project C1 3 3 " +
+            "load-project src/saveOneLayer add-layer L2 add-image-to-layer L2 src/tako.ppm 0 0 " +
+            "set-filter L2 red-component save-image src/tako.ppm " +
+            "save-project src/saveOneLayer txt quit");
+    Appendable out = new StringBuilder();
+
+    CollageProject collageProject = new CollageProjectModelImpl();
+    CollageView view = new CollageTextView(collageProject, out);
+    CollageController controller = new CollageControllerImpl(r,collageProject,view);
+
+    controller.runProgram();
+
+    assertEquals("abc",out.toString());
+  }
+
+  @Test
+  public void testCreateNewProj() {
+
+    Readable r = new StringReader("new-project C1 3 3 " +
+            "load-project src/saveOneLayer add-layer L2 add-image-to-layer L2 src/tako.ppm 0 0 " +
+            "set-filter L2 red-component save-image src/tako.ppm " +
+            "save-project src/saveOneLayer txt quit");
+
+    Appendable out = new StringBuilder();
+
+    CollageProject collageProject = new CollageProjectModelImpl();
+    CollageView view = new CollageTextView(collageProject, out);
+    CollageController controller = new CollageControllerImpl(r,collageProject,view);
+
+    controller.runProgram();
+
+    assertEquals("abc",out.toString());
+  }
+
 
   @Test
   public void testCreateProject() {

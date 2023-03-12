@@ -29,7 +29,6 @@ public class CollageControllerImpl implements CollageController {
     if (in == null || collage == null || view == null) {
       throw new IllegalArgumentException("the given arguments cannot be null");
     }
-
     this.in = in;
     this.collage = collage;
     this.view = view;
