@@ -16,7 +16,7 @@ import model.Pixel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-public class CollageImplTest {
+public class CollageModelImplTest {
   Pixel pixel1;
   Pixel pixel2;
   Pixel pixel3;

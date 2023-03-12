@@ -1,4 +1,54 @@
-Make max value: 255 cuz easier & consistent
+We divided our Collage Application into three sections; adhering to the Model, View, Controller pattern in
+Software design.
 
+We first decided to create interfaces for the model, view and controller. These interfaces hold all the
+necessary requirements and functionalities that allow our program to work accordingly.
+
+We initially had one interface in our model that housed all the methods necessary to run our program but
+as we developed more understanding of the requirements, we felt that it would be best to
+have two different interfaces that are associated through inheritance.
+
+The CollageProjectModel interface holds the general methods that can be used for any implementation of a similar
+application. The CollageProject interface holds the methods that are specific to this particular implementation
+of our application.
+
+Housed in our model, is the Effects package which contains the MacroCollageEffects. This interface is our macro
+and we came to an agreement that since macros are a scalable way to create a growing extended set of
+functionality, it would be best to use the command design pattern to
+ support a set of effects/ filters that our program offers. This way, our design is loosely
+coupled and if we have to add more operations(effects), we can just add new classes that perform them.
+
+Our View interface is the CollageView and our controller interface is the CollageController.
+
+These interfaces work together together to create our Collaging application and to deliver the
+functionalities that were required.
+They are organized such that they allow for extensibility in the cases where we are asked to implement
+more functionality.
+
+These interfaces are implemented by :
++ The CollageProjectModelImpl
++ The CollageControllerImpl
++ The CollageTextView
+
+
+We have stand alone classes which include the
+
+ + Pixel class : It represents a single pixel that makes up images. We have fields that represent each
+ red, green , blue and alpha component of a Pixel. Our constructor ensures that invalid arguments are not
+ accepted; this way we make sure that all Pixel values are correct. We have observers that return each of
+ these components when we need them ; these were included for many reasons including testing purposes.
+ We also have three main methods that can alter the appearance of a pixel and added methods on a need-basis.
+
+ + Layer class : In this class, we have methods and fields that are necessary for the required layer implementations
+
+ + ImageUtil class : The class provided to us
+
+ + Main : Our main methods; which when run accepts command line arguments that allow the program to be used.
 
 + executes macro should take in a layer because it is easy to understand from a users point of view.
+
+
+
+Citations :
+Copyright © 1994-2021, Oracle and/or its affiliates. All rights reserved.
+

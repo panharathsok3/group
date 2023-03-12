@@ -1,7 +1,7 @@
 package controller;
 
 /**
- * A controller interface the for the CollageProjectModelImpl.
+ * A controller interface for the CollageProjectModelImpl.
  */
 public interface CollageController {
 

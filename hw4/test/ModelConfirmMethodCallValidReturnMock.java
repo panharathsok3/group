@@ -10,31 +10,22 @@ import model.Layer;
  * A mock class for the model that tests and logs communication between the
  * model and the controller.
  */
-public class MockCollageImpl implements CollageProject {
+public class ModelConfirmMethodCallValidReturnMock implements CollageProject {
 
   private final Appendable log;
 
   /**
-   *
+   * Creates a mock keeps track of the method calls.
    */
-  public MockCollageImpl(Appendable log) {
-    this.log = Objects.requireNonNull(log);
-  }
+  public ModelConfirmMethodCallValidReturnMock(Appendable log) {
 
-  /**
-   * Helps us see what the model sent to the controller.
-   *
-   * @return a complete transcript of what the communication
-   * between the model and controller.
-   */
-  public String getLog() {
-    return this.log.toString();
+    this.log = log;
   }
 
   @Override
   public void addLayer(String layerName) throws IllegalStateException, IllegalArgumentException {
     try {
-      this.log.append(String.format(" Added a Layer to the project with the given name = %s", layerName));
+      this.log.append(String.format("Added a Layer to the project with the given name = %s\n", layerName));
     } catch (IOException ioe) {
       //
     }
@@ -43,8 +34,8 @@ public class MockCollageImpl implements CollageProject {
   @Override
   public void addImageToLayer(String layerName, String filePath, int xPos, int yPos) throws IllegalArgumentException {
     try {
-      this.log.append(String.format(" Added an Image to a layer with the given arguments = %s, %s, %d," +
-              " %d", layerName, filePath, xPos, yPos));
+      this.log.append(String.format("Added an Image to a layer with the given arguments = %s, %s, %d," +
+              " %d\n", layerName, filePath, xPos, yPos));
     } catch (IOException ioe) {
       //
     }
@@ -53,8 +44,17 @@ public class MockCollageImpl implements CollageProject {
   @Override
   public void setFilter(String layerName, String filterOption) throws IllegalArgumentException, IllegalStateException {
     try {
-      this.log.append(String.format(" Applied a filter with the given arguments = %s, %s",
+      this.log.append(String.format("Applied a filter with the given arguments = %s, %s\n",
               layerName, filterOption));
+    } catch (IOException ioe) {
+      //
+    }
+  }
+
+  @Override
+  public void clear() throws IllegalStateException {
+    try {
+      this.log.append("clear\n");
     } catch (IOException ioe) {
       //
     }
@@ -93,7 +93,7 @@ public class MockCollageImpl implements CollageProject {
   @Override
   public void newProject(String name, int canvasHeight, int canvasWidth) throws IllegalArgumentException {
     try {
-      this.log.append(String.format(" Created a new project with the given arguments = %s, %d, %d ",
+      this.log.append(String.format("Created a new project with the given arguments = %s, %d, %d\n",
               name, canvasHeight, canvasWidth));
     } catch (IOException ioe) {
       //
@@ -103,7 +103,7 @@ public class MockCollageImpl implements CollageProject {
   @Override
   public void loadProject(String filePath) throws IllegalArgumentException, IllegalStateException {
     try {
-      this.log.append(String.format(" Loaded a project with the given argument = %s", filePath));
+      this.log.append(String.format("Loaded a project with the given argument = %s\n", filePath));
     } catch (IOException ioe) {
       //
     }
@@ -112,7 +112,7 @@ public class MockCollageImpl implements CollageProject {
   @Override
   public void saveProject(String filePath, String projectType) throws IllegalArgumentException, IllegalStateException {
     try {
-      this.log.append(String.format(" Saved a project with the given arguments = %s, %s", filePath, projectType));
+      this.log.append(String.format("Saved a project with the given arguments = %s, %s\n", filePath, projectType));
     } catch (IOException ioe) {
       //
     }
@@ -121,7 +121,7 @@ public class MockCollageImpl implements CollageProject {
   @Override
   public void saveImage(String filePath) throws IllegalArgumentException, IllegalStateException {
     try{
-    this.log.append(String.format(" Saved an image with the given argument = %s", filePath));} catch (IOException ioe) {
+    this.log.append(String.format("Saved an image with the given argument = %s\n", filePath));} catch (IOException ioe) {
       //
     }
   }

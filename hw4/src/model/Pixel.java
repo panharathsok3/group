@@ -209,7 +209,6 @@ public class Pixel {
   /**
    * Checks if the given component is higher than the max value or if it's lower than zero and set
    * it to either the max value if it exceeds it or set it to zero if it goes below zero.
-   *
    */
   private void checkBounds() {
     if (this.redComponent > 255) {

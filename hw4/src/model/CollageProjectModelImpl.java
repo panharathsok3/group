@@ -2,7 +2,6 @@ package model;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -169,15 +168,15 @@ public class CollageProjectModelImpl implements CollageProject {
   public void saveImage(String filePath) throws IllegalArgumentException {
     this.throwExceptionProjectNotMade();
 
-    try {
-      if (filePath.endsWith(".ppm")) {
-        savePPMProject(filePath);
-      }
-    } catch (FileNotFoundException e) {
-      throw new IllegalArgumentException("The image you are trying to save cannot be found");
-    } catch (IOException e) {
-      throw new IllegalArgumentException(e);
-    }
+//    try {
+//      if (filePath.endsWith(".ppm")) {
+//        savePPMProject(filePath);
+//      }
+//    } catch (FileNotFoundException e) {
+//      throw new IllegalArgumentException("The image you are trying to save cannot be found");
+//    } catch (IOException e) {
+//      throw new IllegalArgumentException(e);
+//    }
   }
 
   @Override
@@ -311,6 +310,12 @@ public class CollageProjectModelImpl implements CollageProject {
       default:
         throw new IllegalArgumentException("Filter not found");
     }
+  }
+
+  @Override
+  public void clear() {
+    this.project = new LinkedList<>();
+    this.layerFilter = new HashMap<>();
   }
 
   @Override

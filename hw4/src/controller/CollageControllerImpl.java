@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -34,14 +33,6 @@ public class CollageControllerImpl implements CollageController {
     this.view = view;
   }
 
-  /*
-
-# Sets the image on the layer to the provided image, but offset 100
-# pixels to the right and 50 pixels down from the top left
-add-image-to-layer tako-blue image/tako.ppm 100 50
-   */
-
-
   @Override
   public void runProgram() throws IllegalStateException {
     Scanner sc = new Scanner(this.in);
@@ -58,6 +49,7 @@ add-image-to-layer tako-blue image/tako.ppm 100 50
       switch (command) {
         case "quit":
           running = false;
+          this.collage.clear();
           break;
         case "new-project":
           String name = this.readValueString(sc);
@@ -100,7 +92,6 @@ add-image-to-layer tako-blue image/tako.ppm 100 50
           } catch (IOException e) {
             throw new IllegalStateException("Unexpected IOException");
           }
-
       }
 
     }

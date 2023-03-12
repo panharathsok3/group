@@ -1,9 +1,9 @@
 import java.io.IOException;
 
 /**
- *Appendable that always throws IOException.
+ * Appendable that always throws IOException.
  */
-public class BadAppendable implements Appendable{
+public class BadAppendable implements Appendable {
   @Override
   public Appendable append(CharSequence csq) throws IOException {
     throw new IOException("Failed!");

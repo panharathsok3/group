@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 /**
- * Represents a single layer.
+ * Represents a single layer that can hold images.
  */
 public class Layer {
   private final String layerName;

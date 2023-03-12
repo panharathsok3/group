@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * An interface to represent the canvas operations that can be done with our program.
+ * An interface to represent the collage operations that can be done with our program.
  */
 public interface CollageProject extends CollageProjectModel {
 
@@ -46,6 +46,12 @@ public interface CollageProject extends CollageProjectModel {
    */
   void setFilter(String layerName, String filterOption) throws IllegalArgumentException,
       IllegalStateException;
+
+  /**
+   * Resets everything in this collage project, but the backgrounds stills stays intact.
+   * @throws IllegalStateException if the project has not been made yet
+   */
+  void clear() throws IllegalStateException;
 
   /**
    * Returns a copy of the layers on the collage.
