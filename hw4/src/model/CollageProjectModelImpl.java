@@ -239,14 +239,15 @@ public class CollageProjectModelImpl implements CollageProject {
       this.addLayer(currentLayer);
       this.setFilter(currentLayer, filterType);
 
-      layerNum += 1;
-      this.addImageToLayer(sc, 1);
+      layerNum++;
+      this.addImageToLayer(sc, layerNum);
     }
   }
 
   /**
    * Adds the content of the image from the file and place it on the Layer.
    * @param sc the scanner to read from the file
+   * @param layerNum the number of the layer
    */
   private void addImageToLayer(Scanner sc, int layerNum) {
     ArrayList<ArrayList<Pixel>> image = new ArrayList<>();
@@ -314,6 +315,7 @@ public class CollageProjectModelImpl implements CollageProject {
 
   @Override
   public void clear() {
+    this.throwExceptionProjectNotMade();
     this.project = new LinkedList<>();
     this.layerFilter = new HashMap<>();
   }

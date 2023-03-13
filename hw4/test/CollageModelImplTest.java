@@ -52,12 +52,369 @@ public class CollageModelImplTest {
   }
 
   @Test
+  public void testRunningEntireProgram() {
+    this.init();
+
+    //NEW PROJECT
+    this.collage1.newProject("C1", 2, 2);
+
+    assertEquals("C1", this.collage1.getProjectName());
+    assertEquals(2, this.collage1.getHeight());
+    assertEquals(2, this.collage1.getWidth());
+
+    assertEquals("Background", this.collage1.getLayers().get(0).getName());
+    assertEquals("normal", this.collage1.getFiltersOnProject().get("Background"));
+
+    //ADD LAYER
+    this.collage1.addLayer("L1");
+
+    assertEquals("L1", this.collage1.getLayers().get(1).getName());
+    assertEquals("normal", this.collage1.getFiltersOnProject().get("L1"));
+
+    //ADD IMAGE TO LAYER
+    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+
+    ArrayList<ArrayList<Pixel>> pixelsOnLayers = new ImageUtil().readPPM("src/tako.ppm");
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(pixelsOnLayers.get(i).get(j).getGreenComponent(),
+            this.collage1.getLayers().get(1).getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(pixelsOnLayers.get(i).get(j).getBlueComponent(),
+            this.collage1.getLayers().get(1).getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(pixelsOnLayers.get(i).get(j).getRedComponent(),
+            this.collage1.getLayers().get(1).getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(pixelsOnLayers.get(i).get(j).getAlphaComponent(),
+            this.collage1.getLayers().get(1).getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+    //TODO: Need to do SaveImage
+    //SAVE IMAGE
+
+
+    //SAVE PROJECT
+    this.collage1.saveProject("src/saveEntireProgram", "PPM");
+
+    Scanner sc;
+
+    try {
+      sc = new Scanner(new FileInputStream("src/saveEntireProgram"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    sc = new Scanner(builder.toString());
+
+    assertEquals("C1", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("255", sc.next());
+    assertEquals("Background", sc.next());
+    assertEquals("normal", sc.next());
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+      }
+    }
+
+    assertEquals("L1", sc.next());
+    assertEquals("normal", sc.next());
+
+    assertEquals("255", sc.next());
+    assertEquals("173", sc.next());
+    assertEquals("179", sc.next());
+    assertEquals("255", sc.next());
+
+    while(sc.hasNext()) {
+      assertEquals("151", sc.next());
+      assertEquals("173", sc.next());
+      assertEquals("179", sc.next());
+      assertEquals("255", sc.next());
+    }
+
+    //LOAD PROJECT
+    this.collage2.loadProject("src/saveEntireProgram");
+
+    assertEquals("C1", this.collage2.getProjectName());
+    assertEquals(2, this.collage2.getHeight());
+    assertEquals(2, this.collage2.getWidth());
+    assertEquals(255, this.collage2.getMaxValue());
+
+    Layer backgroundLayer = this.collage2.getLayers().get(0);
+    assertEquals("Background", backgroundLayer.getName());
+
+    Map<String, String> layerWithFilter = this.collage2.getFiltersOnProject();
+    assertEquals("normal", layerWithFilter.get("Background"));
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+
+    backgroundLayer = this.collage2.getLayers().get(1);
+    assertEquals("L1", backgroundLayer.getName());
+
+    layerWithFilter = this.collage2.getFiltersOnProject();
+    assertEquals("normal", layerWithFilter.get("L1"));
+
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(0).get(0).getRedComponent());
+    assertEquals(173, backgroundLayer.getPixelsOnLayer().get(0).get(0).getGreenComponent());
+    assertEquals(179, backgroundLayer.getPixelsOnLayer().get(0).get(0).getBlueComponent());
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(0).get(0).getAlphaComponent());
+
+    assertEquals(151, backgroundLayer.getPixelsOnLayer().get(0).get(1).getRedComponent());
+    assertEquals(173, backgroundLayer.getPixelsOnLayer().get(0).get(1).getGreenComponent());
+    assertEquals(179, backgroundLayer.getPixelsOnLayer().get(0).get(1).getBlueComponent());
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(0).get(1).getAlphaComponent());
+
+    assertEquals(151, backgroundLayer.getPixelsOnLayer().get(1).get(0).getRedComponent());
+    assertEquals(173, backgroundLayer.getPixelsOnLayer().get(1).get(0).getGreenComponent());
+    assertEquals(179, backgroundLayer.getPixelsOnLayer().get(1).get(0).getBlueComponent());
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(1).get(0).getAlphaComponent());
+
+    assertEquals(151, backgroundLayer.getPixelsOnLayer().get(1).get(1).getRedComponent());
+    assertEquals(173, backgroundLayer.getPixelsOnLayer().get(1).get(1).getGreenComponent());
+    assertEquals(179, backgroundLayer.getPixelsOnLayer().get(1).get(1).getBlueComponent());
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(1).get(1).getAlphaComponent());
+
+
+    //ADD LAYER
+    this.collage2.addLayer("L2");
+    assertEquals(3, this.collage2.getLayers().size());
+    assertEquals("L2", this.collage2.getLayers().get(2).getName());
+    assertEquals("normal", this.collage2.getFiltersOnProject().get("L2"));
+
+    //ADD IMAGE TO LAYER
+    this.collage2.addImageToLayer("L2", "src/tako.ppm", 0, 0);
+
+    pixelsOnLayers = new ImageUtil().readPPM("src/tako.ppm");
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(pixelsOnLayers.get(i).get(j).getGreenComponent(),
+            this.collage1.getLayers().get(1).getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(pixelsOnLayers.get(i).get(j).getBlueComponent(),
+            this.collage1.getLayers().get(1).getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(pixelsOnLayers.get(i).get(j).getRedComponent(),
+            this.collage1.getLayers().get(1).getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(pixelsOnLayers.get(i).get(j).getAlphaComponent(),
+            this.collage1.getLayers().get(1).getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+
+    //SET FILTER
+    this.collage2.setFilter("L2", "darken-intensity");
+
+    ArrayList<ArrayList<Pixel>> pixelsOnLayerBefore = this.collage2.getLayers().get(2)
+        .getPixelsOnLayer();
+
+    assertEquals(53, pixelsOnLayerBefore.get(0).get(0).getRedComponent());
+    assertEquals(0, pixelsOnLayerBefore.get(0).get(0).getGreenComponent());
+    assertEquals(0, pixelsOnLayerBefore.get(0).get(0).getBlueComponent());
+    assertEquals(255, pixelsOnLayerBefore.get(0).get(0).getAlphaComponent());
+
+    assertEquals(0, pixelsOnLayerBefore.get(0).get(1).getRedComponent());
+    assertEquals(6, pixelsOnLayerBefore.get(0).get(1).getGreenComponent());
+    assertEquals(12, pixelsOnLayerBefore.get(0).get(1).getBlueComponent());
+    assertEquals(255, pixelsOnLayerBefore.get(0).get(1).getAlphaComponent());
+
+    assertEquals(0, pixelsOnLayerBefore.get(1).get(0).getRedComponent());
+    assertEquals(6, pixelsOnLayerBefore.get(1).get(0).getGreenComponent());
+    assertEquals(12, pixelsOnLayerBefore.get(1).get(0).getBlueComponent());
+    assertEquals(255, pixelsOnLayerBefore.get(1).get(0).getAlphaComponent());
+
+    assertEquals(0, pixelsOnLayerBefore.get(1).get(1).getRedComponent());
+    assertEquals(6, pixelsOnLayerBefore.get(1).get(1).getGreenComponent());
+    assertEquals(12, pixelsOnLayerBefore.get(1).get(1).getBlueComponent());
+    assertEquals(255, pixelsOnLayerBefore.get(1).get(1).getAlphaComponent());
+
+    //SAVE PROJECT
+    this.collage2.saveProject("src/saveEntireProgram", "PPM");
+
+    try {
+      sc = new Scanner(new FileInputStream("src/saveEntireProgram"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    builder = new StringBuilder();
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    sc = new Scanner(builder.toString());
+
+    assertEquals("C1", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("255", sc.next());
+    assertEquals("Background", sc.next());
+    assertEquals("normal", sc.next());
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+      }
+    }
+
+    assertEquals("L1", sc.next());
+    assertEquals("normal", sc.next());
+
+    assertEquals("255", sc.next());
+    assertEquals("173", sc.next());
+    assertEquals("179", sc.next());
+    assertEquals("255", sc.next());
+
+    int L1Counter = 0;
+    while(L1Counter < 3) {
+      assertEquals("151", sc.next());
+      assertEquals("173", sc.next());
+      assertEquals("179", sc.next());
+      assertEquals("255", sc.next());
+      L1Counter++;
+    }
+
+    assertEquals("L2", sc.next());
+    assertEquals("darken-intensity", sc.next());
+
+    assertEquals("53", sc.next());
+    assertEquals("0", sc.next());
+    assertEquals("0", sc.next());
+    assertEquals("255", sc.next());
+
+    int L2Counter = 0;
+
+    while(L2Counter < 3) {
+      assertEquals("0", sc.next());
+      assertEquals("6", sc.next());
+      assertEquals("12", sc.next());
+      assertEquals("255", sc.next());
+      L2Counter++;
+    }
+
+    //LOAD PROJECT
+    this.collage3.loadProject("src/saveEntireProgram");
+    assertEquals("C1", this.collage3.getProjectName());
+    assertEquals(2, this.collage3.getHeight());
+    assertEquals(2, this.collage3.getWidth());
+    assertEquals(255, this.collage3.getMaxValue());
+
+    backgroundLayer = this.collage3.getLayers().get(0);
+    assertEquals("Background", backgroundLayer.getName());
+
+    layerWithFilter = this.collage3.getFiltersOnProject();
+    assertEquals("normal", layerWithFilter.get("Background"));
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+
+    backgroundLayer = this.collage3.getLayers().get(1);
+    assertEquals("L1", backgroundLayer.getName());
+
+    layerWithFilter = this.collage3.getFiltersOnProject();
+    assertEquals("normal", layerWithFilter.get("L1"));
+
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(0).get(0).getRedComponent());
+    assertEquals(173, backgroundLayer.getPixelsOnLayer().get(0).get(0).getGreenComponent());
+    assertEquals(179, backgroundLayer.getPixelsOnLayer().get(0).get(0).getBlueComponent());
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(0).get(0).getAlphaComponent());
+
+    assertEquals(151, backgroundLayer.getPixelsOnLayer().get(0).get(1).getRedComponent());
+    assertEquals(173, backgroundLayer.getPixelsOnLayer().get(0).get(1).getGreenComponent());
+    assertEquals(179, backgroundLayer.getPixelsOnLayer().get(0).get(1).getBlueComponent());
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(0).get(1).getAlphaComponent());
+
+    assertEquals(151, backgroundLayer.getPixelsOnLayer().get(1).get(0).getRedComponent());
+    assertEquals(173, backgroundLayer.getPixelsOnLayer().get(1).get(0).getGreenComponent());
+    assertEquals(179, backgroundLayer.getPixelsOnLayer().get(1).get(0).getBlueComponent());
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(1).get(0).getAlphaComponent());
+
+    assertEquals(151, backgroundLayer.getPixelsOnLayer().get(1).get(1).getRedComponent());
+    assertEquals(173, backgroundLayer.getPixelsOnLayer().get(1).get(1).getGreenComponent());
+    assertEquals(179, backgroundLayer.getPixelsOnLayer().get(1).get(1).getBlueComponent());
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(1).get(1).getAlphaComponent());
+
+    backgroundLayer = this.collage3.getLayers().get(2);
+    assertEquals("L2", backgroundLayer.getName());
+
+    layerWithFilter = this.collage3.getFiltersOnProject();
+    assertEquals("darken-intensity", layerWithFilter.get("L2"));
+
+    assertEquals(53, backgroundLayer.getPixelsOnLayer().get(0).get(0).getRedComponent());
+    assertEquals(0, backgroundLayer.getPixelsOnLayer().get(0).get(0).getGreenComponent());
+    assertEquals(0, backgroundLayer.getPixelsOnLayer().get(0).get(0).getBlueComponent());
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(0).get(0).getAlphaComponent());
+
+    assertEquals(0, backgroundLayer.getPixelsOnLayer().get(0).get(1).getRedComponent());
+    assertEquals(6, backgroundLayer.getPixelsOnLayer().get(0).get(1).getGreenComponent());
+    assertEquals(12, backgroundLayer.getPixelsOnLayer().get(0).get(1).getBlueComponent());
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(0).get(1).getAlphaComponent());
+
+    assertEquals(0, backgroundLayer.getPixelsOnLayer().get(1).get(0).getRedComponent());
+    assertEquals(6, backgroundLayer.getPixelsOnLayer().get(1).get(0).getGreenComponent());
+    assertEquals(12, backgroundLayer.getPixelsOnLayer().get(1).get(0).getBlueComponent());
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(1).get(0).getAlphaComponent());
+
+    assertEquals(0, backgroundLayer.getPixelsOnLayer().get(1).get(1).getRedComponent());
+    assertEquals(6, backgroundLayer.getPixelsOnLayer().get(1).get(1).getGreenComponent());
+    assertEquals(12, backgroundLayer.getPixelsOnLayer().get(1).get(1).getBlueComponent());
+    assertEquals(255, backgroundLayer.getPixelsOnLayer().get(1).get(1).getAlphaComponent());
+  }
+
+  @Test
   public void testValidCreateNewProject() {
     this.init();
     this.collage1.newProject("C1", 100, 100);
+
+    assertEquals("C1", this.collage1.getProjectName());
+    assertEquals(100, this.collage1.getHeight());
+    assertEquals(100, this.collage1.getWidth());
+    assertEquals("Background", this.collage1.getLayers().get(0).getName());
+    assertEquals("normal", this.collage1.getFiltersOnProject().get("Background"));
+
     this.collage2.newProject("C2", 20, 20);
-    this.collage3.newProject("C3", 10, 10);
-    this.collage4.newProject("C4", 2, 2);
+
+    assertEquals("C2", this.collage2.getProjectName());
+    assertEquals(20, this.collage2.getHeight());
+    assertEquals(20, this.collage2.getWidth());
+    assertEquals("Background", this.collage2.getLayers().get(0).getName());
+    assertEquals("normal", this.collage2.getFiltersOnProject().get("Background"));
   }
 
   @Test
@@ -139,7 +496,7 @@ public class CollageModelImplTest {
 
 
   @Test
-  public void testAddLayerToProject() {
+  public void testValidAddLayer() {
     this.init();
 
     this.collage1.newProject("C1", 5, 5);
@@ -148,6 +505,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L3");
     this.collage1.addLayer("L1");
 
+    assertEquals(4, this.collage1.getLayers().size());
     assertEquals("Background", this.collage1.getLayers().get(0).getName());
     assertEquals("L1", this.collage1.getLayers().get(3).getName());
     assertEquals("L3", this.collage1.getLayers().get(2).getName());
@@ -783,7 +1141,8 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1).getPixelsOnLayer();
+    ArrayList<ArrayList<Pixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
+        .getPixelsOnLayer();
 
     assertEquals(255, pixelsOnLayerBefore.get(0).get(0).getRedComponent());
     assertEquals(173, pixelsOnLayerBefore.get(0).get(0).getGreenComponent());
@@ -906,16 +1265,16 @@ public class CollageModelImplTest {
   public void testValidLoadProjectImmediately() {
     this.init();
 
-    this.collage1.loadProject("src/saveProjectAndLoadImmediately");
-    assertEquals("C1", this.collage1.getProjectName());
-    assertEquals(2, this.collage1.getHeight());
-    assertEquals(2, this.collage1.getWidth());
-    assertEquals(255, this.collage1.getMaxValue());
+    this.collage2.loadProject("src/saveProjectAndLoadImmediately");
+    assertEquals("C1", this.collage2.getProjectName());
+    assertEquals(2, this.collage2.getHeight());
+    assertEquals(2, this.collage2.getWidth());
+    assertEquals(255, this.collage2.getMaxValue());
 
-    Layer backgroundLayer = this.collage1.getLayers().get(0);
+    Layer backgroundLayer = this.collage2.getLayers().get(0);
     assertEquals("Background", backgroundLayer.getName());
 
-    Map<String, String> layerWithFilter = this.collage1.getFiltersOnProject();
+    Map<String, String> layerWithFilter = this.collage2.getFiltersOnProject();
     assertEquals("normal", layerWithFilter.get("Background"));
 
     for (int i = 0; i < 2; i++) {
@@ -938,16 +1297,16 @@ public class CollageModelImplTest {
 
     this.collage1.addLayer("L1");
     this.collage1.saveProject("src/saveProjectAndLoadAfterAddingLayer", "PPM");
-    this.collage1.loadProject("src/saveProjectAndLoadAfterAddingLayer");
-    assertEquals("C1", this.collage1.getProjectName());
-    assertEquals(2, this.collage1.getHeight());
-    assertEquals(2, this.collage1.getWidth());
-    assertEquals(255, this.collage1.getMaxValue());
+    this.collage2.loadProject("src/saveProjectAndLoadAfterAddingLayer");
+    assertEquals("C1", this.collage2.getProjectName());
+    assertEquals(2, this.collage2.getHeight());
+    assertEquals(2, this.collage2.getWidth());
+    assertEquals(255, this.collage2.getMaxValue());
 
-    Layer backgroundLayer = this.collage1.getLayers().get(0);
+    Layer backgroundLayer = this.collage2.getLayers().get(0);
     assertEquals("Background", backgroundLayer.getName());
 
-    Map<String, String> layerWithFilter = this.collage1.getFiltersOnProject();
+    Map<String, String> layerWithFilter = this.collage2.getFiltersOnProject();
     assertEquals("normal", layerWithFilter.get("Background"));
 
     for (int i = 0; i < 2; i++) {
@@ -963,10 +1322,10 @@ public class CollageModelImplTest {
       }
     }
 
-    backgroundLayer = this.collage1.getLayers().get(1);
+    backgroundLayer = this.collage2.getLayers().get(1);
     assertEquals("L1", backgroundLayer.getName());
 
-    layerWithFilter = this.collage1.getFiltersOnProject();
+    layerWithFilter = this.collage2.getFiltersOnProject();
     assertEquals("normal", layerWithFilter.get("L1"));
 
     for (int i = 0; i < 2; i++) {
@@ -987,21 +1346,22 @@ public class CollageModelImplTest {
   public void testValidLoadProjectAfterAddingLayerAndModifying() {
     this.init();
 
+    this.collage1.newProject("C1", 2, 2);
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
     this.collage1.setFilter("L1", "darken-intensity");
     this.collage1.saveProject("src/saveProjectAndLoadAfterAddingLayerAndModifying",
         "PPM");
-    this.collage1.loadProject("src/saveProjectAndLoadAfterAddingLayerAndModifying");
-    assertEquals("C1", this.collage1.getProjectName());
-    assertEquals(2, this.collage1.getHeight());
-    assertEquals(2, this.collage1.getWidth());
-    assertEquals(255, this.collage1.getMaxValue());
+    this.collage2.loadProject("src/saveProjectAndLoadAfterAddingLayerAndModifying");
+    assertEquals("C1", this.collage2.getProjectName());
+    assertEquals(2, this.collage2.getHeight());
+    assertEquals(2, this.collage2.getWidth());
+    assertEquals(255, this.collage2.getMaxValue());
 
-    Layer backgroundLayer = this.collage1.getLayers().get(0);
+    Layer backgroundLayer = this.collage2.getLayers().get(0);
     assertEquals("Background", backgroundLayer.getName());
 
-    Map<String, String> layerWithFilter = this.collage1.getFiltersOnProject();
+    Map<String, String> layerWithFilter = this.collage2.getFiltersOnProject();
     assertEquals("normal", layerWithFilter.get("Background"));
 
     for (int i = 0; i < 2; i++) {
@@ -1017,10 +1377,10 @@ public class CollageModelImplTest {
       }
     }
 
-    backgroundLayer = this.collage1.getLayers().get(1);
+    backgroundLayer = this.collage2.getLayers().get(1);
     assertEquals("L1", backgroundLayer.getName());
 
-    layerWithFilter = this.collage1.getFiltersOnProject();
+    layerWithFilter = this.collage2.getFiltersOnProject();
     assertEquals("darken-intensity", layerWithFilter.get("L1"));
 
     assertEquals(53, backgroundLayer.getPixelsOnLayer().get(0).get(0).getRedComponent());
@@ -1046,6 +1406,42 @@ public class CollageModelImplTest {
     assertEquals(255,
         backgroundLayer.getPixelsOnLayer().get(1).get(1).getAlphaComponent());
 
+  }
+
+  @Test
+  public void testLoadProjectInTheMiddleOfWorkingOnAProject() {
+    this.init();
+
+    this.collage1.newProject("C1", 2, 2);
+    this.collage1.saveProject("src/saveProjectAndLoadWhileWorking",
+        "PPM");
+
+    this.collage2.newProject("C2", 2, 2);
+    this.collage2.addLayer("L1");
+    this.collage2.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    this.collage2.setFilter("L1", "darken-intensity");
+    this.collage2.loadProject("src/saveProjectAndLoadWhileWorking");
+
+    ArrayList<Layer> backgroundLayer = this.collage2.getLayers();
+    assertEquals(1, backgroundLayer.size());
+    assertEquals("Background", backgroundLayer.get(0).getName());
+
+    Map<String, String> layerWithFilter = this.collage2.getFiltersOnProject();
+    assertEquals(1, layerWithFilter.size());
+    assertEquals("normal", layerWithFilter.get("Background"));
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(255,
+            backgroundLayer.get(0).getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(255,
+            backgroundLayer.get(0).getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(255,
+            backgroundLayer.get(0).getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(255,
+            backgroundLayer.get(0).getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
   }
 
   @Test
@@ -1250,6 +1646,60 @@ public class CollageModelImplTest {
     }
   }
 
-  //TODO: Need to test save image
+  @Test
+  public void testValidClear() {
+    this.init();
 
+    this.collage1.newProject("C1", 2, 2);
+    this.collage1.addLayer("L1");
+    this.collage1.addLayer("L2");
+
+    this.collage1.setFilter("L1",  "darken-luma");
+
+    assertEquals(3, this.collage1.getLayers().size());
+    assertEquals("Background", this.collage1.getLayers().get(0).getName());
+    assertEquals("L1", this.collage1.getLayers().get(1).getName());
+    assertEquals("L2", this.collage1.getLayers().get(2).getName());
+
+    assertEquals(3, this.collage1.getFiltersOnProject().size());
+    assertEquals("normal", this.collage1.getFiltersOnProject().get("Background"));
+    assertEquals("darken-luma", this.collage1.getFiltersOnProject().get("L1"));
+    assertEquals("normal", this.collage1.getFiltersOnProject().get("L2"));
+
+    this.collage1.clear();
+    assertEquals(0, this.collage1.getLayers().size());
+    assertEquals(0, this.collage1.getFiltersOnProject().size());
+  }
+
+  @Test
+  public void testInvalidClear() {
+    this.collage1 = new CollageProjectModelImpl();
+    try {
+      this.collage1.clear();
+      fail("project hasn't been made yet");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+  }
+
+  //TODO: Need to test save image
+  @Test
+  public void testValidSaveImage() {
+
+  }
+
+  @Test
+  public void testSaveImageThenModifyIt() {
+
+  }
+
+  @Test
+  public void testInvalidSaveImage() {
+    this.collage1 = new CollageProjectModelImpl();
+    try {
+      this.collage1.saveImage("src/new");
+    } catch (IllegalStateException e) {
+      // do nothing
+    }
+  }
 }
