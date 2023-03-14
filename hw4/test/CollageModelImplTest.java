@@ -74,7 +74,8 @@ public class CollageModelImplTest {
     //ADD IMAGE TO LAYER
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayers = new ImageUtil().readPPM("src/tako.ppm");
+    ArrayList<ArrayList<Pixel>> pixelsOnLayers = new ImageUtil().readImage("src/tako.ppm",
+        false);
 
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
@@ -88,7 +89,7 @@ public class CollageModelImplTest {
             this.collage1.getLayers().get(1).getPixelsOnLayer().get(i).get(j).getAlphaComponent());
       }
     }
-    //TODO: Need to do SaveImage
+      //TODO: Need to do SaveImage
     //SAVE IMAGE
 
 
@@ -207,7 +208,7 @@ public class CollageModelImplTest {
     //ADD IMAGE TO LAYER
     this.collage2.addImageToLayer("L2", "src/tako.ppm", 0, 0);
 
-    pixelsOnLayers = new ImageUtil().readPPM("src/tako.ppm");
+    pixelsOnLayers = new ImageUtil().readImage("src/tako.ppm", false);
 
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
@@ -520,7 +521,8 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayers = new ImageUtil().readPPM("src/tako.ppm");
+    ArrayList<ArrayList<Pixel>> pixelsOnLayers = new ImageUtil().readImage("src/tako.ppm",
+        false);
 
     for (int i = 0; i < 100; i++) {
       for (int j = 0; j < 100; j++) {

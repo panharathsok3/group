@@ -18,7 +18,8 @@ public class ImageUtil {
    * @throws IllegalStateException when the file could not be retrieved
    *                               or the file is not a PPM file
    */
-  public ArrayList<ArrayList<Pixel>> readPPM(String filename) throws IllegalStateException {
+  public ArrayList<ArrayList<Pixel>> readImage(String filename, boolean hasAlpha)
+      throws IllegalStateException {
     Scanner sc;
 
     try {
@@ -57,7 +58,15 @@ public class ImageUtil {
         int r = sc.nextInt();
         int g = sc.nextInt();
         int b = sc.nextInt();
-        pixelsOnImage.get(i).add(new Pixel(r, g, b));
+
+        if (!hasAlpha) {
+          pixelsOnImage.get(i).add(new Pixel(r, g, b));
+        }
+        else {
+          int a = sc.nextInt();
+          pixelsOnImage.get(i).add(new Pixel(r, g, b, a));
+        }
+
       }
     }
     return pixelsOnImage;

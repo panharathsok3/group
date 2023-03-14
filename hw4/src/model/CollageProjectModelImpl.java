@@ -26,7 +26,7 @@ public class CollageProjectModelImpl implements CollageProject {
   private String projectName;
   private boolean backgroundMade;
   private boolean createdProject;
-  Map<String, String> layerFilter;
+  private Map<String, String> layerFilter;
   private final int maxValue;
 
   /**
@@ -95,10 +95,11 @@ public class CollageProjectModelImpl implements CollageProject {
           + " have to be within the boundaries of the canvas");
     }
 
-    ArrayList<ArrayList<Pixel>> image = new ImageUtil().readPPM(filePath);
+    ArrayList<ArrayList<Pixel>> image = new ImageUtil().readImage(filePath, false);
 
     for (Layer layer : this.project) {
       if (layerName.equals(layer.getName())) {
+
         layer.addImage(xPos, yPos, image);
         return;
       }
