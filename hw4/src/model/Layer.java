@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Layer {
   private final String layerName;
-  private ArrayList<ArrayList<Pixel>> pixelsOnLayer;
+  private final ArrayList<ArrayList<Pixel>> pixelsOnLayer;
   private final int height;
   private final int width;
   private final int alpha;
@@ -32,6 +32,14 @@ public class Layer {
     this.alpha = alpha;
     this.pixelsOnLayer = new ArrayList<>();
     this.addPixels();
+  }
+
+  public Layer(Layer layer) {
+    this.layerName = layer.layerName;
+    this.height = layer.height;
+    this.width = layer.width;
+    this.alpha = layer.alpha;
+    this.pixelsOnLayer = new ArrayList<>(layer.pixelsOnLayer);
   }
 
   /**
@@ -81,8 +89,6 @@ public class Layer {
     pixel.changeTransparency(flag, pixelOnPrevLayer.get(i).get(j).getRedComponent(),
       pixelOnPrevLayer.get(i).get(j).getGreenComponent(), pixelOnPrevLayer.get(i).get(j)
         .getBlueComponent(), pixelOnPrevLayer.get(i).get(j).getAlphaComponent());
-
-
      */
 
     for (int i = xPos; i < height; i++) {
@@ -90,6 +96,10 @@ public class Layer {
         this.pixelsOnLayer.get(i).set(j, image.get(i).get(j));
       }
     }
+  }
+
+  public ArrayList<ArrayList<Pixel>> modifyTransparency(ArrayList<ArrayList<Pixel>> image) {
+
   }
 
   /**

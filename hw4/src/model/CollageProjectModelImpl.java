@@ -95,7 +95,7 @@ public class CollageProjectModelImpl implements CollageProject {
           + "positions have to be within the boundaries of the canvas");
     }
 
-    ArrayList<ArrayList<Pixel>> image = this.readImage(filePath, false);
+    ArrayList<ArrayList<Pixel>> image = this.readImage(filePath, false, "P3");
 
     for (Layer layer : this.project) {
       if (layerName.equals(layer.getName())) {
@@ -115,7 +115,7 @@ public class CollageProjectModelImpl implements CollageProject {
    * @throws IllegalStateException when the file could not be retrieved
    *                               or the file is not a PPM file
    */
-  private ArrayList<ArrayList<Pixel>> readImage(String filename, boolean hasAlpha)
+  private ArrayList<ArrayList<Pixel>> readImage(String filename, boolean hasAlpha, String fileType)
       throws IllegalStateException {
     Scanner sc;
 
@@ -140,8 +140,9 @@ public class CollageProjectModelImpl implements CollageProject {
     String token;
 
     token = sc.next();
-    if (!token.equals("P3")) {
-      throw new IllegalStateException("Invalid PPM file: plain RAW file should begin with P3");
+    if (!token.equals(fileType)) {
+      throw new IllegalStateException("Invalid file type: plain RAW file should begin with "
+          + fileType);
     }
 
     int width = sc.nextInt();
@@ -253,6 +254,63 @@ public class CollageProjectModelImpl implements CollageProject {
           filePath);
     } catch (IOException e) {
       throw new IllegalArgumentException("Was not able to save");
+    }
+  }
+
+  public void makeFinalImage(boolean hasAlpha) {
+    MacroCollageEffects macro;
+
+    ArrayList<Layer> layers = new ArrayList<>(this.project);
+    ArrayList<ArrayList<Pixel>> finalImage = new ArrayList<>();
+    boolean isBackground = true;
+
+    for (Layer layer: layers) {
+      String filter = this.getFiltersOnProject().get(layer.getName());
+
+      switch (filter) {
+        case "normal":
+          break;
+        case "red-component":
+        case "green-component":
+        case "blue-component":
+          macro = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filter);
+          macro.executeMacro(layer);
+          break;
+        case "brighten-value":
+        case "brighten-luma":
+        case "brighten-intensity":
+          macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filter, true);
+          macro.executeMacro(layer);
+          break;
+        case "darken-intensity":
+        case "darken-luma":
+        case "darken-value":
+          macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filter, false);
+          macro.executeMacro(layer);
+          break;
+        default:
+          //do nothing
+      }
+
+      ArrayList<ArrayList<Pixel>> pixelsOnLayer = layer.getPixelsOnLayer();
+
+      if (isBackground) {
+        for (int i = 0; i < this.canvasHeight; i++) {
+          finalImage.add(new ArrayList<>());
+          for (int j = 0; j < this.canvasWidth; j++) {
+            finalImage.get(i).set(j, pixelsOnLayer.get(i).get(j));
+          }
+        }
+        isBackground = false;
+      }
+      else {
+        if (hasAlpha) {
+          finalImage = layer.modifyTransparency(finalImage);
+        }
+        else {
+
+        }
+      }
     }
   }
 

@@ -275,3 +275,35 @@ Do: save-project projects/projectName.collage
     assertEquals(0, greenAfterRedFilter);
 
 
+How should I do saveImage?
+
+1. Does it save only the image I modify or am I like exporting the entire thing including the background
+   assuming the background is bigger than the image?
+
+2. When dealing with transparency, do I do it at the end or do it as I am placing the images down?
+ - Ex: I have background, then L1, then I place image.
+
+ what happens:
+
+ A. Background doesn't change. L1 changes to:
+    - r -> r' : dr = background r
+    - b -> b' : db = background b
+    - g -> g' : dg = background g
+    - a -> a' : da = background a
+
+ B. Background doesn't change. L1 doesn't change until saveImage is evoked where calculation on the entire image is done.
+
+ Let's say that we add L2:
+ If A, then does that mean:
+   - r -> r' : dr = L1 r
+   - b -> b' : db = L1 b
+   - g -> g' : dg = L1 g
+   - a -> a' : da = L1 a
+
+ Similarly since L2, is dependent on L1, if L1, changes, does that mean that L2 also changes?
+
+3. Related to 2, Say set filter is applied. Does the rgb values change with the r', g', b' or does it change with
+   the original then the formula is applied.
+
+
+
