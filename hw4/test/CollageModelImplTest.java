@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
-import model.ImageUtil;
 import org.junit.Test;
 
 import model.CollageProject;
@@ -74,8 +73,49 @@ public class CollageModelImplTest {
     //ADD IMAGE TO LAYER
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayers = new ImageUtil().readImage("src/tako.ppm",
-        false);
+    Scanner sc;
+
+    try {
+      sc = new Scanner(new FileInputStream("src/tako.ppm"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    //read the file line by line, and populate a string. This will throw away any comment lines
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    //now set up the scanner to read from the string we just built
+    sc = new Scanner(builder.toString());
+
+    String token;
+
+    token = sc.next();
+    if (!token.equals("P3")) {
+      throw new IllegalStateException("Invalid PPM file: plain RAW file should begin with P3");
+    }
+
+    int width = sc.nextInt();
+    int height = sc.nextInt();
+
+    ArrayList<ArrayList<Pixel>> pixelsOnLayers = new ArrayList<>();
+
+    for (int i = 0; i < height; i++) {
+      pixelsOnLayers.add(new ArrayList<>());
+      for (int j = 0; j < width; j++) {
+        int r = sc.nextInt();
+        int g = sc.nextInt();
+        int b = sc.nextInt();
+
+        pixelsOnLayers.get(i).add(new Pixel(r, g, b));
+
+      }
+    }
 
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
@@ -96,15 +136,13 @@ public class CollageModelImplTest {
     //SAVE PROJECT
     this.collage1.saveProject("src/saveEntireProgram", "PPM");
 
-    Scanner sc;
-
     try {
       sc = new Scanner(new FileInputStream("src/saveEntireProgram"));
     } catch (FileNotFoundException e) {
       throw new IllegalStateException("File not found!");
     }
 
-    StringBuilder builder = new StringBuilder();
+    builder = new StringBuilder();
     while (sc.hasNextLine()) {
       String s = sc.nextLine();
       if (s.charAt(0) != '#') {
@@ -208,7 +246,45 @@ public class CollageModelImplTest {
     //ADD IMAGE TO LAYER
     this.collage2.addImageToLayer("L2", "src/tako.ppm", 0, 0);
 
-    pixelsOnLayers = new ImageUtil().readImage("src/tako.ppm", false);
+    try {
+      sc = new Scanner(new FileInputStream("src/tako.ppm"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    builder = new StringBuilder();
+    //read the file line by line, and populate a string. This will throw away any comment lines
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    //now set up the scanner to read from the string we just built
+    sc = new Scanner(builder.toString());
+
+    token = sc.next();
+    if (!token.equals("P3")) {
+      throw new IllegalStateException("Invalid PPM file: plain RAW file should begin with P3");
+    }
+
+    width = sc.nextInt();
+    height = sc.nextInt();
+
+    pixelsOnLayers = new ArrayList<>();
+
+    for (int i = 0; i < height; i++) {
+      pixelsOnLayers.add(new ArrayList<>());
+      for (int j = 0; j < width; j++) {
+        int r = sc.nextInt();
+        int g = sc.nextInt();
+        int b = sc.nextInt();
+
+        pixelsOnLayers.get(i).add(new Pixel(r, g, b));
+
+      }
+    }
 
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
@@ -521,18 +597,59 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayers = new ImageUtil().readImage("src/tako.ppm",
-        false);
+    Scanner sc;
+
+    try {
+      sc = new Scanner(new FileInputStream("src/tako.ppm"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    //read the file line by line, and populate a string. This will throw away any comment lines
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    //now set up the scanner to read from the string we just built
+    sc = new Scanner(builder.toString());
+
+    String token;
+
+    token = sc.next();
+    if (!token.equals("P3")) {
+      throw new IllegalStateException("Invalid PPM file: plain RAW file should begin with P3");
+    }
+
+    int width = sc.nextInt();
+    int height = sc.nextInt();
+
+    ArrayList<ArrayList<Pixel>> pixelsOnImage = new ArrayList<>();
+
+    for (int i = 0; i < height; i++) {
+      pixelsOnImage.add(new ArrayList<>());
+      for (int j = 0; j < width; j++) {
+        int r = sc.nextInt();
+        int g = sc.nextInt();
+        int b = sc.nextInt();
+
+        pixelsOnImage.get(i).add(new Pixel(r, g, b));
+
+      }
+    }
 
     for (int i = 0; i < 100; i++) {
       for (int j = 0; j < 100; j++) {
-        assertEquals(pixelsOnLayers.get(i).get(j).getGreenComponent(),
+        assertEquals(pixelsOnImage.get(i).get(j).getGreenComponent(),
             this.collage1.getLayers().get(1).getPixelsOnLayer().get(i).get(j).getGreenComponent());
-        assertEquals(pixelsOnLayers.get(i).get(j).getBlueComponent(),
+        assertEquals(pixelsOnImage.get(i).get(j).getBlueComponent(),
             this.collage1.getLayers().get(1).getPixelsOnLayer().get(i).get(j).getBlueComponent());
-        assertEquals(pixelsOnLayers.get(i).get(j).getRedComponent(),
+        assertEquals(pixelsOnImage.get(i).get(j).getRedComponent(),
             this.collage1.getLayers().get(1).getPixelsOnLayer().get(i).get(j).getRedComponent());
-        assertEquals(pixelsOnLayers.get(i).get(j).getAlphaComponent(),
+        assertEquals(pixelsOnImage.get(i).get(j).getAlphaComponent(),
             this.collage1.getLayers().get(1).getPixelsOnLayer().get(i).get(j).getAlphaComponent());
       }
     }

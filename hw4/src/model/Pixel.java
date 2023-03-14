@@ -41,6 +41,7 @@ public class Pixel {
     if (redComponent < 0 || greenComponent < 0 || blueComponent < 0 || alphaComponent < 0) {
       throw new IllegalArgumentException("The components can't be negative");
     }
+
     this.redComponent = redComponent;
     this.greenComponent = greenComponent;
     this.blueComponent = blueComponent;
@@ -233,6 +234,27 @@ public class Pixel {
     }
   }
 
+  /** TODO add params
+   * Changes the transparency of this Pixel by modifying the four components.
+   * @param hasAlpha true if and only if this pixel doesn't require an alpha value
+   */
+  public void changeTransparency(boolean hasAlpha, int deltaR, int deltaG, int deltaB, int deltaA) {
+    if (hasAlpha) {
+      this.redComponent = this.getRedComponent() * this.alphaComponent / 255;
+      this.greenComponent = this.getRedComponent() * this.alphaComponent / 255;
+      this.blueComponent = this.getRedComponent() * this.alphaComponent / 255;
+    }
+    else {
+      int originalAlpha = this.alphaComponent;
+      this.alphaComponent = (originalAlpha / 255) + (deltaA / 255) * (1 - (originalAlpha / 255));
+      this.redComponent = ((originalAlpha * this.redComponent) + (deltaR * (deltaA / 255)
+          * (1 - (originalAlpha / 255)))) * (1 / this.alphaComponent);
+      this.greenComponent = ((originalAlpha * this.greenComponent) + (deltaG * (deltaA / 255)
+          * (1 - (originalAlpha / 255)))) * (1 / this.alphaComponent);
+      this.blueComponent = ((originalAlpha * this.blueComponent) + (deltaB * (deltaA / 255)
+          * (1 - (originalAlpha / 255)))) * (1 / this.alphaComponent);
+    }
+  }
 
 
 

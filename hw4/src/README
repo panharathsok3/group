@@ -53,11 +53,6 @@ CollageProject and perform some file operations.
 The CollageProjectModelImpl class is the model of our program. It inherits the CollageProject. This
 TODO
 
-# ImageUtil
-
-The ImageUtil class is a utility class that is used to read an image file in the PPM format and
-returns the pixels on the image as a 2D array.
-
 # Effects
 
 We have an Effects package that holds the macros that is used in the model.

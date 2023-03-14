@@ -74,6 +74,17 @@ public class Layer {
       width = this.width;
     }
 
+    /*
+    ArrayList<ArrayList<Pixel>> pixelsOnPrevLayer = prevLayer.getPixelsOnLayer();
+
+    Pixel pixel = image.get(i).get(j);
+    pixel.changeTransparency(flag, pixelOnPrevLayer.get(i).get(j).getRedComponent(),
+      pixelOnPrevLayer.get(i).get(j).getGreenComponent(), pixelOnPrevLayer.get(i).get(j)
+        .getBlueComponent(), pixelOnPrevLayer.get(i).get(j).getAlphaComponent());
+
+
+     */
+
     for (int i = xPos; i < height; i++) {
       for (int j = yPos; j < width; j++) {
         this.pixelsOnLayer.get(i).set(j, image.get(i).get(j));

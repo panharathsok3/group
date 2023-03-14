@@ -91,11 +91,11 @@ public class CollageProjectModelImpl implements CollageProject {
 
     if (layerName == null || layerName.equals("") || filePath == null || filePath.equals("")
             || xPos < 0 || xPos > this.canvasHeight || yPos < 0 || yPos > this.canvasWidth) {
-      throw new IllegalArgumentException("layer name and file path cannot be null, x and y positions"
-          + " have to be within the boundaries of the canvas");
+      throw new IllegalArgumentException("layer name and file path cannot be null, x and y "
+          + "positions have to be within the boundaries of the canvas");
     }
 
-    ArrayList<ArrayList<Pixel>> image = new ImageUtil().readImage(filePath, false);
+    ArrayList<ArrayList<Pixel>> image = this.readImage(filePath, false);
 
     for (Layer layer : this.project) {
       if (layerName.equals(layer.getName())) {
@@ -108,8 +108,70 @@ public class CollageProjectModelImpl implements CollageProject {
     throw new IllegalArgumentException("Layer not found");
   }
 
+  /**
+   * Read an image file in the PPM format and returns the pixels on the image as a 2D array.
+   * @param filename the path of the file
+   * @return the pixels on the image as a 2D array
+   * @throws IllegalStateException when the file could not be retrieved
+   *                               or the file is not a PPM file
+   */
+  private ArrayList<ArrayList<Pixel>> readImage(String filename, boolean hasAlpha)
+      throws IllegalStateException {
+    Scanner sc;
+
+    try {
+      sc = new Scanner(new FileInputStream(filename));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File " + filename + " not found!");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    //read the file line by line, and populate a string. This will throw away any comment lines
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    //now set up the scanner to read from the string we just built
+    sc = new Scanner(builder.toString());
+
+    String token;
+
+    token = sc.next();
+    if (!token.equals("P3")) {
+      throw new IllegalStateException("Invalid PPM file: plain RAW file should begin with P3");
+    }
+
+    int width = sc.nextInt();
+    int height = sc.nextInt();
+
+    ArrayList<ArrayList<Pixel>> pixelsOnImage = new ArrayList<>();
+
+    for (int i = 0; i < height; i++) {
+      pixelsOnImage.add(new ArrayList<>());
+      for (int j = 0; j < width; j++) {
+        int r = sc.nextInt();
+        int g = sc.nextInt();
+        int b = sc.nextInt();
+
+        if (!hasAlpha) {
+          pixelsOnImage.get(i).add(new Pixel(r, g, b));
+        }
+        else {
+          int a = sc.nextInt();
+          pixelsOnImage.get(i).add(new Pixel(r, g, b, a));
+        }
+
+      }
+    }
+    return pixelsOnImage;
+  }
+
   @Override
-  public void saveProject(String filePath, String projectType) throws IllegalArgumentException, IllegalStateException {
+  public void saveProject(String filePath, String projectType) throws IllegalArgumentException,
+      IllegalStateException {
     if (filePath == null) {
       throw new IllegalArgumentException("Cannot give null as an argument");
     }
@@ -117,7 +179,8 @@ public class CollageProjectModelImpl implements CollageProject {
 
     if (projectType.equals("PPM")) {
       try {
-        savePPMProject(filePath);
+        saveProjectHelper(this.projectName, this.canvasHeight, this.canvasWidth, this.maxValue,
+            filePath);
       } catch (IOException e) {
         throw new IllegalArgumentException("Was not able to save");
       }
@@ -125,25 +188,28 @@ public class CollageProjectModelImpl implements CollageProject {
   }
 
   /**
-   * Allows the user to save a project as a PPM file.
-   *
+   * Helper method for saving a project to a file.
+   * @param projectName the name of the project
+   * @param height the height of the image/project
+   * @param width the width of the image/project
+   * @param maxValue the max value of a pixel component
    * @param filePath the location where the file will be stored.
-   * @throws IllegalArgumentException if the file has no contents/images
-   *                                  or if the given filePath is null
+   * @throws IllegalArgumentException if the given filePath is null
+   * @throws IOException if there is issue writing to the file
    */
-  private void savePPMProject(String filePath) throws IOException {
+  private void saveProjectHelper(String projectName, int height, int width, int maxValue,
+      String filePath) throws IOException {
     this.throwExceptionProjectNotMade();
 
     //write the new file to this path
     FileWriter fileWriter = new FileWriter(filePath);
 
-    fileWriter.write(this.projectName + "\n");
-    fileWriter.write(this.canvasWidth + " " + this.canvasHeight + "\n");
+    fileWriter.write(projectName + "\n");
+    fileWriter.write(height + " " + width + "\n");
     //depends on what ever the colors in the project are
-    fileWriter.write("255\n"); //because the max value of each pixel can be 255
+    fileWriter.write(maxValue + "\n"); //because the max value of each pixel can be 255
 
-    for (int i = 0; i < this.project.size(); i++) {
-      Layer layer = this.project.get(i);
+    for (Layer layer : this.project) {
       String filter = this.layerFilter.get(layer.getName());
       fileWriter.write(layer.getName() + " " + filter + "\n");
 
@@ -156,7 +222,7 @@ public class CollageProjectModelImpl implements CollageProject {
           int blueComponent = pixels.get(j).get(k).getBlueComponent();
           int alphaComponent = pixels.get(j).get(k).getAlphaComponent();
           fileWriter.write(redComponent + " " + greenComponent + " " + blueComponent + " "
-                  + alphaComponent + "\n");
+              + alphaComponent + "\n");
         }
       }
     }
@@ -169,15 +235,25 @@ public class CollageProjectModelImpl implements CollageProject {
   public void saveImage(String filePath) throws IllegalArgumentException {
     this.throwExceptionProjectNotMade();
 
-//    try {
-//      if (filePath.endsWith(".ppm")) {
-//        savePPMProject(filePath);
-//      }
-//    } catch (FileNotFoundException e) {
-//      throw new IllegalArgumentException("The image you are trying to save cannot be found");
-//    } catch (IOException e) {
-//      throw new IllegalArgumentException(e);
-//    }
+    ArrayList<ArrayList<Pixel>> finalImage = new ArrayList<>();
+
+    for (Layer layer : this.project) {
+      ArrayList<ArrayList<Pixel>> pixelsOnLayer = layer.getPixelsOnLayer();
+
+      for (int i = 0; i < this.canvasHeight; i++) {
+        finalImage.add(new ArrayList<>());
+        for (int j = 0; j < this.canvasWidth; j++) {
+          finalImage.get(i).set(j, pixelsOnLayer.get(i).get(j));
+        }
+      }
+    }
+
+    try {
+      this.saveProjectHelper("P3", this.canvasHeight, this.canvasWidth, this.maxValue,
+          filePath);
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Was not able to save");
+    }
   }
 
   @Override
