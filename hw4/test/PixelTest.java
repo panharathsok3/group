@@ -4,8 +4,6 @@ import org.junit.Test;
 import model.Pixel;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class PixelTest {
@@ -15,6 +13,7 @@ public class PixelTest {
   Pixel pixel3;
   Pixel pixel4;
   Pixel pixel5;
+  Pixel pixel6;
 
   @Before
   public void init() {
@@ -23,7 +22,7 @@ public class PixelTest {
     this.pixel3 = new Pixel(21, 50, 68, 100);
     this.pixel4 = new Pixel(12, 11, 10);
     this.pixel5 = new Pixel(1, 1, 1);
-
+    this.pixel6 = new Pixel(100, 60, 33, 220);
   }
 
   @Test
@@ -98,9 +97,6 @@ public class PixelTest {
     assertEquals(68, this.pixel3.value());
     assertEquals(12, this.pixel4.value());
     assertEquals(1, this.pixel5.value());
-    assertTrue(this.pixel3.value() == 68);
-    assertTrue(this.pixel3.value() != 21);
-    assertFalse(this.pixel2.value() == 10);
   }
 
   @Test
@@ -283,8 +279,41 @@ public class PixelTest {
     } catch (IllegalArgumentException iae) {
       //does nothing because we want it to fail.
     }
-
   }
 
+  @Test
+  public void testChangeTransparency() {
+    this.init();
 
+    this.pixel1.changeTransparency(false, 10, 10, 10, 255);
+    assertEquals(0, this.pixel1.getRedComponent());
+    assertEquals(0, this.pixel1.getGreenComponent());
+    assertEquals(0, this.pixel1.getBlueComponent());
+    assertEquals(1, this.pixel1.getAlphaComponent());
+
+    this.pixel2.changeTransparency(true, 20, 30, 40, 20);
+    assertEquals(120, this.pixel2.getRedComponent());
+    assertEquals(72, this.pixel2.getGreenComponent());
+    assertEquals(99, this.pixel2.getBlueComponent());
+    assertEquals(255, this.pixel2.getAlphaComponent());
+
+    this.pixel4.changeTransparency(false, 10, 10, 10,20);
+    assertEquals(12, this.pixel4.getRedComponent());
+    assertEquals(11, this.pixel4.getGreenComponent());
+    assertEquals(10, this.pixel4.getBlueComponent());
+    assertEquals(255, this.pixel4.getAlphaComponent());
+
+    this.pixel4.changeTransparency(false, 10, 10, 10,20);
+    assertEquals(12, this.pixel4.getRedComponent());
+    assertEquals(11, this.pixel4.getGreenComponent());
+    assertEquals(10, this.pixel4.getBlueComponent());
+    assertEquals(255, this.pixel4.getAlphaComponent());
+
+
+    this.pixel6.changeTransparency(true, 10, 20, 30, 30);
+    assertEquals(98, this.pixel6.getRedComponent());
+    assertEquals(59, this.pixel6.getGreenComponent());
+    assertEquals(32, this.pixel6.getBlueComponent());
+    assertEquals(224, this.pixel6.getAlphaComponent());
+  }
 }

@@ -1,10 +1,10 @@
 
-# Collager
+# Collager - Title
 
 We divided our Collager Application into three sections; adhering to the Model, View, Controller
 pattern in Software design pattern.
 
-# Pixel
+# Pixel - Class
 
 The Pixel class represents a single pixel that makes up images. We made our Pixel class backwards
 compatible with other forms of Images in case there is no alpha value which we set to 255. We have
@@ -52,11 +52,6 @@ CollageProject and perform some file operations.
 
 The CollageProjectModelImpl class is the model of our program. It inherits the CollageProject. This
 TODO
-
-# ImageUtil
-
-The ImageUtil class is a utility class that is used to read an image file in the PPM format and
-returns the pixels on the image as a 2D array.
 
 # Effects
 

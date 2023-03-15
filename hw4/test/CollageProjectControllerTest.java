@@ -1,7 +1,6 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.io.StringReader;
 
 import controller.CollageController;
@@ -12,7 +11,6 @@ import view.CollageTextView;
 import view.CollageView;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 public class CollageProjectControllerTest {
@@ -92,31 +90,6 @@ public class CollageProjectControllerTest {
       // do nothing
     }
   }
-
-  //TODO
-  @Test
-  public void testRunningAllMethods() {
-
-    Readable r = new StringReader("new-project C1 3 3\n"
-        + "load-project src/saveProjectAndLoadImmediately\n"
-        + "add-layer L2\n"
-        + "add-image-to-layer L2 src/tako.ppm 0 0\n"
-        + "save-image src/modifiedTako.ppm\n"
-        + "set-filter L2 red-component\n"
-        + "save-project src/saveOneLayer txt\n"
-        + "quit");
-
-    Appendable out = new StringBuilder();
-
-    CollageProject collageProject = new CollageProjectModelImpl();
-    CollageView view = new CollageTextView(collageProject, out);
-    CollageController controller = new CollageControllerImpl(r, collageProject, view);
-
-    controller.runProgram();
-
-    assertEquals("abc",out.toString());
-  }
-
   @Test
   public void testCallMockOnAllMethodsForModel() {
 

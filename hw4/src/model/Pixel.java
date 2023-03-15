@@ -234,28 +234,32 @@ public class Pixel {
     }
   }
 
-  /** TODO add params
-   * Changes the transparency of this Pixel by modifying the four components.
+  /**
+   * Changes the transparency of this Pixel by modifying the four components if the image originally
+   * has an alpha value and modifies only the rgb if the image doesn't have an alpha component.
    * @param hasAlpha true if and only if this pixel doesn't require an alpha value
+   * @param dR the default red value which is the value of the background's red value
+   * @param dG the default green value which is the value of the background's green value
+   * @param dB the default blue value which is the value of the background's blue value
+   * @param dA the default alpha value which is the value of the background's alpha value
    */
-  public void changeTransparency(boolean hasAlpha, int deltaR, int deltaG, int deltaB, int deltaA) {
-    if (hasAlpha) {
-      this.redComponent = this.getRedComponent() * this.alphaComponent / 255;
-      this.greenComponent = this.getRedComponent() * this.alphaComponent / 255;
-      this.blueComponent = this.getRedComponent() * this.alphaComponent / 255;
+  public void changeTransparency(boolean hasAlpha, int dR, int dG, int dB, int dA) {
+    if (!hasAlpha) {
+      this.redComponent = (int) (this.getRedComponent() * this.alphaComponent / 255f);
+      this.greenComponent = (int) (this.getGreenComponent() * this.alphaComponent / 255f);
+      this.blueComponent = (int) (this.getBlueComponent() * this.alphaComponent / 255f);
     }
     else {
       int originalAlpha = this.alphaComponent;
-      this.alphaComponent = (originalAlpha / 255) + (deltaA / 255) * (1 - (originalAlpha / 255));
-      this.redComponent = ((originalAlpha * this.redComponent) + (deltaR * (deltaA / 255)
-          * (1 - (originalAlpha / 255)))) * (1 / this.alphaComponent);
-      this.greenComponent = ((originalAlpha * this.greenComponent) + (deltaG * (deltaA / 255)
-          * (1 - (originalAlpha / 255)))) * (1 / this.alphaComponent);
-      this.blueComponent = ((originalAlpha * this.blueComponent) + (deltaB * (deltaA / 255)
-          * (1 - (originalAlpha / 255)))) * (1 / this.alphaComponent);
+      double alphaPrime = (originalAlpha / 255f) + (dA / 255f) * (1 - (originalAlpha / 255f));
+
+      this.redComponent = (int) (((originalAlpha / 255f * this.redComponent) + (dR * (dA / 255f)
+          * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
+      this.greenComponent = (int) (((originalAlpha / 255f * this.greenComponent) + (dG * (dA / 255f)
+          * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
+      this.blueComponent = (int) (((originalAlpha / 255f * this.blueComponent) + (dB * (dA / 255f)
+          * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
+      this.alphaComponent = (int) (alphaPrime * 255);
     }
   }
-
-
-
 }

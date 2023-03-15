@@ -3,7 +3,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import model.CollageProject;
 import model.Layer;
 import model.Pixel;
 
@@ -17,11 +16,12 @@ public class LayerTest {
   Layer layer2;
   Layer layer3;
   Layer layer4;
+  Layer layer5;
+  Layer layer6;
 
   Pixel pixel1;
   Pixel pixel2;
   Pixel pixel3;
-
   Pixel pixel4;
   Pixel pixel5;
   Pixel pixel6;
@@ -34,6 +34,9 @@ public class LayerTest {
     this.layer2 = new Layer("L2",10,15,0);
     this.layer3 = new Layer("L3",10,10,0);
     this.layer4 = new Layer("L4", 2, 2, 255);
+    this.layer5 = new Layer("L5", 10, 20, 255);
+    this.layer6 = new Layer("L6", 2, 2, 0);
+
     this.pixel1 = new Pixel(0,0,0, 1);
     this.pixel2 = new Pixel(120,72,99);
     this.pixel3 = new Pixel(21,50,68,100);
@@ -103,24 +106,28 @@ public class LayerTest {
 
   @Test
   public void testAddImage() {
-    ArrayList<ArrayList<Pixel>> pixels = new ArrayList<>();
-    Pixel pixel = new Pixel(5, 5, 5);
+    ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
 
     for (int i = 0; i < 2; i++) {
-      pixels.add(new ArrayList<>());
+      currentLayer.add(new ArrayList<>());
       for (int j = 0; j < 2; j++) {
-        pixels.get(i).add(pixel);
+        currentLayer.get(i).add(new Pixel(5, 5, 5));
       }
     }
 
-    this.layer4.addImage(0, 0, pixels);
+    this.layer4.addImage(0, 0, currentLayer);
 
-    for (ArrayList<Pixel> list : this.layer4.getPixelsOnLayer()) {
-      for (Pixel p : list) {
-        assertEquals(p.getRedComponent(), pixel.getRedComponent());
-        assertEquals(p.getGreenComponent(), pixel.getGreenComponent());
-        assertEquals(p.getBlueComponent(), pixel.getBlueComponent());
-        assertEquals(p.getAlphaComponent(), pixel.getAlphaComponent());
+    for (int i = 0; i < currentLayer.size(); i++) {
+      for (int j = 0; j < currentLayer.get(0).size(); j++) {
+        int redComponent = this.layer4.getPixelsOnLayer().get(i).get(j).getRedComponent();
+        int greenComponent = this.layer4.getPixelsOnLayer().get(i).get(j).getGreenComponent();
+        int blueComponent = this.layer4.getPixelsOnLayer().get(i).get(j).getBlueComponent();
+        int alphaComponent = this.layer4.getPixelsOnLayer().get(i).get(j).getAlphaComponent();
+
+        assertEquals(redComponent, currentLayer.get(i).get(j).getRedComponent());
+        assertEquals(greenComponent, currentLayer.get(i).get(j).getGreenComponent());
+        assertEquals(blueComponent, currentLayer.get(i).get(j).getBlueComponent());
+        assertEquals(alphaComponent, currentLayer.get(i).get(j).getAlphaComponent());
       }
     }
   }
@@ -131,13 +138,12 @@ public class LayerTest {
     ArrayList<ArrayList<Pixel>> whiteLayer = this.layer1.getPixelsOnLayer();
     Pixel whiteBackgroundPixel = new Pixel(255, 255, 255, 255);
 
-
-    for (int i = 0; i < whiteLayer.size(); i++) {
-      for (int j = 0; j < whiteLayer.get(0).size(); j ++) {
-        int redComponent = whiteLayer.get(i).get(j).getRedComponent();
-        int greenComponent = whiteLayer.get(i).get(j).getGreenComponent();
-        int blueComponent = whiteLayer.get(i).get(j).getBlueComponent();
-        int alphaComponent = whiteLayer.get(i).get(j).getAlphaComponent();
+    for (ArrayList<Pixel> pixels : whiteLayer) {
+      for (int j = 0; j < whiteLayer.get(0).size(); j++) {
+        int redComponent = pixels.get(j).getRedComponent();
+        int greenComponent = pixels.get(j).getGreenComponent();
+        int blueComponent = pixels.get(j).getBlueComponent();
+        int alphaComponent = pixels.get(j).getAlphaComponent();
 
         assertEquals(redComponent, whiteBackgroundPixel.getRedComponent());
         assertEquals(greenComponent, whiteBackgroundPixel.getGreenComponent());
@@ -149,12 +155,12 @@ public class LayerTest {
     ArrayList<ArrayList<Pixel>> blankLayer = this.layer2.getPixelsOnLayer();
     Pixel whiteBlankPixel = new Pixel(255, 255, 255, 0);
 
-    for (int i = 0; i < blankLayer.size(); i++) {
-      for (int j = 0; j < blankLayer.get(0).size(); j ++) {
-        int redComponent = blankLayer.get(i).get(j).getRedComponent();
-        int greenComponent = blankLayer.get(i).get(j).getGreenComponent();
-        int blueComponent = blankLayer.get(i).get(j).getBlueComponent();
-        int alphaComponent = blankLayer.get(i).get(j).getAlphaComponent();
+    for (ArrayList<Pixel> pixels : blankLayer) {
+      for (int j = 0; j < blankLayer.get(0).size(); j++) {
+        int redComponent = pixels.get(j).getRedComponent();
+        int greenComponent = pixels.get(j).getGreenComponent();
+        int blueComponent = pixels.get(j).getBlueComponent();
+        int alphaComponent = pixels.get(j).getAlphaComponent();
 
         assertEquals(redComponent, whiteBlankPixel.getRedComponent());
         assertEquals(greenComponent, whiteBlankPixel.getGreenComponent());
@@ -173,28 +179,17 @@ public class LayerTest {
     ArrayList<Pixel> lop = new ArrayList<>();
     ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
     currentLayer.add(lop);
-    lop.add(this.pixel3);
+    lop.add(new Pixel(21,50,68,100));
 
-    for (int i = 0; i < currentLayer.size(); i++) {
+    for (ArrayList<Pixel> pixels : currentLayer) {
       for (int j = 0; j < currentLayer.get(0).size(); j++) {
 
-        currentLayer.get(i).get(j).modifyComponentByBrightness("brighten-intensity", true);
+        pixels.get(j).modifyComponentByBrightness("brighten-intensity", true);
 
-        int newRed = currentLayer.get(i).get(j).getRedComponent();
-        int newGreen = currentLayer.get(i).get(j).getGreenComponent();
-        int newBlue = currentLayer.get(i).get(j).getBlueComponent();
-        int newAlpha = currentLayer.get(i).get(j).getAlphaComponent();
-
-
-        assertEquals(newRed, this.pixel3.getRedComponent());
-        assertEquals(newGreen, this.pixel3.getGreenComponent());
-        assertEquals(newBlue, this.pixel3.getBlueComponent());
-        assertEquals(newAlpha, this.pixel3.getAlphaComponent());
-
-        assertEquals(67,this.pixel3.getRedComponent());
-        assertEquals(96,this.pixel3.getGreenComponent());
-        assertEquals(114,this.pixel3.getBlueComponent());
-        assertEquals(100, this.pixel3.getAlphaComponent());
+        assertEquals(67, pixels.get(j).getRedComponent());
+        assertEquals(96, pixels.get(j).getGreenComponent());
+        assertEquals(114, pixels.get(j).getBlueComponent());
+        assertEquals(100, pixels.get(j).getAlphaComponent());
 
       }
     }
@@ -207,28 +202,18 @@ public class LayerTest {
     ArrayList<Pixel> lop = new ArrayList<>();
     ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
     currentLayer.add(lop);
-    lop.add(this.pixel3);
+    lop.add(new Pixel(21,50,68,100));
 
-    for (int i = 0; i < currentLayer.size(); i++) {
+    for (ArrayList<Pixel> pixels : currentLayer) {
       for (int j = 0; j < currentLayer.get(0).size(); j++) {
 
-        currentLayer.get(i).get(j).modifyComponentByBrightness("brighten-value", true);
+        pixels.get(j).modifyComponentByBrightness("brighten-value", true);
 
-        int newRed = currentLayer.get(i).get(j).getRedComponent();
-        int newGreen = currentLayer.get(i).get(j).getGreenComponent();
-        int newBlue = currentLayer.get(i).get(j).getBlueComponent();
-        int newAlpha = currentLayer.get(i).get(j).getAlphaComponent();
+        assertEquals(89, pixels.get(j).getRedComponent());
+        assertEquals(118, pixels.get(j).getGreenComponent());
+        assertEquals(136, pixels.get(j).getBlueComponent());
+        assertEquals(100, pixels.get(j).getAlphaComponent());
 
-
-        assertEquals(newRed, this.pixel3.getRedComponent());
-        assertEquals(newGreen, this.pixel3.getGreenComponent());
-        assertEquals(newBlue, this.pixel3.getBlueComponent());
-        assertEquals(newAlpha, this.pixel3.getAlphaComponent());
-
-        assertEquals(89,this.pixel3.getRedComponent());
-        assertEquals(118,this.pixel3.getGreenComponent());
-        assertEquals(136,this.pixel3.getBlueComponent());
-        assertEquals(100, this.pixel3.getAlphaComponent());
       }
     }
   }
@@ -240,28 +225,18 @@ public class LayerTest {
     ArrayList<Pixel> lop = new ArrayList<>();
     ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
     currentLayer.add(lop);
-    lop.add(this.pixel3);
+    lop.add(new Pixel(21,50,68,100));
 
-    for (int i = 0; i < currentLayer.size(); i++) {
+    for (ArrayList<Pixel> pixels : currentLayer) {
       for (int j = 0; j < currentLayer.get(0).size(); j++) {
 
-        currentLayer.get(i).get(j).modifyComponentByBrightness("brighten-luma", true);
+        pixels.get(j).modifyComponentByBrightness("brighten-luma", true);
 
-        int newRed = currentLayer.get(i).get(j).getRedComponent();
-        int newGreen = currentLayer.get(i).get(j).getGreenComponent();
-        int newBlue = currentLayer.get(i).get(j).getBlueComponent();
-        int newAlpha = currentLayer.get(i).get(j).getAlphaComponent();
+        assertEquals(66, pixels.get(j).getRedComponent());
+        assertEquals(95, pixels.get(j).getGreenComponent());
+        assertEquals(113, pixels.get(j).getBlueComponent());
+        assertEquals(100, pixels.get(j).getAlphaComponent());
 
-
-        assertEquals(newRed, this.pixel3.getRedComponent());
-        assertEquals(newGreen, this.pixel3.getGreenComponent());
-        assertEquals(newBlue, this.pixel3.getBlueComponent());
-        assertEquals(newAlpha, this.pixel3.getAlphaComponent());
-
-        assertEquals(66,this.pixel3.getRedComponent());
-        assertEquals(95,this.pixel3.getGreenComponent());
-        assertEquals(113,this.pixel3.getBlueComponent());
-        assertEquals(100, this.pixel3.getAlphaComponent());
       }
     }
   }
@@ -273,24 +248,18 @@ public class LayerTest {
     ArrayList<Pixel> lop = new ArrayList<>();
     ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
     currentLayer.add(lop);
-    lop.add(this.pixel5);
+    lop.add(new Pixel(1, 1, 1));
 
-
-
-    for (int i = 0; i < currentLayer.size(); i++) {
+    for (ArrayList<Pixel> pixels : currentLayer) {
       for (int j = 0; j < currentLayer.get(0).size(); j++) {
 
-        currentLayer.get(i).get(j).modifyComponentByBrightness("darken-value", false);
+        pixels.get(j).modifyComponentByBrightness("darken-value", false);
 
-        int newRed = currentLayer.get(i).get(j).getRedComponent();
-        int newGreen = currentLayer.get(i).get(j).getGreenComponent();
-        int newBlue = currentLayer.get(i).get(j).getBlueComponent();
-        int newAlpha = currentLayer.get(i).get(j).getAlphaComponent();
+        assertEquals(0, pixels.get(j).getRedComponent());
+        assertEquals(0, pixels.get(j).getGreenComponent());
+        assertEquals(0, pixels.get(j).getBlueComponent());
+        assertEquals(255, pixels.get(j).getAlphaComponent());
 
-        assertEquals(newRed, this.pixel5.getRedComponent());
-        assertEquals(newGreen, this.pixel5.getGreenComponent());
-        assertEquals(newBlue, this.pixel5.getBlueComponent());
-        assertEquals(newAlpha, this.pixel5.getAlphaComponent());
       }
     }
   }
@@ -301,26 +270,17 @@ public class LayerTest {
     ArrayList<Pixel> lop = new ArrayList<>();
     ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
     currentLayer.add(lop);
-    lop.add(this.pixel5);
+    lop.add(new Pixel(1, 1, 1));
 
     for (ArrayList<Pixel> pixels : currentLayer) {
       for (int j = 0; j < currentLayer.get(0).size(); j++) {
 
         pixels.get(j).modifyComponentByBrightness("darken-intensity", false);
 
-        int newRed = pixels.get(j).getRedComponent();
-        int newGreen = pixels.get(j).getGreenComponent();
-        int newBlue = pixels.get(j).getBlueComponent();
-        int newAlpha = pixels.get(j).getAlphaComponent();
-
-        assertEquals(newRed, this.pixel5.getRedComponent());
-        assertEquals(newGreen, this.pixel5.getGreenComponent());
-        assertEquals(newBlue, this.pixel5.getBlueComponent());
-        assertEquals(newAlpha, this.pixel5.getAlphaComponent());
-
-        assertEquals(0, this.pixel5.getRedComponent());
-        assertEquals(0, this.pixel5.getGreenComponent());
-        assertEquals(0, this.pixel5.getBlueComponent());
+        assertEquals(0, pixels.get(j).getRedComponent());
+        assertEquals(0, pixels.get(j).getGreenComponent());
+        assertEquals(0, pixels.get(j).getBlueComponent());
+        assertEquals(255, pixels.get(j).getAlphaComponent());
 
       }
     }
@@ -334,30 +294,191 @@ public class LayerTest {
     ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
 
     currentLayer.add(lop);
-    lop.add(this.pixel2);
+    lop.add(new Pixel(120,72,99));
 
     for (ArrayList<Pixel> pixels : currentLayer) {
       for (int j = 0; j < currentLayer.get(0).size(); j++) {
 
         pixels.get(j).modifyComponentByBrightness("darken-luma", false);
 
-        int newRed = pixels.get(j).getRedComponent();
-        int newGreen = pixels.get(j).getGreenComponent();
-        int newBlue = pixels.get(j).getBlueComponent();
-        int newAlpha = pixels.get(j).getAlphaComponent();
-
-        assertEquals(newRed, this.pixel2.getRedComponent());
-        assertEquals(newGreen, this.pixel2.getGreenComponent());
-        assertEquals(newBlue, this.pixel2.getBlueComponent());
-        assertEquals(newAlpha, this.pixel2.getAlphaComponent());
-
-        assertEquals(35, this.pixel2.getRedComponent());
-        assertEquals(0, this.pixel2.getGreenComponent());
-        assertEquals(14, this.pixel2.getBlueComponent());
+        assertEquals(35, pixels.get(j).getRedComponent());
+        assertEquals(0, pixels.get(j).getGreenComponent());
+        assertEquals(14, pixels.get(j).getBlueComponent());
+        assertEquals(255, pixels.get(j).getAlphaComponent());
 
       }
     }
   }
 
+  @Test
+  public void testModifyTransparencyWithWhiteBackGround() {
+    this.init();
+
+    ArrayList<ArrayList<Pixel>> modifiedList =
+        this.layer1.modifyTransparency(this.layer5.getPixelsOnLayer(), true);
+
+    ArrayList<Pixel> lop = new ArrayList<>();
+    ArrayList<ArrayList<Pixel>> currentLayer = new ArrayList<>();
+
+    currentLayer.add(lop);
+    lop.add(new Pixel(255, 255, 255));
+
+    for (int i = 0; i < currentLayer.size(); i++) {
+      for (int j = 0; j < currentLayer.get(0).size(); j++) {
+
+        int newRed = currentLayer.get(i).get(j).getRedComponent();
+        int newGreen =  currentLayer.get(i).get(j).getGreenComponent();
+        int newBlue =  currentLayer.get(i).get(j).getBlueComponent();
+        int newAlpha =  currentLayer.get(i).get(j).getAlphaComponent();
+
+        assertEquals(newRed, modifiedList.get(i).get(j).getRedComponent());
+        assertEquals(newGreen, modifiedList.get(i).get(j).getGreenComponent());
+        assertEquals(newBlue, modifiedList.get(i).get(j).getBlueComponent());
+        assertEquals(newAlpha, modifiedList.get(i).get(j).getAlphaComponent());
+
+      }
+    }
+
+    modifiedList = this.layer1.modifyTransparency(this.layer5.getPixelsOnLayer(), false);
+
+    lop = new ArrayList<>();
+    currentLayer = new ArrayList<>();
+
+    currentLayer.add(lop);
+    lop.add(new Pixel(255, 255, 255));
+
+    for (int i = 0; i < currentLayer.size(); i++) {
+      for (int j = 0; j < currentLayer.get(0).size(); j++) {
+
+        int newRed = currentLayer.get(i).get(j).getRedComponent();
+        int newGreen =  currentLayer.get(i).get(j).getGreenComponent();
+        int newBlue =  currentLayer.get(i).get(j).getBlueComponent();
+        int newAlpha =  currentLayer.get(i).get(j).getAlphaComponent();
+
+        assertEquals(newRed, modifiedList.get(i).get(j).getRedComponent());
+        assertEquals(newGreen, modifiedList.get(i).get(j).getGreenComponent());
+        assertEquals(newBlue, modifiedList.get(i).get(j).getBlueComponent());
+        assertEquals(newAlpha, modifiedList.get(i).get(j).getAlphaComponent());
+
+      }
+    }
+  }
+
+  @Test
+  public void testModifyTransparencyWithOpaqueImageOnTop() {
+    this.init();
+
+    ArrayList<ArrayList<Pixel>> pixels = new ArrayList<>();
+
+    for (int i = 0; i < 2; i++) {
+      pixels.add(new ArrayList<>());
+      for (int j = 0; j < 2; j++) {
+        pixels.get(i).add(new Pixel(5, 5, 5));
+      }
+    }
+
+    this.layer4.addImage(0, 0, pixels);
+
+    ArrayList<ArrayList<Pixel>> modifiedList =
+        this.layer4.modifyTransparency(this.layer6.getPixelsOnLayer(), false);
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(5, modifiedList.get(i).get(j).getRedComponent());
+        assertEquals(5, modifiedList.get(i).get(j).getGreenComponent());
+        assertEquals(5, modifiedList.get(i).get(j).getBlueComponent());
+        assertEquals(255, modifiedList.get(i).get(j).getAlphaComponent());
+
+      }
+    }
+  }
+
+  @Test
+  public void testModifyTransparencyWithOpaqueImageOnTopAndTransparentBottom() {
+    this.init();
+
+    ArrayList<ArrayList<Pixel>> pixels1 = new ArrayList<>();
+    for (int i = 0; i < 2; i++) {
+      pixels1.add(new ArrayList<>());
+      for (int j = 0; j < 2; j++) {
+        pixels1.get(i).add(new Pixel(10, 10, 10, 255));
+      }
+    }
+
+    this.layer4.addImage(0, 0, pixels1);
+
+    ArrayList<ArrayList<Pixel>> pixels2 = new ArrayList<>();
+
+    for (int i = 0; i < 2; i++) {
+      pixels2.add(new ArrayList<>());
+      for (int j = 0; j < 2; j++) {
+        pixels2.get(i).add(new Pixel(10, 10, 10, 0));
+      }
+    }
+
+    this.layer6.addImage(0, 0, pixels2);
+
+    ArrayList<ArrayList<Pixel>> modifiedList =
+        this.layer4.modifyTransparency(this.layer6.getPixelsOnLayer(), true);
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(10, modifiedList.get(i).get(j).getRedComponent());
+        assertEquals(10, modifiedList.get(i).get(j).getGreenComponent());
+        assertEquals(10, modifiedList.get(i).get(j).getBlueComponent());
+        assertEquals(255, modifiedList.get(i).get(j).getAlphaComponent());
+
+      }
+    }
+  }
+
+  @Test
+  public void testModifyTransparencyWithDifferentTransparencies() {
+    this.init();
+
+    ArrayList<ArrayList<Pixel>> pixels1 = new ArrayList<>();
+
+    for (int i = 0; i < 2; i++) {
+      pixels1.add(new ArrayList<>());
+      for (int j = 0; j < 2; j++) {
+        pixels1.get(i).add(new Pixel(10, 10, 10, 20));
+      }
+    }
+
+    this.layer4.addImage(0, 0, pixels1);
+
+    ArrayList<ArrayList<Pixel>> pixels2 = new ArrayList<>();
+
+    for (int i = 0; i < 2; i++) {
+      pixels2.add(new ArrayList<>());
+      for (int j = 0; j < 2; j++) {
+        pixels2.get(i).add(new Pixel(15, 30, 50, 30));
+      }
+    }
+
+    this.layer6.addImage(0, 0, pixels2);
+
+    ArrayList<ArrayList<Pixel>> modifiedList =
+        this.layer4.modifyTransparency(this.layer6.getPixelsOnLayer(), true);
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j ++) {
+        assertEquals(12, modifiedList.get(i).get(j).getRedComponent());
+        assertEquals(21, modifiedList.get(i).get(j).getGreenComponent());
+        assertEquals(33, modifiedList.get(i).get(j).getBlueComponent());
+        assertEquals(47, modifiedList.get(i).get(j).getAlphaComponent());
+      }
+    }
+  }
+
+  @Test
+  public void testInvalidChangeTransparency() {
+    try {
+      this.layer1.modifyTransparency(null, true);
+      fail("Arguments can't be null");
+    } catch (IllegalArgumentException e) {
+      //do nothing
+    }
+  }
 
 }

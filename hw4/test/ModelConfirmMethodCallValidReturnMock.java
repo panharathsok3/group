@@ -52,6 +52,11 @@ public class ModelConfirmMethodCallValidReturnMock implements CollageProject {
   }
 
   @Override
+  public Layer makeFinalImage(boolean hasAlpha) {
+    return null;
+  }
+
+  @Override
   public void clear() throws IllegalStateException {
     try {
       this.log.append("clear\n");

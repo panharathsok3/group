@@ -10,7 +10,7 @@ public class Layer {
   private final ArrayList<ArrayList<Pixel>> pixelsOnLayer;
   private final int height;
   private final int width;
-  private final int alpha;
+  private int alpha;
 
   /**
    * Creates a layer for the collage.
@@ -34,20 +34,19 @@ public class Layer {
     this.addPixels();
   }
 
-  public Layer(Layer layer) {
-    this.layerName = layer.layerName;
-    this.height = layer.height;
-    this.width = layer.width;
-    this.alpha = layer.alpha;
-    this.pixelsOnLayer = new ArrayList<>(layer.pixelsOnLayer);
+  public Layer(String layerName, int height, int width, ArrayList<ArrayList<Pixel>> pixelsOnLayer) {
+    this.layerName = layerName;
+    this.height = height;
+    this.width = width;
+    this.pixelsOnLayer = pixelsOnLayer;
   }
 
   /**
-   * Returns pixels in a 2D array.
-   * @return pixels in a 2D array
+   * Returns a copy of the pixels on this layer in a 2D array.
+   * @return a copy of the pixels on this layer in a 2D array
    */
   public ArrayList<ArrayList<Pixel>> getPixelsOnLayer() {
-    return this.pixelsOnLayer;
+    return new ArrayList<>(this.pixelsOnLayer);
   }
 
   /**
@@ -82,15 +81,6 @@ public class Layer {
       width = this.width;
     }
 
-    /*
-    ArrayList<ArrayList<Pixel>> pixelsOnPrevLayer = prevLayer.getPixelsOnLayer();
-
-    Pixel pixel = image.get(i).get(j);
-    pixel.changeTransparency(flag, pixelOnPrevLayer.get(i).get(j).getRedComponent(),
-      pixelOnPrevLayer.get(i).get(j).getGreenComponent(), pixelOnPrevLayer.get(i).get(j)
-        .getBlueComponent(), pixelOnPrevLayer.get(i).get(j).getAlphaComponent());
-     */
-
     for (int i = xPos; i < height; i++) {
       for (int j = yPos; j < width; j++) {
         this.pixelsOnLayer.get(i).set(j, image.get(i).get(j));
@@ -98,8 +88,32 @@ public class Layer {
     }
   }
 
-  public ArrayList<ArrayList<Pixel>> modifyTransparency(ArrayList<ArrayList<Pixel>> image) {
+  /**
+   * Returns a 2D ArrayList of Pixels that flattens the previous image with the current image.
+   * @param image a 2D arrayList of pixels that represents this the previous layer
+   * @param hasAlpha true if and only if the image being modified has an alpha value originally
+   * @return a 2D ArrayList of Pixels that flattens the previous image with the current image
+   * @throws IllegalArgumentException if the given arguments is null
+   */
+  public ArrayList<ArrayList<Pixel>> modifyTransparency(ArrayList<ArrayList<Pixel>> image,
+      boolean hasAlpha) throws IllegalArgumentException {
+    if (image == null) {
+      throw new IllegalArgumentException("Arguments can't be null");
+    }
 
+    ArrayList<ArrayList<Pixel>> pixelOnLayer = this.getPixelsOnLayer();
+    for (int i = 0; i < this.height; i++) {
+      for (int j = 0; j < this.width; j++) {
+        Pixel pixel = pixelOnLayer.get(i).get(j);
+        Pixel prevPixel = image.get(i).get(j);
+
+        pixel.changeTransparency(hasAlpha, prevPixel.getRedComponent(),
+            prevPixel.getGreenComponent(), prevPixel.getBlueComponent(),
+            prevPixel.getAlphaComponent());
+      }
+    }
+
+    return pixelOnLayer;
   }
 
   /**

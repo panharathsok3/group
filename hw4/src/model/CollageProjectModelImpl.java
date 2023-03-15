@@ -109,8 +109,10 @@ public class CollageProjectModelImpl implements CollageProject {
   }
 
   /**
-   * Read an image file in the PPM format and returns the pixels on the image as a 2D array.
+   * Read an image file and returns the pixels on the image as a 2D array.
    * @param filename the path of the file
+   * @param hasAlpha true if and only if the original image has an alpha value
+   * @param fileType the type of file that is being read from
    * @return the pixels on the image as a 2D array
    * @throws IllegalStateException when the file could not be retrieved
    *                               or the file is not a PPM file
@@ -181,7 +183,7 @@ public class CollageProjectModelImpl implements CollageProject {
     if (projectType.equals("PPM")) {
       try {
         saveProjectHelper(this.projectName, this.canvasHeight, this.canvasWidth, this.maxValue,
-            filePath);
+            filePath, this.project, false);
       } catch (IOException e) {
         throw new IllegalArgumentException("Was not able to save");
       }
@@ -195,11 +197,13 @@ public class CollageProjectModelImpl implements CollageProject {
    * @param width the width of the image/project
    * @param maxValue the max value of a pixel component
    * @param filePath the location where the file will be stored.
+   * @param layers the layers of the entire project
+   * @param isSaveImage true if and only if this method is used to save an image
    * @throws IllegalArgumentException if the given filePath is null
    * @throws IOException if there is issue writing to the file
    */
   private void saveProjectHelper(String projectName, int height, int width, int maxValue,
-      String filePath) throws IOException {
+      String filePath, List<Layer> layers, boolean isSaveImage) throws IOException {
     this.throwExceptionProjectNotMade();
 
     //write the new file to this path
@@ -210,54 +214,64 @@ public class CollageProjectModelImpl implements CollageProject {
     //depends on what ever the colors in the project are
     fileWriter.write(maxValue + "\n"); //because the max value of each pixel can be 255
 
-    for (Layer layer : this.project) {
-      String filter = this.layerFilter.get(layer.getName());
-      fileWriter.write(layer.getName() + " " + filter + "\n");
+    for (Layer layer : layers) {
+      if (!isSaveImage) {
+        String filter = this.layerFilter.get(layer.getName());
+        fileWriter.write(layer.getName() + " " + filter + "\n");
 
-      ArrayList<ArrayList<Pixel>> pixels = layer.getPixelsOnLayer();
+        ArrayList<ArrayList<Pixel>> pixels = layer.getPixelsOnLayer();
 
-      for (int j = 0; j < this.canvasHeight; j++) {
-        for (int k = 0; k < this.canvasWidth; k++) {
-          int redComponent = pixels.get(j).get(k).getRedComponent();
-          int greenComponent = pixels.get(j).get(k).getGreenComponent();
-          int blueComponent = pixels.get(j).get(k).getBlueComponent();
-          int alphaComponent = pixels.get(j).get(k).getAlphaComponent();
-          fileWriter.write(redComponent + " " + greenComponent + " " + blueComponent + " "
-              + alphaComponent + "\n");
+        for (int j = 0; j < this.canvasHeight; j++) {
+          for (int k = 0; k < this.canvasWidth; k++) {
+            int redComponent = pixels.get(j).get(k).getRedComponent();
+            int greenComponent = pixels.get(j).get(k).getGreenComponent();
+            int blueComponent = pixels.get(j).get(k).getBlueComponent();
+            int alphaComponent = pixels.get(j).get(k).getAlphaComponent();
+            fileWriter.write(redComponent + " " + greenComponent + " " + blueComponent + " "
+                + alphaComponent + "\n");
+          }
         }
       }
+      else {
+        ArrayList<ArrayList<Pixel>> pixels = layer.getPixelsOnLayer();
+        for (int j = 0; j < this.canvasHeight; j++) {
+          for (int k = 0; k < this.canvasWidth; k++) {
+            int redComponent = pixels.get(j).get(k).getRedComponent();
+            int greenComponent = pixels.get(j).get(k).getGreenComponent();
+            int blueComponent = pixels.get(j).get(k).getBlueComponent();
+            fileWriter.write(redComponent + " " + greenComponent + " " + blueComponent + "\n");
+          }
+        }
+      }
+
     }
 
     fileWriter.close();
   }
 
-  //TODO
   @Override
   public void saveImage(String filePath) throws IllegalArgumentException {
     this.throwExceptionProjectNotMade();
 
-    ArrayList<ArrayList<Pixel>> finalImage = new ArrayList<>();
+    Layer finalImage;
+    if (filePath.endsWith(".ppm")) {
+      finalImage = this.makeFinalImage(false);
+      ArrayList<Layer> listLayer = new ArrayList<>();
+      listLayer.add(finalImage);
 
-    for (Layer layer : this.project) {
-      ArrayList<ArrayList<Pixel>> pixelsOnLayer = layer.getPixelsOnLayer();
-
-      for (int i = 0; i < this.canvasHeight; i++) {
-        finalImage.add(new ArrayList<>());
-        for (int j = 0; j < this.canvasWidth; j++) {
-          finalImage.get(i).set(j, pixelsOnLayer.get(i).get(j));
-        }
+      try {
+        this.saveProjectHelper("P3", this.canvasHeight, this.canvasWidth, this.maxValue,
+            filePath, listLayer, true);
+      } catch (IOException e) {
+        throw new IllegalArgumentException("Was not able to save");
       }
-    }
-
-    try {
-      this.saveProjectHelper("P3", this.canvasHeight, this.canvasWidth, this.maxValue,
-          filePath);
-    } catch (IOException e) {
-      throw new IllegalArgumentException("Was not able to save");
     }
   }
 
-  public void makeFinalImage(boolean hasAlpha) {
+  @Override
+  public Layer makeFinalImage(boolean hasAlpha) {
+    this.throwExceptionProjectNotMade();
+
     MacroCollageEffects macro;
 
     ArrayList<Layer> layers = new ArrayList<>(this.project);
@@ -292,26 +306,16 @@ public class CollageProjectModelImpl implements CollageProject {
           //do nothing
       }
 
-      ArrayList<ArrayList<Pixel>> pixelsOnLayer = layer.getPixelsOnLayer();
-
       if (isBackground) {
-        for (int i = 0; i < this.canvasHeight; i++) {
-          finalImage.add(new ArrayList<>());
-          for (int j = 0; j < this.canvasWidth; j++) {
-            finalImage.get(i).set(j, pixelsOnLayer.get(i).get(j));
-          }
-        }
+        finalImage = new ArrayList<>(layer.getPixelsOnLayer());
         isBackground = false;
       }
       else {
-        if (hasAlpha) {
-          finalImage = layer.modifyTransparency(finalImage);
-        }
-        else {
-
-        }
+        finalImage = layer.modifyTransparency(finalImage, hasAlpha);
       }
     }
+
+    return new Layer("Final Image", this.canvasHeight, this.canvasWidth, finalImage);
   }
 
   @Override
@@ -405,14 +409,10 @@ public class CollageProjectModelImpl implements CollageProject {
     if (layerName == null || filterOption == null) {
       throw new IllegalArgumentException("Arguments can't be null");
     }
-
-    MacroCollageEffects macro;
-    Layer currentLayer = null;
     boolean layerFound = false;
 
     for (Layer layer : this.project) {
       if (layerName.equals(layer.getName())) {
-        currentLayer = layer;
         layerFound = true;
         this.layerFilter.put(layerName, filterOption);
       }
@@ -424,27 +424,18 @@ public class CollageProjectModelImpl implements CollageProject {
 
     switch (filterOption) {
       case "normal":
-        break;
       case "red-component":
       case "green-component":
       case "blue-component":
-        macro = new BulkAssignFilter(this.canvasHeight, this.canvasWidth, filterOption);
-        macro.executeMacro(currentLayer);
-        break;
       case "brighten-value":
       case "brighten-luma":
       case "brighten-intensity":
-        macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, true);
-        macro.executeMacro(currentLayer);
-        break;
       case "darken-intensity":
       case "darken-luma":
       case "darken-value":
-        macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filterOption, false);
-        macro.executeMacro(currentLayer);
         break;
       default:
-        throw new IllegalArgumentException("Filter not found");
+        throw new IllegalArgumentException("Filter doesn't exist");
     }
   }
 

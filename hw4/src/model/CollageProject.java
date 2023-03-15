@@ -33,7 +33,6 @@ public interface CollageProject extends CollageProjectModel {
   void addImageToLayer(String layerName, String filePath, int xPos, int yPos)
       throws IllegalArgumentException;
 
-
   /**
    * Sets the filter of the given layer based on the filter options.
    * A filter can be normal,red-component,green-component,blue-component,
@@ -46,6 +45,14 @@ public interface CollageProject extends CollageProjectModel {
    */
   void setFilter(String layerName, String filterOption) throws IllegalArgumentException,
       IllegalStateException;
+
+  /**
+   * Returns a layer that is made from putting all the layers in this CollageProject together.
+   * @param hasAlpha true if and only if the original images has an alpha component
+   * @return a layer that is made from putting all the layers in this CollageProject together
+   * @throws IllegalStateException if the project has not been made yet
+   */
+  Layer makeFinalImage(boolean hasAlpha) throws IllegalStateException;
 
   /**
    * Resets everything in this collage project, but the backgrounds stills stays intact.
