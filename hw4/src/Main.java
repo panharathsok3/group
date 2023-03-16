@@ -8,7 +8,7 @@ import model.CollageProjectModelImpl;
 import view.CollageTextView;
 import view.CollageView;
 
-public class Main {
+public class  Main {
 
   //demo main
   public static void main(String[] args) {

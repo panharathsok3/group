@@ -37,7 +37,7 @@ public class CollageControllerImpl implements CollageController {
   public void runProgram() throws IllegalStateException {
     Scanner sc = new Scanner(this.in);
     boolean running = true;
-   // display();
+    // display();
 
     if (!sc.hasNext()) {
       throw new IllegalStateException("Ran out of inputs.");
@@ -80,7 +80,12 @@ public class CollageControllerImpl implements CollageController {
         case "set-filter":
           String layerName2 = this.readValueString(sc);
           String filterOption = this.readValueString(sc);
-          this.collage.setFilter(layerName2, filterOption);
+          try {
+            this.collage.setFilter(layerName2, filterOption);
+          } catch(IllegalArgumentException iae) {
+            //
+            continue;
+          }
           break;
         case "save-image":
           String fileName = this.readValueString(sc);
@@ -99,6 +104,7 @@ public class CollageControllerImpl implements CollageController {
 
   /**
    * Reads the next user input as a String and returns it.
+   *
    * @param scan the scanner to read in the next user input
    * @return the user input as a String
    * @throws IllegalStateException if and only if the controller is unable to successfully read
@@ -119,6 +125,7 @@ public class CollageControllerImpl implements CollageController {
 
   /**
    * Reads the next user input as an Integer and returns it.
+   *
    * @param scan the scanner to read in the next user input
    * @return the user input as an integer
    * @throws IllegalStateException if and only if the controller is unable to successfully read

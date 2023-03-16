@@ -50,6 +50,7 @@ public class CollageModelImplTest {
     this.collage1.saveProject("src/saveProjectAndLoadImmediately", "PPM");
   }
 
+
   @Test
   public void testRunningEntireProgram() {
     this.init();
@@ -822,6 +823,8 @@ public class CollageModelImplTest {
     }
 
   }
+
+
 
   @Test
   public void testSaveProjectWithOneLayer() {
@@ -1966,6 +1969,97 @@ public class CollageModelImplTest {
         assertEquals("255", sc.next());
       }
     }
+  }
+
+
+  @Test
+  public void testDogRedComponent() {
+    this.init();
+    this.collage2.newProject("DogProject",500,500);
+    this.collage2.addLayer("DogLayer");
+    this.collage2.addImageToLayer("DogLayer","src/Images/dog.ppm",0,0);
+    this.collage2.setFilter("DogLayer","red-component");
+    this.collage2.saveImage("src/Images/redDog.ppm");
+  }
+  @Test
+  public void testDogGreenComponent() {
+    this.init();
+    this.collage2.newProject("DogProject",500,500);
+    this.collage2.addLayer("DogLayer");
+    this.collage2.addImageToLayer("DogLayer","src/Images/dog.ppm",0,0);
+    this.collage2.setFilter("DogLayer","green-component");
+    this.collage2.saveImage("src/Images/greenDog.ppm");
+  }
+
+  @Test
+  public void testDogBlueComponent() {
+    this.init();
+    this.collage2.newProject("DogProject",500,500);
+    this.collage2.addLayer("DogLayer");
+    this.collage2.addImageToLayer("DogLayer","src/Images/dog.ppm",0,0);
+    this.collage2.setFilter("DogLayer","blue-component");
+    this.collage2.saveImage("src/Images/blueDog.ppm");
+  }
+
+  @Test
+  public void testDogBrightenValue() {
+    this.init();
+    this.collage2.newProject("DogProject",500,500);
+    this.collage2.addLayer("DogLayer");
+    this.collage2.addImageToLayer("DogLayer","src/Images/dog.ppm",0,0);
+    this.collage2.setFilter("DogLayer","brighten-value");
+    this.collage2.saveImage("src/Images/brightenValueDog.ppm");
+  }
+
+  @Test
+  public void testDogBrightenIntensity() {
+    this.init();
+    this.collage2.newProject("DogProject",500,500);
+    this.collage2.addLayer("DogLayer");
+    this.collage2.addImageToLayer("DogLayer","src/Images/dog.ppm",0,0);
+    this.collage2.setFilter("DogLayer","brighten-intensity");
+    this.collage2.saveImage("src/Images/brightenIntensityDog.ppm");
+  }
+
+  @Test
+  public void testDogBrightenLuma() {
+    this.init();
+    this.collage2.newProject("DogProject",500,500);
+    this.collage2.addLayer("DogLayer");
+    this.collage2.addImageToLayer("DogLayer","src/Images/dog.ppm",0,0);
+    this.collage2.setFilter("DogLayer","brighten-luma");
+    this.collage2.saveImage("src/Images/brightenLumaDog.ppm");
+  }
+
+  @Test
+  public void testDogDarkenLuma() {
+    this.init();
+    this.collage2.newProject("DogProject",500,500);
+    this.collage2.addLayer("DogLayer");
+    this.collage2.addImageToLayer("DogLayer","src/Images/dog.ppm",0,0);
+    this.collage2.setFilter("DogLayer","darken-luma");
+    this.collage2.saveImage("src/Images/darkenLumaDog.ppm");
+  }
+
+
+  @Test
+  public void testDogDarkenValue() {
+    this.init();
+    this.collage2.newProject("DogProject",500,500);
+    this.collage2.addLayer("DogLayer");
+    this.collage2.addImageToLayer("DogLayer","src/Images/dog.ppm",0,0);
+    this.collage2.setFilter("DogLayer","darken-value");
+    this.collage2.saveImage("src/Images/darkenValueDog.ppm");
+  }
+
+  @Test
+  public void testDogDarkenIntensity() {
+    this.init();
+    this.collage2.newProject("DogProject", 500, 500);
+    this.collage2.addLayer("DogLayer");
+    this.collage2.addImageToLayer("DogLayer", "src/Images/dog.ppm", 0, 0);
+    this.collage2.setFilter("DogLayer", "darken-intensity");
+    this.collage2.saveImage("src/Images/darkenIntensityDog.ppm");
   }
 
   @Test
