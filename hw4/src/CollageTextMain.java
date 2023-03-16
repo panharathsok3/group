@@ -1,14 +1,14 @@
 
 import controller.CollageController;
 import controller.CollageControllerImpl;
-import java.io.FileNotFoundException;
+
 import java.io.InputStreamReader;
 import model.CollageProject;
 import model.CollageProjectModelImpl;
 import view.CollageTextView;
 import view.CollageView;
 
-public class  Main {
+public class CollageTextMain {
 
   //demo main
   public static void main(String[] args) {

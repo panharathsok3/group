@@ -38,6 +38,8 @@ Pixel
 
 
 
+
+
   public void display(String... messages) {
     try {
       for (String message : messages) {

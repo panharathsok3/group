@@ -1,5 +1,7 @@
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,10 +9,14 @@ import java.util.Map;
 import java.util.Scanner;
 import org.junit.Test;
 
+import controller.CollageController;
+import controller.CollageControllerImpl;
 import model.CollageProject;
 import model.CollageProjectModelImpl;
 import model.Layer;
 import model.Pixel;
+import view.CollageTextView;
+import view.CollageView;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -49,6 +55,21 @@ public class CollageModelImplTest {
     this.collage1.newProject("C1", 2, 2);
     this.collage1.saveProject("src/saveProjectAndLoadImmediately", "PPM");
   }
+
+  @Test
+  public void testRunScript() {
+    this.init();
+    Appendable out = new StringBuilder();
+    CollageView collageView = new CollageTextView(collage1,out);
+    try {
+      CollageController controller = new CollageControllerImpl(new FileReader("./res/RunScript"),
+              collage1,collageView);
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+
 
 
   @Test

@@ -46,6 +46,7 @@ public class CollageControllerImpl implements CollageController {
     while (running) {
       String command = this.readValueString(sc);
 
+
       switch (command) {
         case "quit":
           running = false;
@@ -82,9 +83,12 @@ public class CollageControllerImpl implements CollageController {
           String filterOption = this.readValueString(sc);
           try {
             this.collage.setFilter(layerName2, filterOption);
-          } catch(IllegalArgumentException iae) {
-            //
-            continue;
+          } catch (IllegalArgumentException iae) {
+            try {
+              view.renderMessage(iae.getMessage());
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
           }
           break;
         case "save-image":
@@ -93,10 +97,12 @@ public class CollageControllerImpl implements CollageController {
           break;
         default:
           try {
-            this.view.renderMessage("Command doesn't exist");
+            this.view.renderMessage("Command doesn't exists");
           } catch (IOException e) {
             throw new IllegalStateException("Unexpected IOException");
           }
+
+
       }
 
     }

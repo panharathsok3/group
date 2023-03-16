@@ -32,7 +32,7 @@ implement more functionality.
 
 # CollageProjectModel
 
-The CollageProjectModel interface represents file operations that can be performed on classes
+The CollageProjectModel interface represents file operations that can be performed on model classes
 that inherits it. It gives functionality to make, save, and load a project and also the ability to
 save an image.
 
@@ -71,7 +71,8 @@ of the tools/class that already exists.
 # BrightenDarkenMacro
 
 The BrightenDarkenMacro class is a macro that implements the MacroCollageEffects interface. It
-allows the user reduce or increase the brightness all the pixels on a layer.
+allows the user reduce or increase the brightness all the pixels on a layer according to either their
+value, intensity or luma.
 
 # BulkAssignFilter
 
@@ -92,15 +93,16 @@ The CollageTextView class inherits the CollageView
 # CollageController
 
 The CollageController interface represents a controller for the CollageProjectModelImpl. It is used
-to run the program which accept user input and perform some actions.
+to run the program which accept user input and perform some actions like loading, creating and
+ saving a project,adding layers to a project etc.
 
 # CollageControllerImpl TODO
 
 The CollageControllerImpl class inherits the CollageController
 
-# Main
+# CollageTextMain
 
-The Main class is used to accepts command line arguments that allow the program to be used.
+The CollageTextMain class is used to accepts command line arguments that allow the program to be used.
 
 # HOW TO USE
 
@@ -162,8 +164,8 @@ Do: add-image-to-layer [layer-name] [image-path] [x-pos] [y-pos]
 NOTE: Once your image is successfully on the layer, you
       can add some effects to it.
 
- ADDING EFFECTS TO YOUR IMAGES
-# To transform any image on a layer,
+ # ADDING EFFECTS TO YOUR IMAGES
+    To transform any image on a layer,
     run the set-filter command and pass in
     the layer name of the layer which has the image you want
     to transform as well as any of the filter options
@@ -266,7 +268,18 @@ NOTE: After all work has been done and saved, and you are
   Do: quit
 
 
+NOTE FOR GRADER:
+Copy and paste the script in the RunScript file into the command line.
+The actions will be performed and the new images and project will be
+saved in the specified path for viewing.
+
 Citations :
 https://www.goodhousekeeping.com/life/pets/g4531/cutest-dog-breeds/
 Copyright © 1994-2021, Oracle and/or its affiliates. All rights reserved.
 
+
+
+At least one example PPM image (different from any of the ones provided to you in this assignment),
+its red, blue, and green components as their own images, and this image brightened and darkened
+by itself using each of value, intensity, and luma in a second new layer
+named suitably in a res/folder.

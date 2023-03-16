@@ -45,7 +45,6 @@ public class CollageProjectModelImpl implements CollageProject {
       throw new IllegalArgumentException("the name of the project can't be null and the"
               + "canvas height and width can't be less than 1");
     }
-
     this.backgroundMade = false;
     this.projectName = name;
     this.createdProject = true;
