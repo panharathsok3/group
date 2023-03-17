@@ -1,5 +1,6 @@
 package model.Effects;
 
+import model.ILayer;
 import model.Layer;
 
 /**
@@ -11,5 +12,5 @@ public interface MacroCollageEffects {
    * A macro method for the Layer of the CollageProjectModelImpl.
    * @param layer the layer the marco will be used in
    */
-  void executeMacro(Layer layer);
+  void executeMacro(ILayer layer);
 }

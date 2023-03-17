@@ -1,6 +1,6 @@
 package model.Effects;
 
-import model.Layer;
+import model.ILayer;
 
 /**
  * This class handles the operation to brighten an image
@@ -37,17 +37,19 @@ public class BrightenDarkenMacro implements MacroCollageEffects {
   }
 
   @Override
-  public void executeMacro(Layer layer) {
+  public void executeMacro(ILayer layer) {
     if (this.brighten) {
       for (int i = 0; i < this.row; i++) {
         for (int j = 0; j < this.col; j++) {
-          layer.getPixelsOnLayer().get(i).get(j).modifyComponentByBrightness(this.optionFilter, true);
+          layer.getPixelsOnLayer().get(i).get(j).modifyComponentByBrightness(this.optionFilter,
+              true);
         }
       }
     } else {
       for (int i = 0; i < this.row; i++) {
         for (int j = 0; j < this.col; j++) {
-          layer.getPixelsOnLayer().get(i).get(j).modifyComponentByBrightness(this.optionFilter, false);
+          layer.getPixelsOnLayer().get(i).get(j).modifyComponentByBrightness(this.optionFilter,
+              false);
         }
       }
     }

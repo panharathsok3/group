@@ -81,11 +81,6 @@ public class CollageTextViewTest {
     }
   }
 
-  /**
-   * More test for render message.
-   *
-   * @return
-   */
   public boolean renderMessageWithMock() {
 
     this.out = new StringBuilder();

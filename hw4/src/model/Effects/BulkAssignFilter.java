@@ -1,6 +1,6 @@
 package model.Effects;
 
-import model.Layer;
+import model.ILayer;
 
 /**
  * A command that assigns a specified filter to a layer.
@@ -30,7 +30,7 @@ public class BulkAssignFilter implements MacroCollageEffects {
   }
 
   @Override
-  public void executeMacro(Layer layer) {
+  public void executeMacro(ILayer layer) {
     for (int i = 0; i < this.row; i++) {
       for (int j = 0; j < this.col; j++) {
         layer.getPixelsOnLayer().get(i).get(j).setFilter(this.optionFilter);

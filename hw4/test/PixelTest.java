@@ -1,3 +1,4 @@
+import model.IPixel;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,12 +9,12 @@ import static org.junit.Assert.fail;
 
 public class PixelTest {
 
-  Pixel pixel1;
-  Pixel pixel2;
-  Pixel pixel3;
-  Pixel pixel4;
-  Pixel pixel5;
-  Pixel pixel6;
+  IPixel pixel1;
+  IPixel pixel2;
+  IPixel pixel3;
+  IPixel pixel4;
+  IPixel pixel5;
+  IPixel pixel6;
 
   @Before
   public void init() {
@@ -29,28 +30,28 @@ public class PixelTest {
   public void testInvalidConstructor() {
 
     try {
-      Pixel pixel1 = new Pixel(-1, 0, 0);
+      IPixel pixel1 = new Pixel(-1, 0, 0);
       fail("the given component can't be negative");
     } catch (IllegalArgumentException e) {
       // do nothing
     }
 
     try {
-      Pixel pixel1 = new Pixel(0, -1, 0);
+      IPixel pixel1 = new Pixel(0, -1, 0);
       fail("the given component can't be negative");
     } catch (IllegalArgumentException e) {
       // do nothing
     }
 
     try {
-      Pixel pixel1 = new Pixel(0, 0, -1);
+      IPixel pixel1 = new Pixel(0, 0, -1);
       fail("the given component can't be negative");
     } catch (IllegalArgumentException e) {
       // do nothing
     }
 
     try {
-      Pixel pixel1 = new Pixel(0, 0, 0, -1);
+      IPixel pixel1 = new Pixel(0, 0, 0, -1);
       fail("the given component can't be negative");
     } catch (IllegalArgumentException e) {
       // do nothing

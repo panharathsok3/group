@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
+import model.ILayer;
+import model.IPixel;
 import org.junit.Test;
 
 import controller.CollageController;
@@ -22,14 +24,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class CollageModelImplTest {
-  Pixel pixel1;
-  Pixel pixel2;
-  Pixel pixel3;
-  Pixel pixel4;
-  Pixel pixel5;
-  Layer layer1;
-  Layer layer2;
-  Layer layer3;
+  IPixel pixel1;
+  IPixel pixel2;
+  IPixel pixel3;
+  IPixel pixel4;
+  IPixel pixel5;
+  ILayer layer1;
+  ILayer layer2;
+  ILayer layer3;
   CollageProject collage1;
   CollageProject collage2;
   CollageProject collage3;
@@ -53,7 +55,7 @@ public class CollageModelImplTest {
     this.collage4 = new CollageProjectModelImpl();
 
     this.collage1.newProject("C1", 2, 2);
-    this.collage1.saveProject("src/saveProjectAndLoadImmediately", "PPM");
+    this.collage1.saveProject("res/project/saveProjectAndLoadImmediately", "PPM");
   }
 
   @Test
@@ -152,10 +154,10 @@ public class CollageModelImplTest {
     }
 
     //SAVE IMAGE
-    this.collage1.saveImage("src/EntireProgam.ppm");
+    this.collage1.saveImage("res/Images/EntireProgam.ppm");
 
     try {
-      sc = new Scanner(new FileInputStream("src/EntireProgam.ppm"));
+      sc = new Scanner(new FileInputStream("res/Images/EntireProgam.ppm"));
     } catch (FileNotFoundException e) {
       throw new IllegalStateException("File not found!");
     }
@@ -185,10 +187,10 @@ public class CollageModelImplTest {
 
 
     //SAVE PROJECT
-    this.collage1.saveProject("src/saveEntireProgram", "PPM");
+    this.collage1.saveProject("res/project/saveEntireProgram", "PPM");
 
     try {
-      sc = new Scanner(new FileInputStream("src/saveEntireProgram"));
+      sc = new Scanner(new FileInputStream("res/project/saveEntireProgram"));
     } catch (FileNotFoundException e) {
       throw new IllegalStateException("File not found!");
     }
@@ -230,14 +232,14 @@ public class CollageModelImplTest {
     }
 
     //LOAD PROJECT
-    this.collage2.loadProject("src/saveEntireProgram");
+    this.collage2.loadProject("res/project/saveEntireProgram");
 
     assertEquals("C1", this.collage2.getProjectName());
     assertEquals(2, this.collage2.getHeight());
     assertEquals(2, this.collage2.getWidth());
     assertEquals(255, this.collage2.getMaxValue());
 
-    Layer backgroundLayer = this.collage2.getLayers().get(0);
+    ILayer backgroundLayer = this.collage2.getLayers().get(0);
     assertEquals("Background", backgroundLayer.getName());
 
     Map<String, String> layerWithFilter = this.collage2.getFiltersOnProject();
@@ -336,7 +338,7 @@ public class CollageModelImplTest {
 
     //SET FILTER
     this.collage2.setFilter("L2", "darken-intensity");
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerBefore = this.collage2.getLayers().get(2)
+    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage2.getLayers().get(2)
         .getPixelsOnLayer();
 
     assertEquals("darken-intensity", this.collage2.getFiltersOnProject().get("L2"));
@@ -350,10 +352,10 @@ public class CollageModelImplTest {
     }
 
     //SAVE PROJECT
-    this.collage2.saveProject("src/saveEntireProgram", "PPM");
+    this.collage2.saveProject("res/project/saveEntireProgram", "PPM");
 
     try {
-      sc = new Scanner(new FileInputStream("src/saveEntireProgram"));
+      sc = new Scanner(new FileInputStream("res/project/saveEntireProgram"));
     } catch (FileNotFoundException e) {
       throw new IllegalStateException("File not found!");
     }
@@ -409,7 +411,7 @@ public class CollageModelImplTest {
     }
 
     //LOAD PROJECT
-    this.collage3.loadProject("src/saveEntireProgram");
+    this.collage3.loadProject("res/project/saveEntireProgram");
     assertEquals("C1", this.collage3.getProjectName());
     assertEquals(2, this.collage3.getHeight());
     assertEquals(2, this.collage3.getWidth());
@@ -473,10 +475,10 @@ public class CollageModelImplTest {
     }
 
     //SAVE IMAGE
-    this.collage3.saveImage("src/EntireProgam.ppm");
+    this.collage3.saveImage("res/Images/EntireProgam.ppm");
 
     try {
-      sc = new Scanner(new FileInputStream("src/EntireProgam.ppm"));
+      sc = new Scanner(new FileInputStream("res/Images/EntireProgam.ppm"));
     } catch (FileNotFoundException e) {
       throw new IllegalStateException("File not found!");
     }
@@ -597,7 +599,7 @@ public class CollageModelImplTest {
       this.collage2.addLayer("L1");
       this.collage2.addLayer("L2");
       fail("Cant make a layer with an already used name");
-    } catch (IllegalStateException e) {
+    } catch (IllegalArgumentException e) {
       //do nothing
     }
   }
@@ -747,12 +749,12 @@ public class CollageModelImplTest {
     this.init();
 
     this.collage1.newProject("C1", 100, 100);
-    this.collage1.saveProject("src/saveImmediately", "PPM");
+    this.collage1.saveProject("res/project/saveImmediately", "PPM");
 
     Scanner sc;
 
     try {
-      sc = new Scanner(new FileInputStream("src/saveImmediately"));
+      sc = new Scanner(new FileInputStream("res/project/saveImmediately"));
     } catch (FileNotFoundException e) {
       throw new IllegalStateException("File not found!");
     }
@@ -793,12 +795,12 @@ public class CollageModelImplTest {
 
     this.collage1.newProject("C1", 200, 200);
     this.collage1.addLayer("L1");
-    this.collage1.saveProject("src/saveOneLayer", "PPM");
+    this.collage1.saveProject("res/project/saveOneLayer", "PPM");
 
     Scanner sc;
 
     try {
-      sc = new Scanner(new FileInputStream("src/saveOneLayer"));
+      sc = new Scanner(new FileInputStream("res/project/saveOneLayer"));
     } catch (FileNotFoundException e) {
       throw new IllegalStateException("File not found!");
     }
@@ -849,12 +851,12 @@ public class CollageModelImplTest {
     this.collage1.newProject("C1", 2, 2);
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
-    this.collage1.saveProject("src/saveAfterModification", "PPM");
+    this.collage1.saveProject("res/project/saveAfterModification", "PPM");
 
     Scanner sc;
 
     try {
-      sc = new Scanner(new FileInputStream("src/saveAfterModification"));
+      sc = new Scanner(new FileInputStream("res/project/saveAfterModification"));
     } catch (FileNotFoundException e) {
       throw new IllegalStateException("File not found!");
     }
@@ -898,10 +900,10 @@ public class CollageModelImplTest {
     }
 
     this.collage1.setFilter("L1", "darken-intensity");
-    this.collage1.saveProject("src/saveAfterModification", "PPM");
+    this.collage1.saveProject("res/project/saveAfterModification", "PPM");
 
     try {
-      sc = new Scanner(new FileInputStream("src/saveAfterModification"));
+      sc = new Scanner(new FileInputStream("res/project/saveAfterModification"));
     } catch (FileNotFoundException e) {
       throw new IllegalStateException("File not found!");
     }
@@ -982,7 +984,8 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.setFilter("L1", "normal");
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayer = this.collage1.getLayers().get(1).getPixelsOnLayer();
+    ArrayList<ArrayList<IPixel>> pixelsOnLayer = this.collage1.getLayers().get(1)
+        .getPixelsOnLayer();
     assertEquals("normal", this.collage1.getFiltersOnProject().get("L1"));
 
     for (int i = 0; i < 2; i++) {
@@ -1002,7 +1005,8 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.setFilter("L1", "red-component");
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayer = this.collage1.getLayers().get(1).getPixelsOnLayer();
+    ArrayList<ArrayList<IPixel>> pixelsOnLayer = this.collage1.getLayers().get(1)
+        .getPixelsOnLayer();
 
     assertEquals("red-component", this.collage1.getFiltersOnProject().get("L1"));
 
@@ -1023,7 +1027,8 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.setFilter("L1", "green-component");
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayer = this.collage1.getLayers().get(1).getPixelsOnLayer();
+    ArrayList<ArrayList<IPixel>> pixelsOnLayer = this.collage1.getLayers().get(1)
+        .getPixelsOnLayer();
 
     assertEquals("green-component", this.collage1.getFiltersOnProject().get("L1"));
 
@@ -1044,7 +1049,8 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.setFilter("L1", "blue-component");
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayer = this.collage1.getLayers().get(1).getPixelsOnLayer();
+    ArrayList<ArrayList<IPixel>> pixelsOnLayer = this.collage1.getLayers().get(1)
+        .getPixelsOnLayer();
     assertEquals("blue-component", this.collage1.getFiltersOnProject().get("L1"));
 
     for (int i = 0; i < 2; i++) {
@@ -1064,7 +1070,8 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1).getPixelsOnLayer();
+    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
+        .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
       for (int j = 0; j < 2; j++) {
@@ -1076,7 +1083,8 @@ public class CollageModelImplTest {
     }
 
     this.collage1.setFilter("L1", "brighten-value");
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1).getPixelsOnLayer();
+    ArrayList<ArrayList<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
+        .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
       for (int j = 0; j < 2; j++) {
@@ -1095,7 +1103,8 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1).getPixelsOnLayer();
+    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
+        .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
       for (int j = 0; j < 2; j++) {
@@ -1107,7 +1116,7 @@ public class CollageModelImplTest {
     }
 
     this.collage1.setFilter("L1", "brighten-luma");
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
+    ArrayList<ArrayList<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     assertEquals("brighten-luma", this.collage1.getFiltersOnProject().get("L1"));
@@ -1128,7 +1137,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
+    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
@@ -1141,7 +1150,7 @@ public class CollageModelImplTest {
     }
 
     this.collage1.setFilter("L1", "brighten-intensity");
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
+    ArrayList<ArrayList<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     assertEquals("brighten-intensity", this.collage1.getFiltersOnProject().get("L1"));
@@ -1162,7 +1171,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
+    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
@@ -1175,7 +1184,7 @@ public class CollageModelImplTest {
     }
 
     this.collage1.setFilter("L1", "darken-value");
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
+    ArrayList<ArrayList<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
@@ -1195,7 +1204,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
+    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
@@ -1208,7 +1217,7 @@ public class CollageModelImplTest {
     }
 
     this.collage1.setFilter("L1", "darken-luma");
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
+    ArrayList<ArrayList<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     assertEquals("darken-luma", this.collage1.getFiltersOnProject().get("L1"));
@@ -1230,7 +1239,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
+    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
@@ -1243,7 +1252,7 @@ public class CollageModelImplTest {
     }
 
     this.collage1.setFilter("L1", "darken-intensity");
-    ArrayList<ArrayList<Pixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
+    ArrayList<ArrayList<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     assertEquals("darken-intensity", this.collage1.getFiltersOnProject().get("L1"));
@@ -1306,7 +1315,7 @@ public class CollageModelImplTest {
   public void testGetLayers() {
     this.init();
     this.collage1.newProject("C1", 1, 1);
-    ArrayList<Layer> list = this.collage1.getLayers();
+    ArrayList<ILayer> list = this.collage1.getLayers();
     assertEquals(new Layer("Background", 1, 1, 0).getName(),
         list.get(0).getName());
 
@@ -1333,13 +1342,13 @@ public class CollageModelImplTest {
   public void testValidLoadProjectImmediately() {
     this.init();
 
-    this.collage2.loadProject("src/saveProjectAndLoadImmediately");
+    this.collage2.loadProject("res/project/saveProjectAndLoadImmediately");
     assertEquals("C1", this.collage2.getProjectName());
     assertEquals(2, this.collage2.getHeight());
     assertEquals(2, this.collage2.getWidth());
     assertEquals(255, this.collage2.getMaxValue());
 
-    Layer backgroundLayer = this.collage2.getLayers().get(0);
+    ILayer backgroundLayer = this.collage2.getLayers().get(0);
     assertEquals("Background", backgroundLayer.getName());
 
     Map<String, String> layerWithFilter = this.collage2.getFiltersOnProject();
@@ -1364,14 +1373,14 @@ public class CollageModelImplTest {
     this.init();
 
     this.collage1.addLayer("L1");
-    this.collage1.saveProject("src/saveProjectAndLoadAfterAddingLayer", "PPM");
-    this.collage2.loadProject("src/saveProjectAndLoadAfterAddingLayer");
+    this.collage1.saveProject("res/project/saveProjectAndLoadAfterAddingLayer", "PPM");
+    this.collage2.loadProject("res/project/saveProjectAndLoadAfterAddingLayer");
     assertEquals("C1", this.collage2.getProjectName());
     assertEquals(2, this.collage2.getHeight());
     assertEquals(2, this.collage2.getWidth());
     assertEquals(255, this.collage2.getMaxValue());
 
-    Layer backgroundLayer = this.collage2.getLayers().get(0);
+    ILayer backgroundLayer = this.collage2.getLayers().get(0);
     assertEquals("Background", backgroundLayer.getName());
 
     Map<String, String> layerWithFilter = this.collage2.getFiltersOnProject();
@@ -1418,15 +1427,15 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
     this.collage1.setFilter("L1", "darken-intensity");
-    this.collage1.saveProject("src/saveProjectAndLoadAfterAddingLayerAndModifying",
+    this.collage1.saveProject("res/project/saveProjectAndLoadAfterAddingLayerAndModifying",
         "PPM");
-    this.collage2.loadProject("src/saveProjectAndLoadAfterAddingLayerAndModifying");
+    this.collage2.loadProject("res/project/saveProjectAndLoadAfterAddingLayerAndModifying");
     assertEquals("C1", this.collage2.getProjectName());
     assertEquals(2, this.collage2.getHeight());
     assertEquals(2, this.collage2.getWidth());
     assertEquals(255, this.collage2.getMaxValue());
 
-    Layer backgroundLayer = this.collage2.getLayers().get(0);
+    ILayer backgroundLayer = this.collage2.getLayers().get(0);
     assertEquals("Background", backgroundLayer.getName());
 
     Map<String, String> layerWithFilter = this.collage2.getFiltersOnProject();
@@ -1466,16 +1475,16 @@ public class CollageModelImplTest {
     this.init();
 
     this.collage1.newProject("C1", 2, 2);
-    this.collage1.saveProject("src/saveProjectAndLoadWhileWorking",
+    this.collage1.saveProject("res/project/saveProjectAndLoadWhileWorking",
         "PPM");
 
     this.collage2.newProject("C2", 2, 2);
     this.collage2.addLayer("L1");
     this.collage2.addImageToLayer("L1", "src/tako.ppm", 0, 0);
     this.collage2.setFilter("L1", "darken-intensity");
-    this.collage2.loadProject("src/saveProjectAndLoadWhileWorking");
+    this.collage2.loadProject("res/project/saveProjectAndLoadWhileWorking");
 
-    ArrayList<Layer> backgroundLayer = this.collage2.getLayers();
+    ArrayList<ILayer> backgroundLayer = this.collage2.getLayers();
     assertEquals(1, backgroundLayer.size());
     assertEquals("Background", backgroundLayer.get(0).getName());
 
@@ -1515,21 +1524,21 @@ public class CollageModelImplTest {
     }
 
     try {
-      FileWriter fileWriter = new FileWriter("src/nothingInside");
+      FileWriter fileWriter = new FileWriter("res/project/nothingInside");
       fileWriter.close();
     } catch (IOException e) {
       throw new IllegalStateException("Unexpected IOException");
     }
 
     try {
-      this.collage1.loadProject("src/nothingInside");
+      this.collage1.loadProject("res/project/nothingInside");
       fail("Nothing is inside the file");
     } catch (IllegalStateException e) {
       //do nothing
     }
 
     try {
-      FileWriter fileWriter = new FileWriter("src/nothingInside");
+      FileWriter fileWriter = new FileWriter("res/project/nothingInside");
       fileWriter.write("C1" + "\n");
       fileWriter.close();
     } catch (IOException e) {
@@ -1537,14 +1546,14 @@ public class CollageModelImplTest {
     }
 
     try {
-      this.collage1.loadProject("src/nothingInside");
+      this.collage1.loadProject("res/project/nothingInside");
       fail("Not enough to make a project");
     } catch (IllegalStateException e) {
       //do nothing
     }
 
     try {
-      FileWriter fileWriter = new FileWriter("src/nothingInside");
+      FileWriter fileWriter = new FileWriter("res/project/nothingInside");
       fileWriter.write("C1" + "\n");
       fileWriter.write("100 100" + "\n");
       fileWriter.close();
@@ -1553,14 +1562,14 @@ public class CollageModelImplTest {
     }
 
     try {
-      this.collage1.loadProject("src/nothingInside");
+      this.collage1.loadProject("res/project/nothingInside");
       fail("Not enough to make a project");
     } catch (IllegalStateException e) {
       //do nothing
     }
 
     try {
-      FileWriter fileWriter = new FileWriter("src/nothingInside");
+      FileWriter fileWriter = new FileWriter("res/project/nothingInside");
       fileWriter.write("C1" + "\n");
       fileWriter.write("a 100" + "\n");
       fileWriter.write("255" + "\n");
@@ -1570,14 +1579,14 @@ public class CollageModelImplTest {
     }
 
     try {
-      this.collage1.loadProject("src/nothingInside");
+      this.collage1.loadProject("res/project/nothingInside");
       fail("Not enough to make a project");
     } catch (IllegalStateException e) {
       //do nothing
     }
 
     try {
-      FileWriter fileWriter = new FileWriter("src/nothingInside");
+      FileWriter fileWriter = new FileWriter("res/project/nothingInside");
       fileWriter.write("C1" + "\n");
       fileWriter.write("100 a" + "\n");
       fileWriter.write("255" + "\n");
@@ -1587,7 +1596,7 @@ public class CollageModelImplTest {
     }
 
     try {
-      this.collage1.loadProject("src/nothingInside");
+      this.collage1.loadProject("res/project/nothingInside");
       fail("Not enough to make a project");
     } catch (IllegalStateException e) {
       //do nothing
@@ -1700,51 +1709,15 @@ public class CollageModelImplTest {
   }
 
   @Test
-  public void testValidClear() {
-    this.init();
-
-    this.collage1.newProject("C1", 2, 2);
-    this.collage1.addLayer("L1");
-    this.collage1.addLayer("L2");
-
-    this.collage1.setFilter("L1",  "darken-luma");
-
-    assertEquals(3, this.collage1.getLayers().size());
-    assertEquals("Background", this.collage1.getLayers().get(0).getName());
-    assertEquals("L1", this.collage1.getLayers().get(1).getName());
-    assertEquals("L2", this.collage1.getLayers().get(2).getName());
-
-    assertEquals(3, this.collage1.getFiltersOnProject().size());
-    assertEquals("normal", this.collage1.getFiltersOnProject().get("Background"));
-    assertEquals("darken-luma", this.collage1.getFiltersOnProject().get("L1"));
-    assertEquals("normal", this.collage1.getFiltersOnProject().get("L2"));
-
-    this.collage1.clear();
-    assertEquals(0, this.collage1.getLayers().size());
-    assertEquals(0, this.collage1.getFiltersOnProject().size());
-  }
-
-  @Test
-  public void testInvalidClear() {
-    this.collage1 = new CollageProjectModelImpl();
-    try {
-      this.collage1.clear();
-      fail("project hasn't been made yet");
-    } catch (IllegalStateException e) {
-      //do nothing
-    }
-  }
-
-  @Test
   public void testSaveImageOfBackGround() {
     this.init();
     this.collage1 = new CollageProjectModelImpl();
     this.collage1.newProject("C1", 2, 2);
-    this.collage1.saveImage("src/background.ppm");
+    this.collage1.saveImage("res/Images/background.ppm");
 
     Scanner sc;
     try {
-      sc = new Scanner(new FileInputStream("src/background.ppm"));
+      sc = new Scanner(new FileInputStream("res/Images/background.ppm"));
     } catch (FileNotFoundException e) {
       throw new IllegalStateException("File not found!");
     }
@@ -1871,11 +1844,11 @@ public class CollageModelImplTest {
     this.collage1.newProject("C1", 2, 2);
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
-    this.collage1.saveImage("src/saveImageImmediately.ppm");
+    this.collage1.saveImage("res/Images/saveImageImmediately.ppm");
 
     Scanner sc;
     try {
-      sc = new Scanner(new FileInputStream("src/saveImageImmediately.ppm"));
+      sc = new Scanner(new FileInputStream("res/Images/saveImageImmediately.ppm"));
     } catch (FileNotFoundException e) {
       throw new IllegalStateException("File not found!");
     }
@@ -1910,11 +1883,11 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
     this.collage1.setFilter("L1", "darken-intensity");
-    this.collage1.saveImage("src/saveImageModified.ppm");
+    this.collage1.saveImage("res/Images/saveImageModified.ppm");
 
     Scanner sc;
     try {
-      sc = new Scanner(new FileInputStream("src/saveImageModified.ppm"));
+      sc = new Scanner(new FileInputStream("res/Images/saveImageModified.ppm"));
     } catch (FileNotFoundException e) {
       throw new IllegalStateException("File not found!");
     }
@@ -1944,7 +1917,7 @@ public class CollageModelImplTest {
   @Test
   public void testSaveBackground() {
     this.init();
-    Layer layer = this.collage1.makeFinalImage(false);
+    ILayer layer = this.collage1.makeFinalImage(false);
 
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
@@ -1961,9 +1934,9 @@ public class CollageModelImplTest {
     this.init();
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
-    Layer layer = this.collage1.makeFinalImage(false);
+    ILayer layer = this.collage1.makeFinalImage(false);
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayer = layer.getPixelsOnLayer();
+    ArrayList<ArrayList<IPixel>> pixelsOnLayer = layer.getPixelsOnLayer();
 
     assertEquals(173, pixelsOnLayer.get(0).get(0).getRedComponent());
     assertEquals(179, pixelsOnLayer.get(0).get(0).getGreenComponent());
@@ -1988,9 +1961,9 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
     this.collage1.setFilter("L1", "darken-intensity");
-    Layer layer = this.collage1.makeFinalImage(false);
+    ILayer layer = this.collage1.makeFinalImage(false);
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayer = layer.getPixelsOnLayer();
+    ArrayList<ArrayList<IPixel>> pixelsOnLayer = layer.getPixelsOnLayer();
 
     assertEquals(6, pixelsOnLayer.get(0).get(0).getRedComponent());
     assertEquals(12, pixelsOnLayer.get(0).get(0).getGreenComponent());
@@ -2014,6 +1987,12 @@ public class CollageModelImplTest {
     this.collage1 = new CollageProjectModelImpl();
     try {
       this.collage1.saveImage("src/new");
+    } catch (IllegalStateException e) {
+      // do nothing
+    }
+
+    try {
+      this.collage1.saveImage(null);
     } catch (IllegalStateException e) {
       // do nothing
     }

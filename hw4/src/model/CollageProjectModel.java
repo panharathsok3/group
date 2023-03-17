@@ -43,7 +43,8 @@ public interface CollageProjectModel {
   /**
    * Allows the user to save an image that they have applied a filter(s) to.
    * @param filePath the directory or location of the new image.
-   * @throws IllegalArgumentException if the user is not able to save their new image.
+   * @throws IllegalArgumentException if the user is not able to save their new image
+   *                                  or if the given argument is null
    * @throws IllegalStateException if the project has not been made yet
    */
   void saveImage(String filePath) throws IllegalArgumentException, IllegalStateException;

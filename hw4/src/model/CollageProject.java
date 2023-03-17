@@ -12,9 +12,9 @@ public interface CollageProject extends CollageProjectModel {
    * Adds a layer with a given name to the top of the whole project.
    * DEFAULT: a fully transparent white image and the normal filter.
    * @param layerName the name of the layer
-   * @throws IllegalStateException if there already exists a layer with the name
-   *                               or if the project has not been made yet
+   * @throws IllegalStateException if the project has not been made yet
    * @throws IllegalArgumentException if the given layerName is null
+   *                                  or if there already exists a layer with the name
    */
   void addLayer(String layerName) throws IllegalStateException, IllegalArgumentException;
 
@@ -52,20 +52,15 @@ public interface CollageProject extends CollageProjectModel {
    * @return a layer that is made from putting all the layers in this CollageProject together
    * @throws IllegalStateException if the project has not been made yet
    */
-  Layer makeFinalImage(boolean hasAlpha) throws IllegalStateException;
+  ILayer makeFinalImage(boolean hasAlpha) throws IllegalStateException;
 
-  /**
-   * Resets everything in this collage project, but the backgrounds stills stays intact.
-   * @throws IllegalStateException if the project has not been made yet
-   */
-  void clear() throws IllegalStateException;
 
   /**
    * Returns a copy of the layers on the collage.
    * @return a copy of the layers on the collage
    * @throws IllegalStateException if the project has not been made yet
    */
-  ArrayList<Layer> getLayers() throws IllegalStateException;
+  ArrayList<ILayer> getLayers() throws IllegalStateException;
 
   /**
    * Returns the name of this project.

@@ -11,7 +11,7 @@ public interface ILayer {
    * Returns a copy of the pixels on this layer in a 2D array.
    * @return a copy of the pixels on this layer in a 2D array
    */
-  ArrayList<ArrayList<Pixel>> getPixelsOnLayer();
+  ArrayList<ArrayList<IPixel>> getPixelsOnLayer();
 
   /**
    * Returns the name of this layer.
@@ -30,7 +30,7 @@ public interface ILayer {
    */
 
 
-  void addImage(int xPos, int yPos, ArrayList<ArrayList<Pixel>> image);
+  void addImage(int xPos, int yPos, ArrayList<ArrayList<IPixel>> image);
 
   /**
    * Returns a 2D ArrayList of Pixels that flattens the previous image with the current image.
@@ -39,7 +39,7 @@ public interface ILayer {
    * @return a 2D ArrayList of Pixels that flattens the previous image with the current image
    * @throws IllegalArgumentException if the given arguments is null
    */
-  ArrayList<ArrayList<Pixel>> modifyTransparency(ArrayList<ArrayList<Pixel>> image,
+  ArrayList<ArrayList<IPixel>> modifyTransparency(ArrayList<ArrayList<IPixel>> image,
                                                  boolean hasAlpha);
 
 

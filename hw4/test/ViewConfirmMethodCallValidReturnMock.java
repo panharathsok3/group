@@ -7,10 +7,14 @@ import view.CollageView;
  */
 public class ViewConfirmMethodCallValidReturnMock implements CollageView {
 
-  private StringBuilder log = new StringBuilder();
+  private final Appendable log;
+
+  public ViewConfirmMethodCallValidReturnMock(Appendable log) {
+    this.log = log;
+  }
 
   @Override
   public void renderMessage(String message) throws IOException {
-    this.log.append(message).append("\n");
+    this.log.append(message);
   }
 }

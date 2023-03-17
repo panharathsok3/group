@@ -1,9 +1,9 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 
 import model.CollageProject;
+import model.ILayer;
 import model.Layer;
 
 /**
@@ -57,16 +57,7 @@ public class ModelConfirmMethodCallValidReturnMock implements CollageProject {
   }
 
   @Override
-  public void clear() throws IllegalStateException {
-    try {
-      this.log.append("clear\n");
-    } catch (IOException ioe) {
-      //
-    }
-  }
-
-  @Override
-  public ArrayList<Layer> getLayers() throws IllegalStateException {
+  public ArrayList<ILayer> getLayers() throws IllegalStateException {
     return null;
   }
 

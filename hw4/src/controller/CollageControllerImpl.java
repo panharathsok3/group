@@ -51,26 +51,49 @@ public class CollageControllerImpl implements CollageController {
       switch (command) {
         case "quit":
           running = false;
-          this.collage.clear();
+          this.renderMessage("The program has ended");
           break;
         case "new-project":
           String name = this.readValueString(sc);
           int height = this.readValueInteger(sc);
           int width = this.readValueInteger(sc);
-          this.collage.newProject(name, height, width);
+          try {
+            this.collage.newProject(name, height, width);
+          } catch (IllegalArgumentException e) {
+            this.renderMessage("Arguments can't be null");
+          }
           break;
         case "load-project":
           String filename = this.readValueString(sc);
-          this.collage.loadProject(filename);
+          try {
+            this.collage.loadProject(filename);
+          } catch (IllegalArgumentException e) {
+            this.renderMessage("Arguments can't be null");
+          } catch (IllegalStateException e) {
+            this.renderMessage("File can't be open or file is not enough to start a load a "
+                + "project");
+          }
           break;
         case "save-project":
           String filePath = this.readValueString(sc);
           String fileType = this.readValueString(sc);
-          this.collage.saveProject(filePath, fileType);
+          try {
+            this.collage.saveProject(filePath, fileType);
+          } catch (IllegalArgumentException e) {
+            this.renderMessage("Arguments can't be null");
+          } catch (IllegalStateException e) {
+            this.renderMessage("The project hasn't been made yet");
+          }
           break;
         case "add-layer":
           String layerName = this.readValueString(sc);
-          this.collage.addLayer(layerName);
+          try {
+            this.collage.addLayer(layerName);
+          } catch (IllegalArgumentException e) {
+            this.renderMessage("Arguments can't be null or the layer already exist");
+          } catch (IllegalStateException e) {
+            this.renderMessage("The project hasn't been made yet");
+          }
           break;
         case "add-image-to-layer":
           String layerName1 = this.readValueString(sc);
@@ -80,11 +103,9 @@ public class CollageControllerImpl implements CollageController {
           try {
             this.collage.addImageToLayer(layerName1, imageName, x, y);
           } catch (IllegalArgumentException e) {
-            try {
-              this.view.renderMessage("Layer not found");
-            } catch (IOException ex) {
-              throw new IllegalStateException("Unexpected IOException");
-            }
+            this.renderMessage("Arguments can't be null or negative or the layer doesn't exist");
+          } catch (IllegalStateException e) {
+            this.renderMessage("The layer already exists or the project hasn't been made yet");
           }
           break;
         case "set-filter":
@@ -92,28 +113,26 @@ public class CollageControllerImpl implements CollageController {
           String filterOption = this.readValueString(sc);
           try {
             this.collage.setFilter(layerName2, filterOption);
-          } catch (IllegalArgumentException iae) {
-            try {
-              view.renderMessage(iae.getMessage());
-            } catch (IOException e) {
-              throw new RuntimeException(e);
-            }
+          } catch (IllegalArgumentException e) {
+            this.renderMessage("Arguments can't be null or the layer doesn't exist or filter "
+                + "doesn't exist");
+          } catch (IllegalStateException e) {
+            this.renderMessage("The project hasn't been made yet");
           }
           break;
         case "save-image":
           String fileName = this.readValueString(sc);
-          this.collage.saveImage(fileName);
+          try {
+            this.collage.saveImage(fileName);
+          } catch (IllegalArgumentException e) {
+            this.renderMessage("Arguments can't be null");
+          } catch (IllegalStateException e) {
+            this.renderMessage("The project hasn't been made yet");
+          }
           break;
         default:
-          try {
-            this.view.renderMessage("Command doesn't exists");
-          } catch (IOException e) {
-            throw new IllegalStateException("Unexpected IOException");
-          }
-
-
+          this.renderMessage("Command doesn't exist");
       }
-
     }
   }
 
@@ -151,26 +170,26 @@ public class CollageControllerImpl implements CollageController {
     String data = this.readValueString(scan);
 
     int dataInt = 0;
-    boolean wrongStringInput = false;
 
     try {
       dataInt = Integer.parseInt(data);
     } catch (NumberFormatException e) {
-      wrongStringInput = true;
-    }
-
-    while (wrongStringInput) {
-      data = this.readValueString(scan);
-
-      wrongStringInput = false;
-      try {
-        dataInt = Integer.parseInt(data);
-      } catch (NumberFormatException e) {
-        wrongStringInput = true;
-      }
+      // do nothing
     }
 
     return dataInt;
+  }
+
+  /**
+   * Renders a message to the user.
+   * @param message the message to print out
+   */
+  private void renderMessage(String message) {
+    try {
+      this.view.renderMessage(message + "\n");
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException\n");
+    }
   }
 
 

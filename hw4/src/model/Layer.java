@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Layer implements ILayer {
   private final String layerName;
-  private final ArrayList<ArrayList<Pixel>> pixelsOnLayer;
+  private final ArrayList<ArrayList<IPixel>> pixelsOnLayer;
   private final int height;
   private final int width;
   private int alpha;
@@ -36,7 +36,7 @@ public class Layer implements ILayer {
     this.addPixels();
   }
 
-  public Layer(String layerName, int height, int width, ArrayList<ArrayList<Pixel>> pixelsOnLayer) {
+  public Layer(String layerName, int height, int width, ArrayList<ArrayList<IPixel>> pixelsOnLayer) {
     this.layerName = layerName;
     this.height = height;
     this.width = width;
@@ -44,7 +44,7 @@ public class Layer implements ILayer {
   }
 
   @Override
-  public ArrayList<ArrayList<Pixel>> getPixelsOnLayer() {
+  public ArrayList<ArrayList<IPixel>> getPixelsOnLayer() {
     return new ArrayList<>(this.pixelsOnLayer);
   }
 
@@ -54,7 +54,7 @@ public class Layer implements ILayer {
   }
 
   @Override
-  public void addImage(int xPos, int yPos, ArrayList<ArrayList<Pixel>> image)
+  public void addImage(int xPos, int yPos, ArrayList<ArrayList<IPixel>> image)
       throws IllegalArgumentException {
     if (image == null || xPos < 0 || xPos > this.height || yPos < 0 || yPos > this.width) {
       throw new IllegalArgumentException("Arguments can't be null and they can't be negative");
@@ -77,17 +77,17 @@ public class Layer implements ILayer {
   }
 
   @Override
-  public ArrayList<ArrayList<Pixel>> modifyTransparency(ArrayList<ArrayList<Pixel>> image,
+  public ArrayList<ArrayList<IPixel>> modifyTransparency(ArrayList<ArrayList<IPixel>> image,
       boolean hasAlpha) throws IllegalArgumentException {
     if (image == null) {
       throw new IllegalArgumentException("Arguments can't be null");
     }
 
-    ArrayList<ArrayList<Pixel>> pixelOnLayer = this.getPixelsOnLayer();
+    ArrayList<ArrayList<IPixel>> pixelOnLayer = this.getPixelsOnLayer();
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
-        Pixel pixel = pixelOnLayer.get(i).get(j);
-        Pixel prevPixel = image.get(i).get(j);
+        IPixel pixel = pixelOnLayer.get(i).get(j);
+        IPixel prevPixel = image.get(i).get(j);
 
         pixel.changeTransparency(hasAlpha, prevPixel.getRedComponent(),
             prevPixel.getGreenComponent(), prevPixel.getBlueComponent(),

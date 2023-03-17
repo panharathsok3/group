@@ -4,15 +4,22 @@
 We divided our Collager Application into three sections; adhering to the Model, View, Controller
 pattern in Software design pattern.
 
+# IPixel - Interface
+
+The IPixel interface represents the operations that can be performed on a Pixel
+We have methods that allow the user to modify the pixel and calculate for the brightness of the
+pixel. There are also observers in the pixel class in case the user wants to know the specific
+component of the pixels.
+
 # Pixel - Class
 
 The Pixel class represents a single pixel that makes up images. We made our Pixel class backwards
 compatible with other forms of Images in case there is no alpha value which we set to 255. We have
 one constructor that takes in all 4 components from an image and one take takes only the rgb values.
 
-We also have methods that allow the user to modify the pixel and calculate for the brightness of the
-pixel. There are also observers in the pixel class in case the user wants to know the specific
-component of the pixels.
+# ILayer - Interface
+
+The ILayer interface represents operations
 
 # Layer - Class
 
@@ -39,8 +46,8 @@ save an image.
 # CollageProject - Interface
 
 The CollageProject interface represents operations that can be done on the application of a collage.
-It gives functionality to add a layer, add an image to a layer, set a filter onto a layer, and
-clear the project if the user wants to redo their project. Finally, there are also a bunch of
+It gives functionality to add a layer, add an image to a layer, and set a filter onto a layer
+the project if the user wants to redo their project. Finally, there are also a bunch of
 observers that the user can query if they need to use it. This is information the user has already
 known from using the methods mentioned above. So, if they need information about something they
 forgot, the observers are there to help them.
@@ -104,13 +111,19 @@ read user input and perform actions accordingly.
 
 # CollageTextMain - Class
 
-The CollageTextMain class is used to accepts command line arguments that allow the program to be used.
+The CollageTextMain class is used to accepts command line arguments that allow the program to be
+used.
+
+
 
 # HOW TO USE
 
 - Our application is used by typing specific commands into the command-line. Below
 are the commands that our program supports and how to use them. The commands are
 character and case sensitive so be sure to used them appropriately.
+
+To run the program on the terminal, you need to go to the ..\hw4\out\production\hw4 folder and write
+java CollageTextMain.
 
 CREATING A PROJECT
 # To create a new project, run the new-project command
