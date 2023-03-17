@@ -59,8 +59,8 @@ public interface IPixel {
   /**
    * Modifies the component by adding or subtracting it by a given value.
    * @param brightnessOptions a string of values that can be applied to the component
-   * @param add               true if and only if the value is being added to and false otherwise which makes it
-   *                          subtract instead
+   * @param add               true if and only if the value is being added to and false otherwise
+   *                          which makes it subtract instead
    * @throws IllegalArgumentException if the given component is null
    *                                  or if the brightnessOptions is not brighten-luma,
    *                                  brighten-value, or brighten-intensity
@@ -73,7 +73,6 @@ public interface IPixel {
    * @throws IllegalArgumentException when the option is not red-component, green-component,
    *                                  or blue-component or if the option is null
    */
-
   void setFilter(String option);
 
 

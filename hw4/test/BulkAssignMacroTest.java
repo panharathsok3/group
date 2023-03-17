@@ -5,13 +5,16 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import model.Effects.BulkAssignFilter;
-import model.Effects.MacroCollageEffects;
+import model.effects.BulkAssignFilter;
+import model.effects.MacroCollageEffects;
 import model.Layer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+/**
+ * This is a test class for BulkAssignMacro.
+ */
 public class BulkAssignMacroTest {
   IPixel pixel1;
   IPixel pixel2;
@@ -23,7 +26,10 @@ public class BulkAssignMacroTest {
   ILayer layer3;
   ILayer layer4;
 
-  public void init() {
+  /**
+   * Initializes the values.
+   */
+  private void init() {
     this.pixel1 = new Pixel(0, 0, 0, 1);
     this.pixel2 = new Pixel(120, 72, 99);
     this.pixel3 = new Pixel(21, 50, 68, 100);

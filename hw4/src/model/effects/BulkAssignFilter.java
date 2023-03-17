@@ -1,4 +1,4 @@
-package model.Effects;
+package model.effects;
 
 import model.ILayer;
 

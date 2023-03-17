@@ -1,6 +1,9 @@
 import model.Layer;
 import model.Pixel;
 
+/**
+ * This is used for testing the Macros.
+ */
 public abstract class AbstractMacroTest {
 
   Pixel pixel1;
@@ -12,6 +15,9 @@ public abstract class AbstractMacroTest {
   Layer layer2;
   Layer layer3;
 
+  /**
+   * Initializes the Macro.
+   */
   public void init() {
     this.pixel1 = new Pixel(0, 0, 0, 1);
     this.pixel2 = new Pixel(120, 72, 99);

@@ -25,24 +25,27 @@ public class ModelConfirmMethodCallValidReturnMock implements CollageProject {
   @Override
   public void addLayer(String layerName) throws IllegalStateException, IllegalArgumentException {
     try {
-      this.log.append(String.format("Added a Layer to the project with the given name = %s\n", layerName));
+      this.log.append(String.format("Added a Layer to the project with the given name = %s\n",
+          layerName));
     } catch (IOException ioe) {
       //
     }
   }
 
   @Override
-  public void addImageToLayer(String layerName, String filePath, int xPos, int yPos) throws IllegalArgumentException {
+  public void addImageToLayer(String layerName, String filePath, int xPos, int yPos)
+      throws IllegalArgumentException {
     try {
-      this.log.append(String.format("Added an Image to a layer with the given arguments = %s, %s, %d," +
-              " %d\n", layerName, filePath, xPos, yPos));
+      this.log.append(String.format("Added an Image to a layer with the given arguments = %s, "
+          + "%s, %d, %d\n", layerName, filePath, xPos, yPos));
     } catch (IOException ioe) {
       //
     }
   }
 
   @Override
-  public void setFilter(String layerName, String filterOption) throws IllegalArgumentException, IllegalStateException {
+  public void setFilter(String layerName, String filterOption) throws IllegalArgumentException,
+      IllegalStateException {
     try {
       this.log.append(String.format("Applied a filter with the given arguments = %s, %s\n",
               layerName, filterOption));
@@ -87,7 +90,8 @@ public class ModelConfirmMethodCallValidReturnMock implements CollageProject {
   }
 
   @Override
-  public void newProject(String name, int canvasHeight, int canvasWidth) throws IllegalArgumentException {
+  public void newProject(String name, int canvasHeight, int canvasWidth)
+      throws IllegalArgumentException {
     try {
       this.log.append(String.format("Created a new project with the given arguments = %s, %d, %d\n",
               name, canvasHeight, canvasWidth));
@@ -106,9 +110,11 @@ public class ModelConfirmMethodCallValidReturnMock implements CollageProject {
   }
 
   @Override
-  public void saveProject(String filePath, String projectType) throws IllegalArgumentException, IllegalStateException {
+  public void saveProject(String filePath, String projectType) throws IllegalArgumentException,
+      IllegalStateException {
     try {
-      this.log.append(String.format("Saved a project with the given arguments = %s, %s\n", filePath, projectType));
+      this.log.append(String.format("Saved a project with the given arguments = %s, %s\n", filePath,
+          projectType));
     } catch (IOException ioe) {
       //
     }
@@ -116,8 +122,9 @@ public class ModelConfirmMethodCallValidReturnMock implements CollageProject {
 
   @Override
   public void saveImage(String filePath) throws IllegalArgumentException, IllegalStateException {
-    try{
-    this.log.append(String.format("Saved an image with the given argument = %s\n", filePath));} catch (IOException ioe) {
+    try {
+      this.log.append(String.format("Saved an image with the given argument = %s\n", filePath));
+    } catch (IOException ioe) {
       //
     }
   }

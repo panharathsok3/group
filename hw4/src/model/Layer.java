@@ -23,7 +23,7 @@ public class Layer implements ILayer {
    * @throws IllegalArgumentException if the given String is null
    *                                  or if the height, width, or alpha is negative
    */
-  public Layer(String layerName, int height, int width, int alpha) throws IllegalArgumentException{
+  public Layer(String layerName, int height, int width, int alpha) throws IllegalArgumentException {
     if (layerName == null || height < 0 || width < 0 || alpha < 0) {
       throw new IllegalArgumentException("String can't be null and integers can't be negative");
     }
@@ -36,7 +36,15 @@ public class Layer implements ILayer {
     this.addPixels();
   }
 
-  public Layer(String layerName, int height, int width, ArrayList<ArrayList<IPixel>> pixelsOnLayer) {
+  /**
+   * Creates a Layer with a given 2D array of IPixels.
+   * @param layerName the name of this layer
+   * @param height the height of this Layer
+   * @param width the width of this Layer
+   * @param pixelsOnLayer the IPixels on this Layer
+   */
+  public Layer(String layerName, int height, int width,
+      ArrayList<ArrayList<IPixel>> pixelsOnLayer) {
     this.layerName = layerName;
     this.height = height;
     this.width = width;

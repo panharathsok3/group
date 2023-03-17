@@ -1,10 +1,7 @@
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.StringReader;
 
-import controller.CollageController;
-import controller.CollageControllerImpl;
 import model.CollageProject;
 import model.CollageProjectModelImpl;
 import view.CollageTextView;
@@ -15,6 +12,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+/**
+ * This is a test class for CollageTextView.
+ */
 public class CollageTextViewTest {
 
   Appendable out;
@@ -24,7 +24,7 @@ public class CollageTextViewTest {
   @Test
   public void testInvalidConstructor() {
     try {
-      this.view = new CollageTextView(null, this.out);
+      this.view = new CollageTextView(this.out);
       fail("the given arguments cannot be null");
     } catch (IllegalArgumentException e) {
       //do nothing
@@ -33,7 +33,7 @@ public class CollageTextViewTest {
     this.collage = new CollageProjectModelImpl();
 
     try {
-      this.view = new CollageTextView(this.collage, null);
+      this.view = new CollageTextView(null);
       fail("the given arguments cannot be null");
     } catch (IllegalArgumentException e) {
       //do nothing
@@ -44,7 +44,7 @@ public class CollageTextViewTest {
   public void renderMessage() {
     this.collage = new CollageProjectModelImpl();
     this.out = new StringBuilder();
-    this.view = new CollageTextView(this.collage, this.out);
+    this.view = new CollageTextView(this.out);
 
     try {
       this.view.renderMessage("a");
@@ -81,13 +81,17 @@ public class CollageTextViewTest {
     }
   }
 
+  /**
+   * Mock testing.
+   * @return true if the Mock renders an error message
+   */
   public boolean renderMessageWithMock() {
 
     this.out = new StringBuilder();
-    this.view = new CollageTextView(this.collage, this.out);
+    this.view = new CollageTextView(this.out);
 
     Appendable badAppendable = new BadAppendable();
-    CollageView badView = new CollageTextView(this.collage, badAppendable);
+    CollageView badView = new CollageTextView(badAppendable);
 
     assertTrue(renderMessage(this.view, "Welcome to the Collage "));
     assertEquals("Welcome to the Collage ", this.out.toString());

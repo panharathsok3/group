@@ -9,7 +9,7 @@ import view.CollageTextView;
 import view.CollageView;
 
 /**
- * Main class for running the collage program
+ * Main class for running the collage program.
  */
 public class CollageTextMain {
 
@@ -19,9 +19,9 @@ public class CollageTextMain {
    */
   public static void main(String[] args) {
     CollageProject collage = new CollageProjectModelImpl();
-    CollageView view = new CollageTextView(collage, System.out);
-    CollageController controller = new CollageControllerImpl(new InputStreamReader(System.in)
-        , collage, view);
+    CollageView view = new CollageTextView(System.out);
+    CollageController controller = new CollageControllerImpl(new InputStreamReader(System.in),
+        collage, view);
     controller.runProgram();
   }
 }

@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import model.Effects.BrightenDarkenMacro;
-import model.Effects.MacroCollageEffects;
+import model.effects.BrightenDarkenMacro;
+import model.effects.MacroCollageEffects;
 import model.Layer;
 import model.Pixel;
 

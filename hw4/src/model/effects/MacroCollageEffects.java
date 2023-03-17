@@ -1,7 +1,6 @@
-package model.Effects;
+package model.effects;
 
 import model.ILayer;
-import model.Layer;
 
 /**
  * A Macro for the adding effects to the Layer of the CollageProjectModelImpl.

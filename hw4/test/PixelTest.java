@@ -7,6 +7,9 @@ import model.Pixel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+/**
+ * This is a test class for Pixel.
+ */
 public class PixelTest {
 
   IPixel pixel1;
@@ -127,6 +130,7 @@ public class PixelTest {
 
     try {
       this.pixel1.modifyComponentByBrightness(null, true);
+      fail("Arguments can't be null");
     } catch (IllegalArgumentException e) {
       //do nothing
     }

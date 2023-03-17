@@ -1,7 +1,5 @@
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,18 +9,17 @@ import model.ILayer;
 import model.IPixel;
 import org.junit.Test;
 
-import controller.CollageController;
-import controller.CollageControllerImpl;
 import model.CollageProject;
 import model.CollageProjectModelImpl;
 import model.Layer;
 import model.Pixel;
-import view.CollageTextView;
-import view.CollageView;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+/**
+ * This is a test class for CollageModelImpl.
+ */
 public class CollageModelImplTest {
   IPixel pixel1;
   IPixel pixel2;
@@ -37,8 +34,10 @@ public class CollageModelImplTest {
   CollageProject collage3;
   CollageProject collage4;
 
-
-  public void init() {
+  /**
+   * Initializes the values.
+   */
+  private void init() {
     this.pixel1 = new Pixel(0, 0, 0, 1);
     this.pixel2 = new Pixel(120, 72, 99);
     this.pixel3 = new Pixel(21, 50, 68, 100);
@@ -57,20 +56,6 @@ public class CollageModelImplTest {
     this.collage1.newProject("C1", 2, 2);
     this.collage1.saveProject("res/project/saveProjectAndLoadImmediately", "PPM");
   }
-
-  @Test
-  public void testRunScript() {
-    this.init();
-    Appendable out = new StringBuilder();
-    CollageView collageView = new CollageTextView(collage1,out);
-    try {
-      CollageController controller = new CollageControllerImpl(new FileReader("./res/RunScript"),
-              collage1,collageView);
-    } catch (FileNotFoundException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
 
   @Test
   public void testRunningEntireProgram() {
@@ -224,7 +209,7 @@ public class CollageModelImplTest {
     assertEquals("L1", sc.next());
     assertEquals("normal", sc.next());
 
-    while(sc.hasNext()) {
+    while (sc.hasNext()) {
       assertEquals("173", sc.next());
       assertEquals("179", sc.next());
       assertEquals("151", sc.next());
@@ -389,25 +374,25 @@ public class CollageModelImplTest {
     assertEquals("L1", sc.next());
     assertEquals("normal", sc.next());
 
-    int L1Counter = 0;
-    while(L1Counter < 4) {
+    int l1Counter = 0;
+    while (l1Counter < 4) {
       assertEquals("173", sc.next());
       assertEquals("179", sc.next());
       assertEquals("151", sc.next());
       assertEquals("255", sc.next());
-      L1Counter++;
+      l1Counter++;
     }
 
     assertEquals("L2", sc.next());
     assertEquals("darken-intensity", sc.next());
 
-    int L2Counter = 0;
-    while(L2Counter < 4) {
+    int l2Counter = 0;
+    while (l2Counter < 4) {
       assertEquals("173", sc.next());
       assertEquals("179", sc.next());
       assertEquals("151", sc.next());
       assertEquals("255", sc.next());
-      L2Counter++;
+      l2Counter++;
     }
 
     //LOAD PROJECT
@@ -778,7 +763,7 @@ public class CollageModelImplTest {
     assertEquals("Background", sc.next());
     assertEquals("normal", sc.next());
 
-    while(sc.hasNext()) {
+    while (sc.hasNext()) {
       assertEquals("255", sc.next());
       assertEquals("255", sc.next());
       assertEquals("255", sc.next());
@@ -836,7 +821,7 @@ public class CollageModelImplTest {
     assertEquals("L1", sc.next());
     assertEquals("normal", sc.next());
 
-    while(sc.hasNext()) {
+    while (sc.hasNext()) {
       assertEquals("255", sc.next());
       assertEquals("255", sc.next());
       assertEquals("255", sc.next());
@@ -892,7 +877,7 @@ public class CollageModelImplTest {
     assertEquals("L1", sc.next());
     assertEquals("normal", sc.next());
 
-    while(sc.hasNext()) {
+    while (sc.hasNext()) {
       assertEquals("173", sc.next());
       assertEquals("179", sc.next());
       assertEquals("151", sc.next());
@@ -939,7 +924,7 @@ public class CollageModelImplTest {
     assertEquals("L1", sc.next());
     assertEquals("darken-intensity", sc.next());
 
-    while(sc.hasNext()) {
+    while (sc.hasNext()) {
       assertEquals("173", sc.next());
       assertEquals("179", sc.next());
       assertEquals("151", sc.next());
@@ -1746,97 +1731,6 @@ public class CollageModelImplTest {
     }
   }
 
-
-  @Test
-  public void testDogRedComponent() {
-    this.init();
-    this.collage2.newProject("DogProject",500,500);
-    this.collage2.addLayer("DogLayer");
-    this.collage2.addImageToLayer("DogLayer","res/Images/dog.ppm",0,0);
-    this.collage2.setFilter("DogLayer","red-component");
-    this.collage2.saveImage("res/Images/redDog.ppm");
-  }
-  @Test
-  public void testDogGreenComponent() {
-    this.init();
-    this.collage2.newProject("DogProject",500,500);
-    this.collage2.addLayer("DogLayer");
-    this.collage2.addImageToLayer("DogLayer","res/Images/dog.ppm",0,0);
-    this.collage2.setFilter("DogLayer","green-component");
-    this.collage2.saveImage("res/Images/greenDog.ppm");
-  }
-
-  @Test
-  public void testDogBlueComponent() {
-    this.init();
-    this.collage2.newProject("DogProject",500,500);
-    this.collage2.addLayer("DogLayer");
-    this.collage2.addImageToLayer("DogLayer","res/Images/dog.ppm",0,0);
-    this.collage2.setFilter("DogLayer","blue-component");
-    this.collage2.saveImage("res/Images/blueDog.ppm");
-  }
-
-  @Test
-  public void testDogBrightenValue() {
-    this.init();
-    this.collage2.newProject("DogProject",500,500);
-    this.collage2.addLayer("DogLayer");
-    this.collage2.addImageToLayer("DogLayer","res/Images/dog.ppm",0,0);
-    this.collage2.setFilter("DogLayer","brighten-value");
-    this.collage2.saveImage("res/Images/brightenValueDog.ppm");
-  }
-
-  @Test
-  public void testDogBrightenIntensity() {
-    this.init();
-    this.collage2.newProject("DogProject",500,500);
-    this.collage2.addLayer("DogLayer");
-    this.collage2.addImageToLayer("DogLayer","res/Images/dog.ppm",0,0);
-    this.collage2.setFilter("DogLayer","brighten-intensity");
-    this.collage2.saveImage("res/Images/brightenIntensityDog.ppm");
-  }
-
-  @Test
-  public void testDogBrightenLuma() {
-    this.init();
-    this.collage2.newProject("DogProject",500,500);
-    this.collage2.addLayer("DogLayer");
-    this.collage2.addImageToLayer("DogLayer","res/Images/dog.ppm",0,0);
-    this.collage2.setFilter("DogLayer","brighten-luma");
-    this.collage2.saveImage("res/Images/brightenLumaDog.ppm");
-  }
-
-  @Test
-  public void testDogDarkenLuma() {
-    this.init();
-    this.collage2.newProject("DogProject",500,500);
-    this.collage2.addLayer("DogLayer");
-    this.collage2.addImageToLayer("DogLayer","res/Images/dog.ppm",0,0);
-    this.collage2.setFilter("DogLayer","darken-luma");
-    this.collage2.saveImage("res/Images/darkenLumaDog.ppm");
-  }
-
-
-  @Test
-  public void testDogDarkenValue() {
-    this.init();
-    this.collage2.newProject("DogProject",500,500);
-    this.collage2.addLayer("DogLayer");
-    this.collage2.addImageToLayer("DogLayer","res/Images/dog.ppm",0,0);
-    this.collage2.setFilter("DogLayer","darken-value");
-    this.collage2.saveImage("res/Images/darkenValueDog.ppm");
-  }
-
-  @Test
-  public void testDogDarkenIntensity() {
-    this.init();
-    this.collage2.newProject("DogProject", 500, 500);
-    this.collage2.addLayer("DogLayer");
-    this.collage2.addImageToLayer("DogLayer", "res/Images/dog.ppm", 0, 0);
-    this.collage2.setFilter("DogLayer", "darken-intensity");
-    this.collage2.saveImage("res/Images/darkenIntensityDog.ppm");
-  }
-
   @Test
   public void testValidSaveImageAfterPuttingAnImage() {
     this.init();
@@ -1987,12 +1881,14 @@ public class CollageModelImplTest {
     this.collage1 = new CollageProjectModelImpl();
     try {
       this.collage1.saveImage("src/new");
+      fail("file doesn't exist");
     } catch (IllegalStateException e) {
       // do nothing
     }
 
     try {
       this.collage1.saveImage(null);
+      fail("Arguments can't be null");
     } catch (IllegalStateException e) {
       // do nothing
     }

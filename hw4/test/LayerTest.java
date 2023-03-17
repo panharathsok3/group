@@ -11,8 +11,10 @@ import model.Pixel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+/**
+ * A test class for Layer.
+ */
 public class LayerTest {
-
 
   ILayer layer1;
   ILayer layer2;
@@ -89,18 +91,21 @@ public class LayerTest {
   public void testInvalidAddImage() {
     try {
       this.layer1.addImage(-1, 0, new ArrayList<>(3));
+      fail("The image needs to be on the Layer");
     } catch (IllegalArgumentException e) {
       //do nothing
     }
 
     try {
       this.layer1.addImage(0, -1, new ArrayList<>(3));
+      fail("The image needs to be on the Layer");
     } catch (IllegalArgumentException e) {
       //do nothing
     }
 
     try {
       this.layer1.addImage(0, 0, null);
+      fail("Arguments can't be null");
     } catch (IllegalArgumentException e) {
       //do nothing
     }

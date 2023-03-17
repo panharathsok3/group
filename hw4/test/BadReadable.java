@@ -8,6 +8,6 @@ import java.nio.CharBuffer;
 public class BadReadable implements Readable {
   @Override
   public int read(CharBuffer cb) throws IOException {
-   throw new IOException("Unable to read inputs");
+    throw new IOException("Unable to read inputs");
   }
 }

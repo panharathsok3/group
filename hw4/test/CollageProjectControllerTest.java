@@ -15,6 +15,9 @@ import view.CollageView;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+/**
+ * This is a test class for CollageProjectController.
+ */
 public class CollageProjectControllerTest {
 
   CollageProject collageModel;
@@ -63,8 +66,8 @@ public class CollageProjectControllerTest {
 
     Appendable out = new StringBuilder();
 
-    CollageControllerImpl controller = new CollageControllerImpl(new BadReadable(), this.collageModel,
-            this.collageTextView = new CollageTextView(this.collageModel, out));
+    CollageControllerImpl controller = new CollageControllerImpl(new BadReadable(),
+        this.collageModel, this.collageTextView = new CollageTextView(out));
 
     try {
       controller.runProgram();
@@ -81,17 +84,18 @@ public class CollageProjectControllerTest {
     this.out = new StringBuilder();
 
     this.collageModel = new CollageProjectModelImpl();
-    this.collageTextView = new CollageTextView(this.collageModel, new StringBuilder());
+    this.collageTextView = new CollageTextView(new StringBuilder());
     this.collageController = new CollageControllerImpl(this.in, this.collageModel,
         this.collageTextView);
 
     try {
       this.collageController.runProgram();
       fail("out of inputs");
-    } catch(IllegalStateException ise) {
+    } catch (IllegalStateException ise) {
       // do nothing
     }
   }
+
   @Test
   public void testCallMockOnAllMethodsForModel() {
 
@@ -106,7 +110,7 @@ public class CollageProjectControllerTest {
     Appendable out = new StringBuilder();
 
     CollageProject collageProject = new ModelConfirmMethodCallValidReturnMock(out);
-    CollageView view = new CollageTextView(collageProject, out);
+    CollageView view = new CollageTextView(out);
     CollageController controller = new CollageControllerImpl(r, collageProject, view);
 
     controller.runProgram();
@@ -264,8 +268,8 @@ public class CollageProjectControllerTest {
 
 
     collageController.runProgram();
-    assertEquals("Created a new project with the given arguments = C1, 3, 3\n" +
-                    "Added a Layer to the project with the given name = L1\n"
+    assertEquals("Created a new project with the given arguments = C1, 3, 3\n"
+            + "Added a Layer to the project with the given name = L1\n"
             + "The program has ended\n",
             this.out.toString());
   }
@@ -301,8 +305,8 @@ public class CollageProjectControllerTest {
 
   @Test
   public void testAddImageToLayer() {
-    this.in = new StringReader("new-project C1 3 3 add-layer L1 " +
-            "add-image-to-layer L1 src/tako.ppm 0 0 quit");
+    this.in = new StringReader("new-project C1 3 3 add-layer L1 "
+        + "add-image-to-layer L1 src/tako.ppm 0 0 quit");
     this.out = new StringBuilder();
 
     this.collageModel = new ModelConfirmMethodCallValidReturnMock(this.out);
@@ -317,17 +321,17 @@ public class CollageProjectControllerTest {
       fail(isa.getMessage());
     }
 
-    assertEquals("Created a new project with the given arguments = C1, 3, 3\n" +
-                    "Added a Layer to the project with the given name = L1\n" +
-                    "Added an Image to a layer with the given arguments = L1, src/tako.ppm, 0, 0\n"
+    assertEquals("Created a new project with the given arguments = C1, 3, 3\n"
+            + "Added a Layer to the project with the given name = L1\n"
+            + "Added an Image to a layer with the given arguments = L1, src/tako.ppm, 0, 0\n"
             + "The program has ended\n",
             this.out.toString());
   }
 
   @Test
   public void testInvalidAddImageToLayer() {
-    this.in = new StringReader("new-project C1 3 3 add-layer L1 " +
-        "add-image-to-layer L2 src/tako.ppm 0 0 quit");
+    this.in = new StringReader("new-project C1 3 3 add-layer L1 "
+        + "add-image-to-layer L2 src/tako.ppm 0 0 quit");
     this.out = new StringBuilder();
 
     this.collageModel = new CollageProjectModelImpl();
@@ -354,8 +358,8 @@ public class CollageProjectControllerTest {
             + "The program has ended\n",
         this.out.toString());
 
-    this.in = new StringReader("new-project C1 3 3 add-layer L1 " +
-        "add-image-to-layer L2 src/tako.ppm -1 0 quit");
+    this.in = new StringReader("new-project C1 3 3 add-layer L1 "
+        + "add-image-to-layer L2 src/tako.ppm -1 0 quit");
     this.out = new StringBuilder();
 
     this.collageModel = new CollageProjectModelImpl();
@@ -368,8 +372,8 @@ public class CollageProjectControllerTest {
             + "The program has ended\n",
         this.out.toString());
 
-    this.in = new StringReader("new-project C1 3 3 add-layer L1 " +
-        "add-image-to-layer L2 src/tako.ppm 0 -1 quit");
+    this.in = new StringReader("new-project C1 3 3 add-layer L1 "
+        + "add-image-to-layer L2 src/tako.ppm 0 -1 quit");
     this.out = new StringBuilder();
 
     this.collageModel = new CollageProjectModelImpl();
@@ -385,8 +389,8 @@ public class CollageProjectControllerTest {
 
   @Test
   public void testSetFilter() {
-    this.in = new StringReader("new-project C1 3 3 add-layer L1 " +
-            "add-image-to-layer L1 src/tako.ppm 0 0 set-filter L1 red-component quit");
+    this.in = new StringReader("new-project C1 3 3 add-layer L1 "
+        + "add-image-to-layer L1 src/tako.ppm 0 0 set-filter L1 red-component quit");
     this.out = new StringBuilder();
 
     this.collageModel = new ModelConfirmMethodCallValidReturnMock(this.out);
@@ -400,10 +404,10 @@ public class CollageProjectControllerTest {
       fail(isa.getMessage());
     }
 
-    assertEquals("Created a new project with the given arguments = C1, 3, 3\n" +
-                    "Added a Layer to the project with the given name = L1\n" +
-                    "Added an Image to a layer with the given arguments = L1, src/tako.ppm, 0, 0\n" +
-                    "Applied a filter with the given arguments = L1, red-component\n"
+    assertEquals("Created a new project with the given arguments = C1, 3, 3\n"
+            + "Added a Layer to the project with the given name = L1\n"
+            + "Added an Image to a layer with the given arguments = L1, src/tako.ppm, 0, 0\n"
+            + "Applied a filter with the given arguments = L1, red-component\n"
             + "The program has ended\n",
             this.out.toString());
   }
@@ -510,7 +514,8 @@ public class CollageProjectControllerTest {
   @Test
   public void testSaveProject() {
 
-    this.in = new StringReader("load-project src/saveOneLayer save-project src/saveOneLayer txt quit");
+    this.in = new StringReader("load-project src/saveOneLayer save-project "
+        + "src/saveOneLayer txt quit");
     this.out = new StringBuilder();
 
     this.collageModel = new ModelConfirmMethodCallValidReturnMock(this.out);
@@ -524,9 +529,9 @@ public class CollageProjectControllerTest {
       fail(isa.getMessage());
     }
 
-    assertEquals("Loaded a project with the given argument = src/saveOneLayer\n" +
-                    "Saved a project with the given arguments = src/saveOneLayer, txt\n"
-        + "The program has ended\n",
+    assertEquals("Loaded a project with the given argument = src/saveOneLayer\n"
+            + "Saved a project with the given arguments = src/saveOneLayer, txt\n"
+            + "The program has ended\n",
             this.out.toString());
   }
 

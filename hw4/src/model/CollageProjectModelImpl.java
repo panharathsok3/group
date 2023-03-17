@@ -11,9 +11,9 @@ import java.util.List;
 
 import java.util.Map;
 import java.util.Scanner;
-import model.Effects.BrightenDarkenMacro;
-import model.Effects.BulkAssignFilter;
-import model.Effects.MacroCollageEffects;
+import model.effects.BrightenDarkenMacro;
+import model.effects.BulkAssignFilter;
+import model.effects.MacroCollageEffects;
 
 /**
  * This class is used to make a collage to work on.
@@ -383,7 +383,7 @@ public class CollageProjectModelImpl implements CollageProject {
     sc.next(); // normal
 
     int layerNum = 0;
-    this.addImageToLayer(sc, layerNum);
+    this.addImageToLayerFromFile(sc, layerNum);
 
     while (sc.hasNext()) {
       String currentLayer = sc.next();
@@ -392,7 +392,7 @@ public class CollageProjectModelImpl implements CollageProject {
       this.setFilter(currentLayer, filterType);
 
       layerNum++;
-      this.addImageToLayer(sc, layerNum);
+      this.addImageToLayerFromFile(sc, layerNum);
     }
   }
 
@@ -401,7 +401,7 @@ public class CollageProjectModelImpl implements CollageProject {
    * @param sc the scanner to read from the file
    * @param layerNum the number of the layer
    */
-  private void addImageToLayer(Scanner sc, int layerNum) {
+  private void addImageToLayerFromFile(Scanner sc, int layerNum) {
     ArrayList<ArrayList<IPixel>> image = new ArrayList<>();
 
     for (int i = 0; i < this.canvasHeight; i++) {

@@ -1,4 +1,4 @@
-package model.Effects;
+package model.effects;
 
 import model.ILayer;
 
@@ -19,8 +19,8 @@ public class BrightenDarkenMacro implements MacroCollageEffects {
    * @param row          the row of the pixel that will be darkened/brightened
    * @param col          the column of the pixel that will be darkened/brightened
    * @param optionFilter the option the pixel can be changed by using its brightness
-   * @param brighten     true if and only if the pixel is getting brightened and false if and only if
-   *                     the pixel is getting darkened
+   * @param brighten     true if and only if the pixel is getting brightened and false if and only
+   *                     if the pixel is getting darkened
    * @throws IllegalArgumentException if the given optionFilter is null
    *                                  or if the row or column is negative.
    */

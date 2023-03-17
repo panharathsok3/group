@@ -120,7 +120,7 @@ public class Pixel implements IPixel {
     }
   }
 
-
+  @Override
   public void setFilter(String option) throws IllegalArgumentException {
     if (option == null) {
       throw new IllegalArgumentException("The option cannot be null");
