@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Represents a single layer that can hold images.
  */
-public class Layer {
+public class Layer implements ILayer {
   private final String layerName;
   private final ArrayList<ArrayList<Pixel>> pixelsOnLayer;
   private final int height;
@@ -41,31 +41,17 @@ public class Layer {
     this.pixelsOnLayer = pixelsOnLayer;
   }
 
-  /**
-   * Returns a copy of the pixels on this layer in a 2D array.
-   * @return a copy of the pixels on this layer in a 2D array
-   */
+  @Override
   public ArrayList<ArrayList<Pixel>> getPixelsOnLayer() {
     return new ArrayList<>(this.pixelsOnLayer);
   }
 
-  /**
-   * Returns the name of this layer.
-   * @return the name of this layer
-   */
+  @Override
   public String getName() {
     return this.layerName;
   }
 
-  /**
-   * Adds a given image to this layer. It doesn't resize the image, so if the image is bigger than
-   * the layer, it will only get the top left portion of the image and not the entire image.
-   * @param xPos the x position of the pixel on this layer
-   * @param yPos the y position of the pixel on this layer
-   * @param image the image that will be placed on this layer
-   * @throws IllegalArgumentException if the given image is null
-   *                                  or if the xPos or yPos is not in the bounds of the Layer
-   */
+  @Override
   public void addImage(int xPos, int yPos, ArrayList<ArrayList<Pixel>> image)
       throws IllegalArgumentException {
     if (image == null || xPos < 0 || xPos > this.height || yPos < 0 || yPos > this.width) {
@@ -88,13 +74,7 @@ public class Layer {
     }
   }
 
-  /**
-   * Returns a 2D ArrayList of Pixels that flattens the previous image with the current image.
-   * @param image a 2D arrayList of pixels that represents this the previous layer
-   * @param hasAlpha true if and only if the image being modified has an alpha value originally
-   * @return a 2D ArrayList of Pixels that flattens the previous image with the current image
-   * @throws IllegalArgumentException if the given arguments is null
-   */
+  @Override
   public ArrayList<ArrayList<Pixel>> modifyTransparency(ArrayList<ArrayList<Pixel>> image,
       boolean hasAlpha) throws IllegalArgumentException {
     if (image == null) {

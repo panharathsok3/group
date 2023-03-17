@@ -40,7 +40,6 @@ public class CollageProjectModelImpl implements CollageProject {
   @Override
   public void newProject(String name, int canvasHeight, int canvasWidth)
           throws IllegalArgumentException {
-
     if (name == null || name.equals("") || canvasHeight < 1 || canvasWidth < 1) {
       throw new IllegalArgumentException("the name of the project can't be null and the"
               + "canvas height and width can't be less than 1");

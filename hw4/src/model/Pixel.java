@@ -3,7 +3,7 @@ package model;
 /**
  * Represents a pixel of an image.
  */
-public class Pixel {
+public class Pixel implements IPixel {
   private int redComponent;
   private int greenComponent;
   private int blueComponent;
@@ -49,81 +49,44 @@ public class Pixel {
   }
 
 
-  /**
-   * Returns the red component of this color.
-   *
-   * @return the red component of this color
-   */
+  @Override
   public int getRedComponent() {
     return this.redComponent;
   }
 
-  /**
-   * Returns the green component of this color.
-   *
-   * @return the green component of this color
-   */
+  @Override
   public int getGreenComponent() {
     return this.greenComponent;
   }
 
-  /**
-   * Returns the blue component of this color.
-   *
-   * @return the blue component of this color
-   */
+  @Override
   public int getBlueComponent() {
     return this.blueComponent;
   }
 
-  /**
-   * Returns the alpha component of this color.
-   *
-   * @return the alpha component of this color
-   */
+  @Override
   public int getAlphaComponent() {
     return this.alphaComponent;
   }
 
-  /**
-   * Returns the maximum value of the rgb component.
-   *
-   * @return the maximum value of the rgb component
-   */
+  @Override
   public int value() {
     return Math.max(Math.max(this.redComponent, this.greenComponent), this.blueComponent);
   }
 
 
-  /**
-   * Returns the average of the rgb components.
-   *
-   * @return the average of the rgb components
-   */
+  @Override
   public int intensity() {
     return (this.redComponent + this.greenComponent + this.blueComponent) / 3;
   }
 
-  /**
-   * Returns the weighted sum of the rgb components.
-   *
-   * @return the weighted sum of the rgb components
-   */
+  @Override
   public int luma() {
     return (int) Math.round((0.216 * this.redComponent) + (0.7152 * this.greenComponent)
             + (0.0722 * this.blueComponent));
   }
 
-  /**
-   * Modifies the component by adding or subtracting it by a given value.
-   *
-   * @param brightnessOptions a string of values that can be applied to the component
-   * @param add   true if and only if the value is being added to and false otherwise which makes it
-   *              subtract instead
-   * @throws IllegalArgumentException if the given component is null
-   *                                  or if the brightnessOptions is not brighten-luma,
-   *                                  brighten-value, or brighten-intensity
-   */
+  @Override
   public void modifyComponentByBrightness(String brightnessOptions, boolean add)
           throws IllegalArgumentException {
     if (brightnessOptions == null) {
@@ -133,18 +96,15 @@ public class Pixel {
 
     if (brightnessOptions.equals("brighten-luma") || brightnessOptions.equals("darken-luma")) {
       brightness = this.luma();
-    }
-    else if (brightnessOptions.equals("brighten-value")
-        || brightnessOptions.equals("darken-value")) {
+    } else if (brightnessOptions.equals("brighten-value")
+            || brightnessOptions.equals("darken-value")) {
       brightness = this.value();
-    }
-    else if (brightnessOptions.equals("brighten-intensity")
-        || brightnessOptions.equals("darken-intensity")) {
+    } else if (brightnessOptions.equals("brighten-intensity")
+            || brightnessOptions.equals("darken-intensity")) {
       brightness = this.intensity();
-    }
-    else {
+    } else {
       throw new IllegalArgumentException("The brightnessOptions must be brighten-luma, "
-          + "brighten-value, or brighten-intensity");
+              + "brighten-value, or brighten-intensity");
     }
 
     if (add) {
@@ -154,12 +114,7 @@ public class Pixel {
     }
   }
 
-  /**
-   * Filters for a specific color component by setting the other 2 to zero.
-   * @param option the color to filter to
-   * @throws IllegalArgumentException when the option is not red-component, green-component,
-   *                                  or blue-component or if the option is null
-   */
+
   public void setFilter(String option) throws IllegalArgumentException {
     if (option == null) {
       throw new IllegalArgumentException("The option cannot be null");
@@ -234,31 +189,22 @@ public class Pixel {
     }
   }
 
-  /**
-   * Changes the transparency of this Pixel by modifying the four components if the image originally
-   * has an alpha value and modifies only the rgb if the image doesn't have an alpha component.
-   * @param hasAlpha true if and only if this pixel doesn't require an alpha value
-   * @param dR the default red value which is the value of the background's red value
-   * @param dG the default green value which is the value of the background's green value
-   * @param dB the default blue value which is the value of the background's blue value
-   * @param dA the default alpha value which is the value of the background's alpha value
-   */
+  @Override
   public void changeTransparency(boolean hasAlpha, int dR, int dG, int dB, int dA) {
     if (!hasAlpha) {
       this.redComponent = (int) (this.getRedComponent() * this.alphaComponent / 255f);
       this.greenComponent = (int) (this.getGreenComponent() * this.alphaComponent / 255f);
       this.blueComponent = (int) (this.getBlueComponent() * this.alphaComponent / 255f);
-    }
-    else {
+    } else {
       int originalAlpha = this.alphaComponent;
       double alphaPrime = (originalAlpha / 255f) + (dA / 255f) * (1 - (originalAlpha / 255f));
 
       this.redComponent = (int) (((originalAlpha / 255f * this.redComponent) + (dR * (dA / 255f)
-          * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
+              * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
       this.greenComponent = (int) (((originalAlpha / 255f * this.greenComponent) + (dG * (dA / 255f)
-          * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
+              * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
       this.blueComponent = (int) (((originalAlpha / 255f * this.blueComponent) + (dB * (dA / 255f)
-          * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
+              * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
       this.alphaComponent = (int) (alphaPrime * 255);
     }
   }
