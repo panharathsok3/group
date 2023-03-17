@@ -1,13 +1,12 @@
 package model;
 
 /**
- * Represents a Pixel interface.
+ * Represents a Pixel interface for Modifying and accessing a Pixel.
  */
 public interface IPixel {
 
   /**
    * Returns the red component of this color.
-   *
    * @return the red component of this color
    */
   int getRedComponent();
@@ -15,7 +14,6 @@ public interface IPixel {
 
   /**
    * Returns the green component of this color.
-   *
    * @return the green component of this color
    */
   int getGreenComponent();
@@ -23,14 +21,12 @@ public interface IPixel {
 
   /**
    * Returns the blue component of this color.
-   *
    * @return the blue component of this color
    */
   int getBlueComponent();
 
   /**
    * Returns the alpha component of this color.
-   *
    * @return the alpha component of this color
    */
 
@@ -39,7 +35,6 @@ public interface IPixel {
 
   /**
    * Returns the maximum value of the rgb component.
-   *
    * @return the maximum value of the rgb component
    */
   int value();
@@ -47,7 +42,6 @@ public interface IPixel {
 
   /**
    * Returns the average of the rgb components.
-   *
    * @return the average of the rgb components
    */
 
@@ -56,7 +50,6 @@ public interface IPixel {
 
   /**
    * Returns the weighted sum of the rgb components.
-   *
    * @return the weighted sum of the rgb components
    */
 
@@ -65,7 +58,6 @@ public interface IPixel {
 
   /**
    * Modifies the component by adding or subtracting it by a given value.
-   *
    * @param brightnessOptions a string of values that can be applied to the component
    * @param add               true if and only if the value is being added to and false otherwise which makes it
    *                          subtract instead
@@ -77,7 +69,6 @@ public interface IPixel {
 
   /**
    * Filters for a specific color component by setting the other 2 to zero.
-   *
    * @param option the color to filter to
    * @throws IllegalArgumentException when the option is not red-component, green-component,
    *                                  or blue-component or if the option is null
@@ -89,7 +80,6 @@ public interface IPixel {
   /**
    * Changes the transparency of this Pixel by modifying the four components if the image originally
    * has an alpha value and modifies only the rgb if the image doesn't have an alpha component.
-   *
    * @param hasAlpha true if and only if this pixel doesn't require an alpha value
    * @param dR       the default red value which is the value of the background's red value
    * @param dG       the default green value which is the value of the background's green value

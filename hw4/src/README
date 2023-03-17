@@ -14,7 +14,7 @@ We also have methods that allow the user to modify the pixel and calculate for t
 pixel. There are also observers in the pixel class in case the user wants to know the specific
 component of the pixels.
 
-# Layer
+# Layer - Class
 
 The Layer class represents a layer that is used on the collage. It has functionality that allows the
 user to add an image onto the layer and observers for the user to know what the name of the layer
@@ -30,13 +30,13 @@ different things.
 They are organized such that they allow for extensibility in the cases where we are asked to
 implement more functionality.
 
-# CollageProjectModel
+# CollageProjectModel - Interface
 
 The CollageProjectModel interface represents file operations that can be performed on model classes
 that inherits it. It gives functionality to make, save, and load a project and also the ability to
 save an image.
 
-# CollageProject
+# CollageProject - Interface
 
 The CollageProject interface represents operations that can be done on the application of a collage.
 It gives functionality to add a layer, add an image to a layer, set a filter onto a layer, and
@@ -48,16 +48,17 @@ forgot, the observers are there to help them.
 This interface extends the CollageProjectModel interface so that users can work on this
 CollageProject and perform some file operations.
 
-# CollageProjectModelImpl
+# CollageProjectModelImpl - Class
 
 The CollageProjectModelImpl class is the model of our program. It inherits the CollageProject. This
-TODO
+class is used to make a collage to work on. It has the functionality from CollageProject like
+modifying layers that are made and has observers about the project.
 
-# Effects
+# Effects - Package
 
 We have an Effects package that holds the macros that is used in the model.
 
-# MacroCollageEffects
+# MacroCollageEffects - Interface
 
 The MacroCollageEffects interface is our macro and we came to an agreement that since macros are a
 scalable way to create a growing extended set of functionality, it would be best to use the command
@@ -68,39 +69,40 @@ inherits this interface.
 It is also a way to ensure that when a new tool/class is added, it doesn't affect the functionality
 of the tools/class that already exists.
 
-# BrightenDarkenMacro
+# BrightenDarkenMacro - Class
 
 The BrightenDarkenMacro class is a macro that implements the MacroCollageEffects interface. It
 allows the user reduce or increase the brightness all the pixels on a layer according to either their
 value, intensity or luma.
 
-# BulkAssignFilter
+# BulkAssignFilter - Class
 
 The BulkAssignFilter class is a macro that implements the MacroCollageEffects interface. It allows
 the user to filter all the pixels on a layer and set them to one of their components(red, green,
 blue).
 
-# CollageView
+# CollageView - Interface
 
 The CollageView interface represents a way for the user to see what they are working on. Though
 currently it is a text-based implementation on the program so there is nothing to see in real time.
 So, right now, it has only one method which is to send a message to the user.
 
-# CollageTextView TODO
+# CollageTextView - Class
 
-The CollageTextView class inherits the CollageView
+The CollageTextView class inherits the CollageView. It is used to print messages to the user.
 
-# CollageController
+# CollageController - Interface
 
 The CollageController interface represents a controller for the CollageProjectModelImpl. It is used
 to run the program which accept user input and perform some actions like loading, creating and
  saving a project,adding layers to a project etc.
 
-# CollageControllerImpl TODO
+# CollageControllerImpl - Class
 
-The CollageControllerImpl class inherits the CollageController
+The CollageControllerImpl class inherits the CollageController. This class is used to
+read user input and perform actions accordingly.
 
-# CollageTextMain
+# CollageTextMain - Class
 
 The CollageTextMain class is used to accepts command line arguments that allow the program to be used.
 

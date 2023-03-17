@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 /**
  * Represents a single layer that can hold images.
+ * A layer is represented as a 2D ArrayList of Pixels.
+ * It stores the layer name, its height and width as well as the alpha value.
  */
 public class Layer implements ILayer {
   private final String layerName;

@@ -8,7 +8,8 @@ import model.CollageProject;
 import view.CollageView;
 
 /**
- * A CollageControllerImpl is the controller for the CollageProjectModelImpl.
+ * A CollageControllerImpl is the controller for the CollageProjectModelImpl. This class is used to
+ * read user input and perform actions accordingly.
  */
 public class CollageControllerImpl implements CollageController {
   private final Readable in;
@@ -76,7 +77,15 @@ public class CollageControllerImpl implements CollageController {
           String imageName = this.readValueString(sc);
           int x = this.readValueInteger(sc);
           int y = this.readValueInteger(sc);
-          this.collage.addImageToLayer(layerName1, imageName, x, y);
+          try {
+            this.collage.addImageToLayer(layerName1, imageName, x, y);
+          } catch (IllegalArgumentException e) {
+            try {
+              this.view.renderMessage("Layer not found");
+            } catch (IOException ex) {
+              throw new IllegalStateException("Unexpected IOException");
+            }
+          }
           break;
         case "set-filter":
           String layerName2 = this.readValueString(sc);

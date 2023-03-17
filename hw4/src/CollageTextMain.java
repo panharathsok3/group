@@ -8,25 +8,20 @@ import model.CollageProjectModelImpl;
 import view.CollageTextView;
 import view.CollageView;
 
+/**
+ * Main class for running the collage program
+ */
 public class CollageTextMain {
 
-  //demo main
+  /**
+   * Main method for running the program on a terminal.
+   * @param args the arguments being red from the system
+   */
   public static void main(String[] args) {
-
-    String filename;
-    Appendable out = new StringBuilder();
     CollageProject collage = new CollageProjectModelImpl();
     CollageView view = new CollageTextView(collage, System.out);
     CollageController controller = new CollageControllerImpl(new InputStreamReader(System.in)
         , collage, view);
     controller.runProgram();
-
-    if (args.length > 0) {
-      filename = args[0];
-    } else {
-      filename = "src/tako.ppm";
-    }
-
   }
-
 }

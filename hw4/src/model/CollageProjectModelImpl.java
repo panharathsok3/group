@@ -16,7 +16,12 @@ import model.Effects.BulkAssignFilter;
 import model.Effects.MacroCollageEffects;
 
 /**
- * Creates a collage to work on.
+ * This class is used to make a collage to work on.
+ * The Layers on the project is stored as a List so that as users add Layers to the project,
+ * they know the order in which they added the layers.
+ * The filters that are being applied is stored as a Map where the key is the layer name as a string
+ * and the filter type is the value as a string. If no filter was applied, it will be put to normal.
+ * When reading in an image, we convert it to a base of 256.
  */
 public class CollageProjectModelImpl implements CollageProject {
 
@@ -108,6 +113,7 @@ public class CollageProjectModelImpl implements CollageProject {
 
   /**
    * Read an image file and returns the pixels on the image as a 2D array.
+   * Converts color value to the base of 256.
    * @param filename the path of the file
    * @param hasAlpha true if and only if the original image has an alpha value
    * @param fileType the type of file that is being read from
@@ -147,6 +153,7 @@ public class CollageProjectModelImpl implements CollageProject {
 
     int width = sc.nextInt();
     int height = sc.nextInt();
+    int maxValue = sc.nextInt();
 
     ArrayList<ArrayList<Pixel>> pixelsOnImage = new ArrayList<>();
 
@@ -156,6 +163,10 @@ public class CollageProjectModelImpl implements CollageProject {
         int r = sc.nextInt();
         int g = sc.nextInt();
         int b = sc.nextInt();
+
+        r = r * 255 / maxValue;
+        g = g * 255 / maxValue;
+        b = b * 255 / maxValue;
 
         if (!hasAlpha) {
           pixelsOnImage.get(i).add(new Pixel(r, g, b));

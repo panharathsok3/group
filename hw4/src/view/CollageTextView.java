@@ -2,10 +2,10 @@ package view;
 
 import java.io.IOException;
 import model.CollageProject;
-import model.CollageProjectModel;
 
 /**
- * A SetGameTextView is a visual representation of the CollageProjectModelImpl.
+ * A SetGameTextView is a visual representation of the CollageProjectModelImpl. It prints messages
+ * to the user.
  */
 public class CollageTextView implements CollageView {
 

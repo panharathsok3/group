@@ -1,7 +1,10 @@
 package model;
 
 /**
- * Represents a pixel of an image.
+ * This class is used to make a pixel of an image.
+ * The pixel stores the red, green, blue, and alpha components of the pixel.
+ * If the pixel being red from an image originally doesn't have an alpha component,
+ * it will be set to 255.
  */
 public class Pixel implements IPixel {
   private int redComponent;
@@ -11,7 +14,6 @@ public class Pixel implements IPixel {
 
   /**
    * Creates a color using rgb values.
-   *
    * @param redComponent   the red pixel value
    * @param greenComponent the greenComponent pixel value
    * @param blueComponent  the blue pixel value
@@ -30,7 +32,6 @@ public class Pixel implements IPixel {
 
   /**
    * Creates a color using rgb values and an alpha component for transparency.
-   *
    * @param redComponent   the red pixel value
    * @param greenComponent the green pixel value
    * @param blueComponent  the blue pixel value
@@ -94,17 +95,22 @@ public class Pixel implements IPixel {
     }
     int brightness;
 
-    if (brightnessOptions.equals("brighten-luma") || brightnessOptions.equals("darken-luma")) {
-      brightness = this.luma();
-    } else if (brightnessOptions.equals("brighten-value")
-            || brightnessOptions.equals("darken-value")) {
-      brightness = this.value();
-    } else if (brightnessOptions.equals("brighten-intensity")
-            || brightnessOptions.equals("darken-intensity")) {
-      brightness = this.intensity();
-    } else {
-      throw new IllegalArgumentException("The brightnessOptions must be brighten-luma, "
-              + "brighten-value, or brighten-intensity");
+    switch (brightnessOptions) {
+      case "brighten-luma":
+      case "darken-luma":
+        brightness = this.luma();
+        break;
+      case "brighten-value":
+      case "darken-value":
+        brightness = this.value();
+        break;
+      case "brighten-intensity":
+      case "darken-intensity":
+        brightness = this.intensity();
+        break;
+      default:
+        throw new IllegalArgumentException("The brightnessOptions must be brighten-luma, "
+            + "brighten-value, or brighten-intensity");
     }
 
     if (add) {
