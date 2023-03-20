@@ -74,18 +74,18 @@ public interface IPixel {
 //   *                                  or blue-component or if the option is null
 //   */
 //  void setFilter(String option);
-
-
-  /**
-   * Changes the transparency of this Pixel by modifying the four components if the image originally
-   * has an alpha value and modifies only the rgb if the image doesn't have an alpha component.
-   * @param hasAlpha true if and only if this pixel doesn't require an alpha value
-   * @param dR       the default red value which is the value of the background's red value
-   * @param dG       the default green value which is the value of the background's green value
-   * @param dB       the default blue value which is the value of the background's blue value
-   * @param dA       the default alpha value which is the value of the background's alpha value
-   */
-  void changeTransparency(boolean hasAlpha, int dR, int dG, int dB, int dA);
+//
+//
+//  /**
+//   * Changes the transparency of this Pixel by modifying the four components if the image originally
+//   * has an alpha value and modifies only the rgb if the image doesn't have an alpha component.
+//   * @param hasAlpha true if and only if this pixel doesn't require an alpha value
+//   * @param dR       the default red value which is the value of the background's red value
+//   * @param dG       the default green value which is the value of the background's green value
+//   * @param dB       the default blue value which is the value of the background's blue value
+//   * @param dA       the default alpha value which is the value of the background's alpha value
+//   */
+//  void changeTransparency(boolean hasAlpha, int dR, int dG, int dB, int dA);
 
 }
 

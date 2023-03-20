@@ -178,176 +178,176 @@ public class LayerTest {
     }
 
   }
-
-  @Test
-  public void testModifyTransparencyWithWhiteBackGround() {
-    this.init();
-
-    List<List<IPixel>> modifiedList =
-        this.layer1.modifyTransparency(this.layer5.getPixelsOnLayer(), true);
-
-    List<IPixel> lop = new ArrayList<>();
-    List<List<IPixel>> currentLayer = new ArrayList<>();
-
-    currentLayer.add(lop);
-    lop.add(new Pixel(255, 255, 255));
-
-    for (int i = 0; i < currentLayer.size(); i++) {
-      for (int j = 0; j < currentLayer.get(0).size(); j++) {
-
-        int newRed = currentLayer.get(i).get(j).getRedComponent();
-        int newGreen =  currentLayer.get(i).get(j).getGreenComponent();
-        int newBlue =  currentLayer.get(i).get(j).getBlueComponent();
-        int newAlpha =  currentLayer.get(i).get(j).getAlphaComponent();
-
-        assertEquals(newRed, modifiedList.get(i).get(j).getRedComponent());
-        assertEquals(newGreen, modifiedList.get(i).get(j).getGreenComponent());
-        assertEquals(newBlue, modifiedList.get(i).get(j).getBlueComponent());
-        assertEquals(newAlpha, modifiedList.get(i).get(j).getAlphaComponent());
-
-      }
-    }
-
-    modifiedList = this.layer1.modifyTransparency(this.layer5.getPixelsOnLayer(), false);
-
-    lop = new ArrayList<>();
-    currentLayer = new ArrayList<>();
-
-    currentLayer.add(lop);
-    lop.add(new Pixel(255, 255, 255));
-
-    for (int i = 0; i < currentLayer.size(); i++) {
-      for (int j = 0; j < currentLayer.get(0).size(); j++) {
-
-        int newRed = currentLayer.get(i).get(j).getRedComponent();
-        int newGreen =  currentLayer.get(i).get(j).getGreenComponent();
-        int newBlue =  currentLayer.get(i).get(j).getBlueComponent();
-        int newAlpha =  currentLayer.get(i).get(j).getAlphaComponent();
-
-        assertEquals(newRed, modifiedList.get(i).get(j).getRedComponent());
-        assertEquals(newGreen, modifiedList.get(i).get(j).getGreenComponent());
-        assertEquals(newBlue, modifiedList.get(i).get(j).getBlueComponent());
-        assertEquals(newAlpha, modifiedList.get(i).get(j).getAlphaComponent());
-
-      }
-    }
-  }
-
-  @Test
-  public void testModifyTransparencyWithOpaqueImageOnTop() {
-    this.init();
-
-    List<List<IPixel>> pixels = new ArrayList<>();
-
-    for (int i = 0; i < 2; i++) {
-      pixels.add(new ArrayList<>());
-      for (int j = 0; j < 2; j++) {
-        pixels.get(i).add(new Pixel(5, 5, 5));
-      }
-    }
-
-    this.layer4.addImage(0, 0, pixels);
-
-    List<List<IPixel>> modifiedList =
-        this.layer4.modifyTransparency(this.layer6.getPixelsOnLayer(), false);
-
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 2; j++) {
-        assertEquals(5, modifiedList.get(i).get(j).getRedComponent());
-        assertEquals(5, modifiedList.get(i).get(j).getGreenComponent());
-        assertEquals(5, modifiedList.get(i).get(j).getBlueComponent());
-        assertEquals(255, modifiedList.get(i).get(j).getAlphaComponent());
-
-      }
-    }
-  }
-
-  @Test
-  public void testModifyTransparencyWithOpaqueImageOnTopAndTransparentBottom() {
-    this.init();
-
-    List<List<IPixel>> pixels1 = new ArrayList<>();
-    for (int i = 0; i < 2; i++) {
-      pixels1.add(new ArrayList<>());
-      for (int j = 0; j < 2; j++) {
-        pixels1.get(i).add(new Pixel(10, 10, 10, 255));
-      }
-    }
-
-    this.layer4.addImage(0, 0, pixels1);
-
-    List<List<IPixel>> pixels2 = new ArrayList<>();
-
-    for (int i = 0; i < 2; i++) {
-      pixels2.add(new ArrayList<>());
-      for (int j = 0; j < 2; j++) {
-        pixels2.get(i).add(new Pixel(10, 10, 10, 0));
-      }
-    }
-
-    this.layer6.addImage(0, 0, pixels2);
-
-    List<List<IPixel>> modifiedList =
-        this.layer4.modifyTransparency(this.layer6.getPixelsOnLayer(), true);
-
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 2; j++) {
-        assertEquals(10, modifiedList.get(i).get(j).getRedComponent());
-        assertEquals(10, modifiedList.get(i).get(j).getGreenComponent());
-        assertEquals(10, modifiedList.get(i).get(j).getBlueComponent());
-        assertEquals(255, modifiedList.get(i).get(j).getAlphaComponent());
-
-      }
-    }
-  }
-
-  @Test
-  public void testModifyTransparencyWithDifferentTransparencies() {
-    this.init();
-
-    List<List<IPixel>> pixels1 = new ArrayList<>();
-
-    for (int i = 0; i < 2; i++) {
-      pixels1.add(new ArrayList<>());
-      for (int j = 0; j < 2; j++) {
-        pixels1.get(i).add(new Pixel(10, 10, 10, 20));
-      }
-    }
-
-    this.layer4.addImage(0, 0, pixels1);
-
-    List<List<IPixel>> pixels2 = new ArrayList<>();
-
-    for (int i = 0; i < 2; i++) {
-      pixels2.add(new ArrayList<>());
-      for (int j = 0; j < 2; j++) {
-        pixels2.get(i).add(new Pixel(15, 30, 50, 30));
-      }
-    }
-
-    this.layer6.addImage(0, 0, pixels2);
-
-    List<List<IPixel>> modifiedList =
-        this.layer4.modifyTransparency(this.layer6.getPixelsOnLayer(), true);
-
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 2; j ++) {
-        assertEquals(12, modifiedList.get(i).get(j).getRedComponent());
-        assertEquals(21, modifiedList.get(i).get(j).getGreenComponent());
-        assertEquals(33, modifiedList.get(i).get(j).getBlueComponent());
-        assertEquals(47, modifiedList.get(i).get(j).getAlphaComponent());
-      }
-    }
-  }
-
-  @Test
-  public void testInvalidChangeTransparency() {
-    try {
-      this.layer1.modifyTransparency(null, true);
-      fail("Arguments can't be null");
-    } catch (IllegalArgumentException e) {
-      //do nothing
-    }
-  }
+//
+//  @Test
+//  public void testModifyTransparencyWithWhiteBackGround() {
+//    this.init();
+//
+//    List<List<IPixel>> modifiedList =
+//        this.layer1.modifyTransparency(this.layer5.getPixelsOnLayer(), true);
+//
+//    List<IPixel> lop = new ArrayList<>();
+//    List<List<IPixel>> currentLayer = new ArrayList<>();
+//
+//    currentLayer.add(lop);
+//    lop.add(new Pixel(255, 255, 255));
+//
+//    for (int i = 0; i < currentLayer.size(); i++) {
+//      for (int j = 0; j < currentLayer.get(0).size(); j++) {
+//
+//        int newRed = currentLayer.get(i).get(j).getRedComponent();
+//        int newGreen =  currentLayer.get(i).get(j).getGreenComponent();
+//        int newBlue =  currentLayer.get(i).get(j).getBlueComponent();
+//        int newAlpha =  currentLayer.get(i).get(j).getAlphaComponent();
+//
+//        assertEquals(newRed, modifiedList.get(i).get(j).getRedComponent());
+//        assertEquals(newGreen, modifiedList.get(i).get(j).getGreenComponent());
+//        assertEquals(newBlue, modifiedList.get(i).get(j).getBlueComponent());
+//        assertEquals(newAlpha, modifiedList.get(i).get(j).getAlphaComponent());
+//
+//      }
+//    }
+//
+//    modifiedList = this.layer1.modifyTransparency(this.layer5.getPixelsOnLayer(), false);
+//
+//    lop = new ArrayList<>();
+//    currentLayer = new ArrayList<>();
+//
+//    currentLayer.add(lop);
+//    lop.add(new Pixel(255, 255, 255));
+//
+//    for (int i = 0; i < currentLayer.size(); i++) {
+//      for (int j = 0; j < currentLayer.get(0).size(); j++) {
+//
+//        int newRed = currentLayer.get(i).get(j).getRedComponent();
+//        int newGreen =  currentLayer.get(i).get(j).getGreenComponent();
+//        int newBlue =  currentLayer.get(i).get(j).getBlueComponent();
+//        int newAlpha =  currentLayer.get(i).get(j).getAlphaComponent();
+//
+//        assertEquals(newRed, modifiedList.get(i).get(j).getRedComponent());
+//        assertEquals(newGreen, modifiedList.get(i).get(j).getGreenComponent());
+//        assertEquals(newBlue, modifiedList.get(i).get(j).getBlueComponent());
+//        assertEquals(newAlpha, modifiedList.get(i).get(j).getAlphaComponent());
+//
+//      }
+//    }
+//  }
+//
+//  @Test
+//  public void testModifyTransparencyWithOpaqueImageOnTop() {
+//    this.init();
+//
+//    List<List<IPixel>> pixels = new ArrayList<>();
+//
+//    for (int i = 0; i < 2; i++) {
+//      pixels.add(new ArrayList<>());
+//      for (int j = 0; j < 2; j++) {
+//        pixels.get(i).add(new Pixel(5, 5, 5));
+//      }
+//    }
+//
+//    this.layer4.addImage(0, 0, pixels);
+//
+//    List<List<IPixel>> modifiedList =
+//        this.layer4.modifyTransparency(this.layer6.getPixelsOnLayer(), false);
+//
+//    for (int i = 0; i < 2; i++) {
+//      for (int j = 0; j < 2; j++) {
+//        assertEquals(5, modifiedList.get(i).get(j).getRedComponent());
+//        assertEquals(5, modifiedList.get(i).get(j).getGreenComponent());
+//        assertEquals(5, modifiedList.get(i).get(j).getBlueComponent());
+//        assertEquals(255, modifiedList.get(i).get(j).getAlphaComponent());
+//
+//      }
+//    }
+//  }
+//
+//  @Test
+//  public void testModifyTransparencyWithOpaqueImageOnTopAndTransparentBottom() {
+//    this.init();
+//
+//    List<List<IPixel>> pixels1 = new ArrayList<>();
+//    for (int i = 0; i < 2; i++) {
+//      pixels1.add(new ArrayList<>());
+//      for (int j = 0; j < 2; j++) {
+//        pixels1.get(i).add(new Pixel(10, 10, 10, 255));
+//      }
+//    }
+//
+//    this.layer4.addImage(0, 0, pixels1);
+//
+//    List<List<IPixel>> pixels2 = new ArrayList<>();
+//
+//    for (int i = 0; i < 2; i++) {
+//      pixels2.add(new ArrayList<>());
+//      for (int j = 0; j < 2; j++) {
+//        pixels2.get(i).add(new Pixel(10, 10, 10, 0));
+//      }
+//    }
+//
+//    this.layer6.addImage(0, 0, pixels2);
+//
+//    List<List<IPixel>> modifiedList =
+//        this.layer4.modifyTransparency(this.layer6.getPixelsOnLayer(), true);
+//
+//    for (int i = 0; i < 2; i++) {
+//      for (int j = 0; j < 2; j++) {
+//        assertEquals(10, modifiedList.get(i).get(j).getRedComponent());
+//        assertEquals(10, modifiedList.get(i).get(j).getGreenComponent());
+//        assertEquals(10, modifiedList.get(i).get(j).getBlueComponent());
+//        assertEquals(255, modifiedList.get(i).get(j).getAlphaComponent());
+//
+//      }
+//    }
+//  }
+//
+//  @Test
+//  public void testModifyTransparencyWithDifferentTransparencies() {
+//    this.init();
+//
+//    List<List<IPixel>> pixels1 = new ArrayList<>();
+//
+//    for (int i = 0; i < 2; i++) {
+//      pixels1.add(new ArrayList<>());
+//      for (int j = 0; j < 2; j++) {
+//        pixels1.get(i).add(new Pixel(10, 10, 10, 20));
+//      }
+//    }
+//
+//    this.layer4.addImage(0, 0, pixels1);
+//
+//    List<List<IPixel>> pixels2 = new ArrayList<>();
+//
+//    for (int i = 0; i < 2; i++) {
+//      pixels2.add(new ArrayList<>());
+//      for (int j = 0; j < 2; j++) {
+//        pixels2.get(i).add(new Pixel(15, 30, 50, 30));
+//      }
+//    }
+//
+//    this.layer6.addImage(0, 0, pixels2);
+//
+//    List<List<IPixel>> modifiedList =
+//        this.layer4.modifyTransparency(this.layer6.getPixelsOnLayer(), true);
+//
+//    for (int i = 0; i < 2; i++) {
+//      for (int j = 0; j < 2; j ++) {
+//        assertEquals(12, modifiedList.get(i).get(j).getRedComponent());
+//        assertEquals(21, modifiedList.get(i).get(j).getGreenComponent());
+//        assertEquals(33, modifiedList.get(i).get(j).getBlueComponent());
+//        assertEquals(47, modifiedList.get(i).get(j).getAlphaComponent());
+//      }
+//    }
+//  }
+//
+//  @Test
+//  public void testInvalidChangeTransparency() {
+//    try {
+//      this.layer1.modifyTransparency(null, true);
+//      fail("Arguments can't be null");
+//    } catch (IllegalArgumentException e) {
+//      //do nothing
+//    }
+//  }
 
 }

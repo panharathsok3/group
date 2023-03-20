@@ -29,19 +29,17 @@ public interface ILayer {
    * @throws IllegalArgumentException if the given image is null
    *                                  or if the xPos or yPos is not in the bounds of the Layer
    */
-
-
   void addImage(int xPos, int yPos, List<List<IPixel>> image);
 
-  /**
-   * Returns a 2D ArrayList of Pixels that flattens the previous image with the current image.
-   * @param image    a 2D arrayList of pixels that represents this the previous layer
-   * @param hasAlpha true if and only if the image being modified has an alpha value originally
-   * @return a 2D ArrayList of Pixels that flattens the previous image with the current image
-   * @throws IllegalArgumentException if the given arguments is null
-   */
-  List<List<IPixel>> modifyTransparency(List<List<IPixel>> image,
-                                                 boolean hasAlpha);
+//  /**
+//   * Returns a 2D ArrayList of Pixels that flattens the previous image with the current image.
+//   * @param image    a 2D arrayList of pixels that represents this the previous layer
+//   * @param hasAlpha true if and only if the image being modified has an alpha value originally
+//   * @return a 2D ArrayList of Pixels that flattens the previous image with the current image
+//   * @throws IllegalArgumentException if the given arguments is null
+//   */
+//  List<List<IPixel>> modifyTransparency(List<List<IPixel>> image,
+//                                                 boolean hasAlpha);
 
 
 }

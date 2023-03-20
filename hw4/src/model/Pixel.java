@@ -11,6 +11,9 @@ public class Pixel implements IPixel {
   private int greenComponent;
   private int blueComponent;
   private int alphaComponent;
+  private double hue;
+  private double saturation;
+  private double lightness;
 
   /**
    * Creates a color using rgb values.
@@ -47,6 +50,28 @@ public class Pixel implements IPixel {
     this.greenComponent = greenComponent;
     this.blueComponent = blueComponent;
     this.alphaComponent = alphaComponent;
+  }
+
+  /**
+   * Creates a Pixel using the hue, saturation and lightness.
+   * @param hue the hue of this Pixel
+   * @param saturation the saturation of this Pixel
+   * @param lightness the lightness of this Pixel
+   * @throws IllegalArgumentException if 0 > hue >= 360
+   *                                  or 0 > saturation > 1
+   *                                  or 0 > lightness > 1
+   */
+  public Pixel(double hue, double saturation, double lightness) throws IllegalArgumentException {
+
+    if (hue < 0 || hue >= 360 || saturation < 0 || saturation > 1 || lightness < 0
+        || lightness > 1) {
+      throw new IllegalArgumentException("hue must be: 0 <= hue < 360, saturation must be: "
+          + "0 <= saturation <= 1, and lightness must be: 0 <= lightness <= 1\n");
+    }
+
+    this.hue = hue;
+    this.saturation = saturation;
+    this.lightness = lightness;
   }
 
 
@@ -193,24 +218,24 @@ public class Pixel implements IPixel {
 //      this.greenComponent = 0;
 //    }
 //  }
-
-  @Override
-  public void changeTransparency(boolean hasAlpha, int dR, int dG, int dB, int dA) {
-    if (!hasAlpha) {
-      this.redComponent = (int) (this.getRedComponent() * this.alphaComponent / 255f);
-      this.greenComponent = (int) (this.getGreenComponent() * this.alphaComponent / 255f);
-      this.blueComponent = (int) (this.getBlueComponent() * this.alphaComponent / 255f);
-    } else {
-      int originalAlpha = this.alphaComponent;
-      double alphaPrime = (originalAlpha / 255f) + (dA / 255f) * (1 - (originalAlpha / 255f));
-
-      this.redComponent = (int) (((originalAlpha / 255f * this.redComponent) + (dR * (dA / 255f)
-              * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
-      this.greenComponent = (int) (((originalAlpha / 255f * this.greenComponent) + (dG * (dA / 255f)
-              * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
-      this.blueComponent = (int) (((originalAlpha / 255f * this.blueComponent) + (dB * (dA / 255f)
-              * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
-      this.alphaComponent = (int) (alphaPrime * 255);
-    }
-  }
+//
+//  @Override
+//  public void changeTransparency(boolean hasAlpha, int dR, int dG, int dB, int dA) {
+//    if (!hasAlpha) {
+//      this.redComponent = (int) (this.getRedComponent() * this.alphaComponent / 255f);
+//      this.greenComponent = (int) (this.getGreenComponent() * this.alphaComponent / 255f);
+//      this.blueComponent = (int) (this.getBlueComponent() * this.alphaComponent / 255f);
+//    } else {
+//      int originalAlpha = this.alphaComponent;
+//      double alphaPrime = (originalAlpha / 255f) + (dA / 255f) * (1 - (originalAlpha / 255f));
+//
+//      this.redComponent = (int) (((originalAlpha / 255f * this.redComponent) + (dR * (dA / 255f)
+//              * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
+//      this.greenComponent = (int) (((originalAlpha / 255f * this.greenComponent) + (dG * (dA / 255f)
+//              * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
+//      this.blueComponent = (int) (((originalAlpha / 255f * this.blueComponent) + (dB * (dA / 255f)
+//              * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
+//      this.alphaComponent = (int) (alphaPrime * 255);
+//    }
+//  }
 }
