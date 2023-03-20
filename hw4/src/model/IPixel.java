@@ -6,55 +6,92 @@ package model;
 public interface IPixel {
 
   /**
-   * Returns the red component of this color.
-   * @return the red component of this color
+   * Returns the red component of this IPixel.
+   * @return the red component of this IPixel
+   * @throws IllegalStateException when a HSL pixel is trying to access this method
    */
-  int getRedComponent();
-
+  int getRedComponent() throws IllegalStateException;
 
   /**
-   * Returns the green component of this color.
-   * @return the green component of this color
+   * Returns the green component of this IPixel.
+   * @return the green component of this IPixel
+   * @throws IllegalStateException when a HSL pixel is trying to access this method
    */
-  int getGreenComponent();
-
+  int getGreenComponent() throws IllegalStateException;
 
   /**
-   * Returns the blue component of this color.
-   * @return the blue component of this color
+   * Returns the blue component of this IPixel.
+   * @return the blue component of this IPixel
+   * @throws IllegalStateException when a HSL pixel is trying to access this method
    */
-  int getBlueComponent();
+  int getBlueComponent() throws IllegalStateException;
 
   /**
-   * Returns the alpha component of this color.
-   * @return the alpha component of this color
+   * Returns the alpha component of this IPixel.
+   * @return the alpha component of this IPixel
+   * @throws IllegalStateException when a HSL pixel is trying to access this method
    */
+  int getAlphaComponent() throws IllegalStateException;
 
-  int getAlphaComponent();
+  /**
+   * Returns the hue of this IPixel.
+   * @return the hue of this IPixel
+   * @throws IllegalStateException when a RGB pixel is trying to access this method
+   */
+  double getHueComponent() throws IllegalStateException;
 
+  /**
+   * Returns the saturation of this IPixel.
+   * @return the saturation of this IPixel
+   * @throws IllegalStateException when a RGB pixel is trying to access this method
+   */
+  double getSaturationComponent() throws IllegalStateException;
+
+  /**
+   * Returns the lightness of this IPixel.
+   * @return the lightness of this IPixel
+   * @throws IllegalStateException when a RGB pixel is trying to access this method
+   */
+  double getLightnessComponent() throws IllegalStateException;
 
   /**
    * Returns the maximum value of the rgb component.
    * @return the maximum value of the rgb component
+   * @throws IllegalStateException when a HSL pixel is trying to access this method
    */
-  int value();
-
+  int value() throws IllegalStateException;
 
   /**
    * Returns the average of the rgb components.
    * @return the average of the rgb components
+   * @throws IllegalStateException when a HSL pixel is trying to access this method
    */
-
-  int intensity();
-
+  int intensity() throws IllegalStateException;
 
   /**
    * Returns the weighted sum of the rgb components.
    * @return the weighted sum of the rgb components
+   * @throws IllegalStateException when a HSL pixel is trying to access this method
    */
+  int luma() throws IllegalStateException;
 
-  int luma();
+  /**
+   * Converts an RGB representation of an IPixel into an HSL representation of an IPixel and returns
+   * it.
+   * @return a new IPixel that using a HSL representation
+   * @throws IllegalStateException when trying to convert anything other than from RGB
+   *                               representation to HSL
+   */
+  IPixel convertRGBtoHSL() throws IllegalStateException;
 
+  /**
+   * Converts an HSL representation of an IPixel into an RGB representation of an IPixel and returns
+   * it.
+   * @return a new IPixel that using an RGB representation
+   * @throws IllegalStateException when trying to convert anything other than from HSL
+   *                               representation to RGB
+   */
+  IPixel convertHSLtoRGB() throws IllegalStateException;
 
 //  /**
 //   * Modifies the component by adding or subtracting it by a given value.

@@ -14,6 +14,8 @@ import java.util.Scanner;
 import model.effects.BrightenDarkenMacro;
 import model.effects.BulkAssignFilter;
 import model.effects.ChangeTransparencyMacro;
+import model.effects.DarkenMultiplyBrightenScreenMacro;
+import model.effects.DarkenMultiplyMacro;
 import model.effects.InversionDifferenceMacro;
 import model.effects.MacroCollageEffects;
 
@@ -318,11 +320,19 @@ public class CollageProjectModelImpl implements CollageProject {
           macro.executeMacro(layer);
           break;
         case "inversion-difference":
-        case "darken-multiply":
-        case "brighten-screen":
           macro = new InversionDifferenceMacro(this.canvasHeight, this.canvasWidth, finalImage);
           macro.executeMacro(layer);
           break;
+        case "darken-multiply":
+          macro = new DarkenMultiplyBrightenScreenMacro(this.canvasHeight, this.canvasWidth,
+              finalImage, false);
+          macro.executeMacro(layer);
+          break;
+        case "brighten-screen":
+          macro = new DarkenMultiplyBrightenScreenMacro(this.canvasHeight, this.canvasWidth,
+              finalImage, true);
+          macro.executeMacro(layer);
+           break;
         default:
           //do nothing
       }
@@ -335,7 +345,6 @@ public class CollageProjectModelImpl implements CollageProject {
         macro = new ChangeTransparencyMacro(this.canvasHeight, this.canvasWidth, hasAlpha,
             finalImage);
         macro.executeMacro(layer);
-//        finalImage = layer.modifyTransparency(finalImage, hasAlpha);
         finalImage = layer.getPixelsOnLayer();
       }
     }

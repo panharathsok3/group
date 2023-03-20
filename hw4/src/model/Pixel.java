@@ -14,6 +14,7 @@ public class Pixel implements IPixel {
   private double hue;
   private double saturation;
   private double lightness;
+  private boolean isRGB;
 
   /**
    * Creates a color using rgb values.
@@ -31,6 +32,7 @@ public class Pixel implements IPixel {
     this.greenComponent = greenComponent;
     this.blueComponent = blueComponent;
     this.alphaComponent = 255;
+    this.isRGB = true;
   }
 
   /**
@@ -50,6 +52,7 @@ public class Pixel implements IPixel {
     this.greenComponent = greenComponent;
     this.blueComponent = blueComponent;
     this.alphaComponent = alphaComponent;
+    this.isRGB = true;
   }
 
   /**
@@ -72,170 +75,141 @@ public class Pixel implements IPixel {
     this.hue = hue;
     this.saturation = saturation;
     this.lightness = lightness;
+    this.isRGB = false;
   }
 
 
   @Override
-  public int getRedComponent() {
+  public int getRedComponent() throws IllegalStateException {
+    this.throwErrorIfNotCorrectRepresentation(!this.isRGB);
     return this.redComponent;
   }
 
   @Override
-  public int getGreenComponent() {
+  public int getGreenComponent() throws IllegalStateException {
+    this.throwErrorIfNotCorrectRepresentation(!this.isRGB);
     return this.greenComponent;
   }
 
   @Override
-  public int getBlueComponent() {
+  public int getBlueComponent() throws IllegalStateException {
+    this.throwErrorIfNotCorrectRepresentation(!this.isRGB);
     return this.blueComponent;
   }
 
   @Override
-  public int getAlphaComponent() {
+  public int getAlphaComponent() throws IllegalStateException {
+    this.throwErrorIfNotCorrectRepresentation(!this.isRGB);
     return this.alphaComponent;
   }
 
   @Override
-  public int value() {
+  public double getHueComponent() throws IllegalStateException {
+    this.throwErrorIfNotCorrectRepresentation(this.isRGB);
+    return this.hue;
+  }
+
+  @Override
+  public double getSaturationComponent() throws IllegalStateException {
+    this.throwErrorIfNotCorrectRepresentation(this.isRGB);
+    return this.saturation;
+  }
+
+  @Override
+  public double getLightnessComponent() throws IllegalStateException {
+    this.throwErrorIfNotCorrectRepresentation(this.isRGB);
+    return this.lightness;
+  }
+
+  @Override
+  public int value() throws IllegalStateException {
+    this.throwErrorIfNotCorrectRepresentation(!this.isRGB);
     return Math.max(Math.max(this.redComponent, this.greenComponent), this.blueComponent);
   }
 
   @Override
-  public int intensity() {
+  public int intensity() throws IllegalStateException {
+    this.throwErrorIfNotCorrectRepresentation(!this.isRGB);
     return (this.redComponent + this.greenComponent + this.blueComponent) / 3;
   }
 
   @Override
-  public int luma() {
+  public int luma() throws IllegalStateException {
+    this.throwErrorIfNotCorrectRepresentation(!this.isRGB);
     return (int) Math.round((0.216 * this.redComponent) + (0.7152 * this.greenComponent)
             + (0.0722 * this.blueComponent));
   }
 
-//  @Override
-//  public void modifyComponentByBrightness(String brightnessOptions, boolean add)
-//          throws IllegalArgumentException {
-//    if (brightnessOptions == null) {
-//      throw new IllegalArgumentException("the component cannot be null.");
-//    }
-//    int brightness;
-//
-//    switch (brightnessOptions) {
-//      case "brighten-luma":
-//      case "darken-luma":
-//        brightness = this.luma();
-//        break;
-//      case "brighten-value":
-//      case "darken-value":
-//        brightness = this.value();
-//        break;
-//      case "brighten-intensity":
-//      case "darken-intensity":
-//        brightness = this.intensity();
-//        break;
-//      default:
-//        throw new IllegalArgumentException("The brightnessOptions must be brighten-luma, "
-//            + "brighten-value, or brighten-intensity");
-//    }
-//
-//    if (add) {
-//      this.add(brightness);
-//    } else {
-//      this.subtract(brightness);
-//    }
-//  }
-//
-//  @Override
-//  public void setFilter(String option) throws IllegalArgumentException {
-//    if (option == null) {
-//      throw new IllegalArgumentException("The option cannot be null");
-//    }
-//
-//    switch (option) {
-//      case "red-component":
-//        this.greenComponent = 0;
-//        this.blueComponent = 0;
-//        break;
-//      case "green-component":
-//        this.redComponent = 0;
-//        this.blueComponent = 0;
-//        break;
-//      case "blue-component":
-//        this.redComponent = 0;
-//        this.greenComponent = 0;
-//        break;
-//      default:
-//        throw new IllegalArgumentException("the option must be red, green, or blue");
-//    }
-//  }
-//
-//  /**
-//   * Adds the value to the given component.
-//   *
-//   * @param value the value to add to the component
-//   */
-//  private void add(int value) {
-//    this.redComponent += value;
-//    this.blueComponent += value;
-//    this.greenComponent += value;
-//    this.checkBounds();
-//  }
-//
-//  /**
-//   * Subtracts the value to the given component.
-//   *
-//   * @param value the value to add to the component
-//   */
-//  private void subtract(int value) {
-//    this.redComponent -= value;
-//    this.blueComponent -= value;
-//    this.greenComponent -= value;
-//    this.checkBounds();
-//  }
-//
-//  /**
-//   * Checks if the given component is higher than the max value or if it's lower than zero and set
-//   * it to either the max value if it exceeds it or set it to zero if it goes below zero.
-//   */
-//  private void checkBounds() {
-//    if (this.redComponent > 255) {
-//      this.redComponent = 255;
-//    }
-//    if (this.redComponent < 0) {
-//      this.redComponent = 0;
-//    }
-//
-//    if (this.blueComponent > 255) {
-//      this.blueComponent = 255;
-//    }
-//    if (this.blueComponent < 0) {
-//      this.blueComponent = 0;
-//    }
-//
-//    if (this.greenComponent > 255) {
-//      this.greenComponent = 255;
-//    }
-//    if (this.greenComponent < 0) {
-//      this.greenComponent = 0;
-//    }
-//  }
-//
-//  @Override
-//  public void changeTransparency(boolean hasAlpha, int dR, int dG, int dB, int dA) {
-//    if (!hasAlpha) {
-//      this.redComponent = (int) (this.getRedComponent() * this.alphaComponent / 255f);
-//      this.greenComponent = (int) (this.getGreenComponent() * this.alphaComponent / 255f);
-//      this.blueComponent = (int) (this.getBlueComponent() * this.alphaComponent / 255f);
-//    } else {
-//      int originalAlpha = this.alphaComponent;
-//      double alphaPrime = (originalAlpha / 255f) + (dA / 255f) * (1 - (originalAlpha / 255f));
-//
-//      this.redComponent = (int) (((originalAlpha / 255f * this.redComponent) + (dR * (dA / 255f)
-//              * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
-//      this.greenComponent = (int) (((originalAlpha / 255f * this.greenComponent) + (dG * (dA / 255f)
-//              * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
-//      this.blueComponent = (int) (((originalAlpha / 255f * this.blueComponent) + (dB * (dA / 255f)
-//              * (1 - (originalAlpha / 255f)))) * (1f / alphaPrime));
-//      this.alphaComponent = (int) (alphaPrime * 255);
-//    }
-//  }
+  @Override
+  public IPixel convertRGBtoHSL() throws IllegalStateException {
+
+    if (!isRGB) {
+      throw new IllegalStateException("This is used to convert RBG to HSL only!");
+    }
+
+    double red = this.redComponent / 255f;
+    double green = this.greenComponent / 255f;
+    double blue = this.blueComponent / 255f;
+
+    double componentMax = Math.max(red, Math.max(green, blue));
+    double componentMin = Math.min(red, Math.min(green, blue));
+
+    double delta = componentMax - componentMin;
+
+    double lightness = (componentMax + componentMin) / 2;
+    double hue, saturation;
+    if (delta == 0) {
+      hue = 0;
+      saturation = 0;
+    } else {
+      saturation = delta / (1 - Math.abs(2 * lightness - 1));
+      hue = 0;
+      if (componentMax == red) {
+        hue = (green - blue)/delta;
+        hue = hue % 6;
+      } else if (componentMax == green) {
+        hue = (blue - red) / delta;
+        hue += 2;
+      } else if (componentMax == blue) {
+        hue = (red - green) / delta;
+        hue += 4;
+      }
+
+      hue = hue * 60;
+    }
+
+    return new Pixel(hue, saturation, lightness);
+  }
+
+
+  @Override
+  public IPixel convertHSLtoRGB() throws IllegalStateException {
+
+    if (isRGB) {
+      throw new IllegalStateException("This is used to convert HSL to RBG only!");
+    }
+
+    double r = convertFn(this.hue, this.saturation, this.lightness, 0) * 255;
+    double g = convertFn(this.hue, this.saturation, this.lightness, 8) * 255;
+    double b = convertFn(this.hue, this.saturation, this.lightness, 4) * 255;
+
+    return new Pixel(r, g, b);
+  }
+
+  /**
+   * Helper method that performs the translation from the HSL polygonal
+   * model to the more familiar RGB model
+   */
+  private double convertFn(double hue, double saturation, double lightness, int n) {
+    double k = (n + (hue/30)) % 12;
+    double a  = saturation * Math.min(lightness, 1 - lightness);
+
+    return lightness - a * Math.max(-1, Math.min(k - 3, Math.min(9 - k, 1)));
+  }
+
+  private void throwErrorIfNotCorrectRepresentation(boolean wrongRepresentation) {
+    if (wrongRepresentation) {
+      throw new IllegalArgumentException("");
+    }
+  }
 }

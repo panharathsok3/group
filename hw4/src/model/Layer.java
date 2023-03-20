@@ -85,28 +85,6 @@ public class Layer implements ILayer {
     }
   }
 
-//  @Override
-//  public List<List<IPixel>> modifyTransparency(List<List<IPixel>> image,
-//      boolean hasAlpha) throws IllegalArgumentException {
-//    if (image == null) {
-//      throw new IllegalArgumentException("Arguments can't be null");
-//    }
-//
-//    List<List<IPixel>> pixelOnLayer = this.getPixelsOnLayer();
-//    for (int i = 0; i < this.height; i++) {
-//      for (int j = 0; j < this.width; j++) {
-//        IPixel pixel = pixelOnLayer.get(i).get(j);
-//        IPixel prevPixel = image.get(i).get(j);
-//
-//        pixel.changeTransparency(hasAlpha, prevPixel.getRedComponent(),
-//            prevPixel.getGreenComponent(), prevPixel.getBlueComponent(),
-//            prevPixel.getAlphaComponent());
-//      }
-//    }
-//
-//    return pixelOnLayer;
-//  }
-
   /**
    * Creates a 2d array of pixels in this layer.
    */
