@@ -1,3 +1,4 @@
+import java.util.List;
 import model.ILayer;
 import model.IPixel;
 import org.junit.Before;
@@ -89,13 +90,27 @@ public class BrightenDarkenMacroTest {
 
   }
 
+  @Test
+  public void testInvalidExecuteMarco() {
+    this.init();
+
+    MacroCollageEffects brightenMacroLuma = new BrightenDarkenMacro(2, 2,
+        "brighten-luma", true);
+    try {
+      brightenMacroLuma.executeMacro(null);
+      fail("Arguments can't be null");
+    } catch (IllegalArgumentException e) {
+      // do nothing
+    }
+  }
+
 
   @Test
   public void testBrightenByLuma() {
     this.init();
 
     IPixel pixel = new Pixel(5, 5, 5);
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
 
     for (int i = 0; i < 2; i++) {
@@ -111,7 +126,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(2, 2, "brighten-luma", true);
     brightenMacroLuma.executeMacro(this.layer3);
 
-    for (ArrayList<IPixel> list : this.layer3.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer3.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(80, p.getRedComponent());
         assertEquals(80, p.getGreenComponent());
@@ -125,7 +140,7 @@ public class BrightenDarkenMacroTest {
   public void testBrightenByLuma2() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
 
     for (int i = 0; i < 6; i++) {
@@ -141,7 +156,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(6, 6, "brighten-luma", true);
     brightenMacroLuma.executeMacro(this.layer2);
 
-    for (ArrayList<IPixel> list : this.layer2.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer2.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(0, p.getRedComponent());
         assertEquals(0, p.getGreenComponent());
@@ -155,7 +170,7 @@ public class BrightenDarkenMacroTest {
   public void testBrightenByLuma3() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
 
     for (int i = 0; i < 20; i++) {
@@ -171,7 +186,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(20, 20, "brighten-luma", true);
     brightenMacroLuma.executeMacro(this.layer4);
 
-    for (ArrayList<IPixel> list : this.layer4.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer4.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(255, p.getRedComponent());
         assertEquals(255, p.getGreenComponent());
@@ -185,7 +200,7 @@ public class BrightenDarkenMacroTest {
   public void testBrightenByLuma4() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
     for (int i = 0; i < 1; i++) {
       pixels.add(new ArrayList<>());
@@ -200,7 +215,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(1, 1, "brighten-luma", true);
     brightenMacroLuma.executeMacro(this.layer6);
 
-    for (ArrayList<IPixel> list : this.layer6.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer6.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(8, p.getRedComponent());
         assertEquals(8, p.getGreenComponent());
@@ -215,7 +230,7 @@ public class BrightenDarkenMacroTest {
   public void testBrightenByIntensity() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixelsOnCurrentLayer = new ArrayList<>();
+    List<List<IPixel>> pixelsOnCurrentLayer = new ArrayList<>();
 
 
     for (int i = 0; i < 15; i++) {
@@ -232,7 +247,7 @@ public class BrightenDarkenMacroTest {
 
     macroCollageEffects.executeMacro(this.layer1);
 
-    for (ArrayList<IPixel> lop1 : this.layer1.getPixelsOnLayer()) {
+    for (List<IPixel> lop1 : this.layer1.getPixelsOnLayer()) {
       for (IPixel p : lop1) {
         assertEquals(255, p.getRedComponent());
         assertEquals(255, p.getGreenComponent());
@@ -246,7 +261,7 @@ public class BrightenDarkenMacroTest {
   public void testBrightenByIntensity2() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
 
     for (int i = 0; i < 6; i++) {
@@ -262,7 +277,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(6, 6, "brighten-intensity", true);
     brightenMacroLuma.executeMacro(this.layer2);
 
-    for (ArrayList<IPixel> list : this.layer2.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer2.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(0, p.getRedComponent());
         assertEquals(0, p.getGreenComponent());
@@ -276,7 +291,7 @@ public class BrightenDarkenMacroTest {
   public void testBrightenByIntensity3() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
 
     for (int i = 0; i < 20; i++) {
@@ -292,7 +307,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(20, 20, "brighten-intensity", true);
     brightenMacroLuma.executeMacro(this.layer4);
 
-    for (ArrayList<IPixel> list : this.layer4.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer4.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(255, p.getRedComponent());
         assertEquals(255, p.getGreenComponent());
@@ -306,7 +321,7 @@ public class BrightenDarkenMacroTest {
   public void testBrightenByIntensity4() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
     for (int i = 0; i < 1; i++) {
       pixels.add(new ArrayList<>());
@@ -321,7 +336,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(1, 1, "brighten-intensity", true);
     brightenMacroLuma.executeMacro(this.layer6);
 
-    for (ArrayList<IPixel> list : this.layer6.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer6.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(8, p.getRedComponent());
         assertEquals(8, p.getGreenComponent());
@@ -335,7 +350,7 @@ public class BrightenDarkenMacroTest {
   public void testBrightenByValue() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixelsOnCurrentLayer = new ArrayList<>();
+    List<List<IPixel>> pixelsOnCurrentLayer = new ArrayList<>();
 
 
     for (int i = 0; i < 6; i++) {
@@ -352,7 +367,7 @@ public class BrightenDarkenMacroTest {
 
     macroCollageEffects.executeMacro(this.layer2);
 
-    for (ArrayList<IPixel> lop1 : this.layer2.getPixelsOnLayer()) {
+    for (List<IPixel> lop1 : this.layer2.getPixelsOnLayer()) {
       for (IPixel p : lop1) {
         assertEquals(255, p.getRedComponent());
         assertEquals(255, p.getGreenComponent());
@@ -366,7 +381,7 @@ public class BrightenDarkenMacroTest {
   public void testBrightenByValue2() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
 
     for (int i = 0; i < 6; i++) {
@@ -382,7 +397,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(6, 6, "brighten-value", true);
     brightenMacroLuma.executeMacro(this.layer2);
 
-    for (ArrayList<IPixel> list : this.layer2.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer2.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(0, p.getRedComponent());
         assertEquals(0, p.getGreenComponent());
@@ -396,7 +411,7 @@ public class BrightenDarkenMacroTest {
   public void testBrightenByValue3() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
 
     for (int i = 0; i < 20; i++) {
@@ -412,7 +427,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(20, 20, "brighten-value", true);
     brightenMacroLuma.executeMacro(this.layer4);
 
-    for (ArrayList<IPixel> list : this.layer4.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer4.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(255, p.getRedComponent());
         assertEquals(255, p.getGreenComponent());
@@ -426,7 +441,7 @@ public class BrightenDarkenMacroTest {
   public void testBrightenByValue4() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
     for (int i = 0; i < 1; i++) {
       pixels.add(new ArrayList<>());
@@ -441,7 +456,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(1, 1, "brighten-value", true);
     brightenMacroLuma.executeMacro(this.layer6);
 
-    for (ArrayList<IPixel> list : this.layer6.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer6.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(8, p.getRedComponent());
         assertEquals(8, p.getGreenComponent());
@@ -456,7 +471,7 @@ public class BrightenDarkenMacroTest {
     this.init();
 
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
 
     for (int i = 0; i < 2; i++) {
@@ -472,7 +487,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(2, 2, "darken-luma", false);
     brightenMacroLuma.executeMacro(this.layer3);
 
-    for (ArrayList<IPixel> list : this.layer3.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer3.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(0, p.getRedComponent());
         assertEquals(0, p.getGreenComponent());
@@ -486,7 +501,7 @@ public class BrightenDarkenMacroTest {
   public void testDarkenByIntensity1() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
 
     for (int i = 0; i < 100; i++) {
@@ -502,7 +517,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(100, 100, "darken-intensity", false);
     brightenMacroLuma.executeMacro(this.layer5);
 
-    for (ArrayList<IPixel> list : this.layer5.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer5.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(1, p.getRedComponent());
         assertEquals(0, p.getGreenComponent());
@@ -516,7 +531,7 @@ public class BrightenDarkenMacroTest {
   public void testDarkenByValue1() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
 
     for (int i = 0; i < 15; i++) {
@@ -532,7 +547,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(15, 15, "darken-value", false);
     brightenMacroLuma.executeMacro(this.layer1);
 
-    for (ArrayList<IPixel> list : this.layer1.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer1.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(0, p.getRedComponent());
         assertEquals(0, p.getGreenComponent());
@@ -547,7 +562,7 @@ public class BrightenDarkenMacroTest {
     this.init();
 
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
 
     for (int i = 0; i < 20; i++) {
@@ -563,7 +578,7 @@ public class BrightenDarkenMacroTest {
             new BrightenDarkenMacro(20, 20, "darken-value", false);
     brightenMacroLuma.executeMacro(this.layer4);
 
-    for (ArrayList<IPixel> list : this.layer4.getPixelsOnLayer()) {
+    for (List<IPixel> list : this.layer4.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(0, p.getRedComponent());
         assertEquals(0, p.getGreenComponent());
@@ -577,7 +592,7 @@ public class BrightenDarkenMacroTest {
   public void testDarkenByValue3() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
     for (int i = 0; i < 2; i++) {
       pixels.add(new ArrayList<>());

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a single layer that can hold images.
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  */
 public class Layer implements ILayer {
   private final String layerName;
-  private final ArrayList<ArrayList<IPixel>> pixelsOnLayer;
+  private final List<List<IPixel>> pixelsOnLayer;
   private final int height;
   private final int width;
   private int alpha;
@@ -44,7 +45,7 @@ public class Layer implements ILayer {
    * @param pixelsOnLayer the IPixels on this Layer
    */
   public Layer(String layerName, int height, int width,
-      ArrayList<ArrayList<IPixel>> pixelsOnLayer) {
+      List<List<IPixel>> pixelsOnLayer) {
     this.layerName = layerName;
     this.height = height;
     this.width = width;
@@ -52,7 +53,7 @@ public class Layer implements ILayer {
   }
 
   @Override
-  public ArrayList<ArrayList<IPixel>> getPixelsOnLayer() {
+  public List<List<IPixel>> getPixelsOnLayer() {
     return new ArrayList<>(this.pixelsOnLayer);
   }
 
@@ -62,7 +63,7 @@ public class Layer implements ILayer {
   }
 
   @Override
-  public void addImage(int xPos, int yPos, ArrayList<ArrayList<IPixel>> image)
+  public void addImage(int xPos, int yPos, List<List<IPixel>> image)
       throws IllegalArgumentException {
     if (image == null || xPos < 0 || xPos > this.height || yPos < 0 || yPos > this.width) {
       throw new IllegalArgumentException("Arguments can't be null and they can't be negative");
@@ -85,13 +86,13 @@ public class Layer implements ILayer {
   }
 
   @Override
-  public ArrayList<ArrayList<IPixel>> modifyTransparency(ArrayList<ArrayList<IPixel>> image,
+  public List<List<IPixel>> modifyTransparency(List<List<IPixel>> image,
       boolean hasAlpha) throws IllegalArgumentException {
     if (image == null) {
       throw new IllegalArgumentException("Arguments can't be null");
     }
 
-    ArrayList<ArrayList<IPixel>> pixelOnLayer = this.getPixelsOnLayer();
+    List<List<IPixel>> pixelOnLayer = this.getPixelsOnLayer();
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
         IPixel pixel = pixelOnLayer.get(i).get(j);

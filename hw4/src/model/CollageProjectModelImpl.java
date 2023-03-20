@@ -98,7 +98,7 @@ public class CollageProjectModelImpl implements CollageProject {
           + "positions have to be within the boundaries of the canvas");
     }
 
-    ArrayList<ArrayList<IPixel>> image = this.readImage(filePath, false, "P3");
+    List<List<IPixel>> image = this.readImage(filePath, false, "P3");
 
     for (ILayer layer : this.project) {
       if (layerName.equals(layer.getName())) {
@@ -121,7 +121,7 @@ public class CollageProjectModelImpl implements CollageProject {
    * @throws IllegalStateException when the file could not be retrieved
    *                               or the file is not a PPM file
    */
-  private ArrayList<ArrayList<IPixel>> readImage(String filename, boolean hasAlpha, String fileType)
+  private List<List<IPixel>> readImage(String filename, boolean hasAlpha, String fileType)
       throws IllegalStateException {
     Scanner sc;
 
@@ -155,7 +155,7 @@ public class CollageProjectModelImpl implements CollageProject {
     int height = sc.nextInt();
     int maxValue = sc.nextInt();
 
-    ArrayList<ArrayList<IPixel>> pixelsOnImage = new ArrayList<>();
+    List<List<IPixel>> pixelsOnImage = new ArrayList<>();
 
     for (int i = 0; i < height; i++) {
       pixelsOnImage.add(new ArrayList<>());
@@ -228,7 +228,7 @@ public class CollageProjectModelImpl implements CollageProject {
         String filter = this.layerFilter.get(layer.getName());
         fileWriter.write(layer.getName() + " " + filter + "\n");
 
-        ArrayList<ArrayList<IPixel>> pixels = layer.getPixelsOnLayer();
+        List<List<IPixel>> pixels = layer.getPixelsOnLayer();
 
         for (int j = 0; j < this.canvasHeight; j++) {
           for (int k = 0; k < this.canvasWidth; k++) {
@@ -242,7 +242,7 @@ public class CollageProjectModelImpl implements CollageProject {
         }
       }
       else {
-        ArrayList<ArrayList<IPixel>> pixels = layer.getPixelsOnLayer();
+        List<List<IPixel>> pixels = layer.getPixelsOnLayer();
         for (int j = 0; j < this.canvasHeight; j++) {
           for (int k = 0; k < this.canvasWidth; k++) {
             int redComponent = pixels.get(j).get(k).getRedComponent();
@@ -269,7 +269,7 @@ public class CollageProjectModelImpl implements CollageProject {
     ILayer finalImage;
     if (filePath.endsWith(".ppm")) {
       finalImage = this.makeFinalImage(false);
-      ArrayList<ILayer> listLayer = new ArrayList<>();
+      List<ILayer> listLayer = new ArrayList<>();
       listLayer.add(finalImage);
 
       try {
@@ -287,8 +287,8 @@ public class CollageProjectModelImpl implements CollageProject {
 
     MacroCollageEffects macro;
 
-    ArrayList<ILayer> layers = new ArrayList<>(this.project);
-    ArrayList<ArrayList<IPixel>> finalImage = new ArrayList<>();
+    List<ILayer> layers = new ArrayList<>(this.project);
+    List<List<IPixel>> finalImage = new ArrayList<>();
     boolean isBackground = true;
 
     for (ILayer layer: layers) {
@@ -408,7 +408,7 @@ public class CollageProjectModelImpl implements CollageProject {
    * @param layerNum the number of the layer
    */
   private void addImageToLayerFromFile(Scanner sc, int layerNum) {
-    ArrayList<ArrayList<IPixel>> image = new ArrayList<>();
+    List<List<IPixel>> image = new ArrayList<>();
 
     for (int i = 0; i < this.canvasHeight; i++) {
       image.add(new ArrayList<>());
@@ -441,6 +441,9 @@ public class CollageProjectModelImpl implements CollageProject {
       case "darken-intensity":
       case "darken-luma":
       case "darken-value":
+      case "inversion-difference":
+      case "darken-multiply":
+      case "brighten-screen":
         break;
       default:
         throw new IllegalArgumentException("Filter doesn't exist");
@@ -461,7 +464,7 @@ public class CollageProjectModelImpl implements CollageProject {
   }
 
   @Override
-  public ArrayList<ILayer> getLayers() throws IllegalStateException {
+  public List<ILayer> getLayers() throws IllegalStateException {
     this.throwExceptionProjectNotMade();
     return new ArrayList<>(this.project);
   }

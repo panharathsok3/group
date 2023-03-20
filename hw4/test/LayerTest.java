@@ -1,3 +1,4 @@
+import java.util.List;
 import model.ILayer;
 import model.IPixel;
 import org.junit.Before;
@@ -113,7 +114,7 @@ public class LayerTest {
 
   @Test
   public void testAddImage() {
-    ArrayList<ArrayList<IPixel>> currentLayer = new ArrayList<>();
+    List<List<IPixel>> currentLayer = new ArrayList<>();
 
     for (int i = 0; i < 2; i++) {
       currentLayer.add(new ArrayList<>());
@@ -142,10 +143,10 @@ public class LayerTest {
   @Test
   public void testGetPixelsOnALayer() {
     this.init();
-    ArrayList<ArrayList<IPixel>> whiteLayer = this.layer1.getPixelsOnLayer();
+    List<List<IPixel>> whiteLayer = this.layer1.getPixelsOnLayer();
     Pixel whiteBackgroundPixel = new Pixel(255, 255, 255, 255);
 
-    for (ArrayList<IPixel> pixels : whiteLayer) {
+    for (List<IPixel> pixels : whiteLayer) {
       for (int j = 0; j < whiteLayer.get(0).size(); j++) {
         int redComponent = pixels.get(j).getRedComponent();
         int greenComponent = pixels.get(j).getGreenComponent();
@@ -159,10 +160,10 @@ public class LayerTest {
       }
     }
 
-    ArrayList<ArrayList<IPixel>> blankLayer = this.layer2.getPixelsOnLayer();
+    List<List<IPixel>> blankLayer = this.layer2.getPixelsOnLayer();
     Pixel whiteBlankPixel = new Pixel(255, 255, 255, 0);
 
-    for (ArrayList<IPixel> pixels : blankLayer) {
+    for (List<IPixel> pixels : blankLayer) {
       for (int j = 0; j < blankLayer.get(0).size(); j++) {
         int redComponent = pixels.get(j).getRedComponent();
         int greenComponent = pixels.get(j).getGreenComponent();
@@ -183,12 +184,12 @@ public class LayerTest {
   public void testBrightenLayerByIntensity() {
     this.init();
 
-    ArrayList<IPixel> lop = new ArrayList<>();
-    ArrayList<ArrayList<IPixel>> currentLayer = new ArrayList<>();
+    List<IPixel> lop = new ArrayList<>();
+    List<List<IPixel>> currentLayer = new ArrayList<>();
     currentLayer.add(lop);
     lop.add(new Pixel(21,50,68,100));
 
-    for (ArrayList<IPixel> pixels : currentLayer) {
+    for (List<IPixel> pixels : currentLayer) {
       for (int j = 0; j < currentLayer.get(0).size(); j++) {
 
         pixels.get(j).modifyComponentByBrightness("brighten-intensity", true);
@@ -206,12 +207,12 @@ public class LayerTest {
   public void testBrightenLayerByValue() {
     this.init();
 
-    ArrayList<IPixel> lop = new ArrayList<>();
-    ArrayList<ArrayList<IPixel>> currentLayer = new ArrayList<>();
+    List<IPixel> lop = new ArrayList<>();
+    List<List<IPixel>> currentLayer = new ArrayList<>();
     currentLayer.add(lop);
     lop.add(new Pixel(21,50,68,100));
 
-    for (ArrayList<IPixel> pixels : currentLayer) {
+    for (List<IPixel> pixels : currentLayer) {
       for (int j = 0; j < currentLayer.get(0).size(); j++) {
 
         pixels.get(j).modifyComponentByBrightness("brighten-value", true);
@@ -229,12 +230,12 @@ public class LayerTest {
   public void testBrightenLayerByLuma() {
     this.init();
 
-    ArrayList<IPixel> lop = new ArrayList<>();
-    ArrayList<ArrayList<IPixel>> currentLayer = new ArrayList<>();
+    List<IPixel> lop = new ArrayList<>();
+    List<List<IPixel>> currentLayer = new ArrayList<>();
     currentLayer.add(lop);
     lop.add(new Pixel(21,50,68,100));
 
-    for (ArrayList<IPixel> pixels : currentLayer) {
+    for (List<IPixel> pixels : currentLayer) {
       for (int j = 0; j < currentLayer.get(0).size(); j++) {
 
         pixels.get(j).modifyComponentByBrightness("brighten-luma", true);
@@ -252,12 +253,12 @@ public class LayerTest {
   public void testDarkenByValue() {
     this.init();
 
-    ArrayList<IPixel> lop = new ArrayList<>();
-    ArrayList<ArrayList<IPixel>> currentLayer = new ArrayList<>();
+    List<IPixel> lop = new ArrayList<>();
+    List<List<IPixel>> currentLayer = new ArrayList<>();
     currentLayer.add(lop);
     lop.add(new Pixel(1, 1, 1));
 
-    for (ArrayList<IPixel> pixels : currentLayer) {
+    for (List<IPixel> pixels : currentLayer) {
       for (int j = 0; j < currentLayer.get(0).size(); j++) {
 
         pixels.get(j).modifyComponentByBrightness("darken-value", false);
@@ -274,12 +275,12 @@ public class LayerTest {
   @Test
   public void testDarkenLayerByIntensity() {
     this.init();
-    ArrayList<IPixel> lop = new ArrayList<>();
-    ArrayList<ArrayList<IPixel>> currentLayer = new ArrayList<>();
+    List<IPixel> lop = new ArrayList<>();
+    List<List<IPixel>> currentLayer = new ArrayList<>();
     currentLayer.add(lop);
     lop.add(new Pixel(1, 1, 1));
 
-    for (ArrayList<IPixel> pixels : currentLayer) {
+    for (List<IPixel> pixels : currentLayer) {
       for (int j = 0; j < currentLayer.get(0).size(); j++) {
 
         pixels.get(j).modifyComponentByBrightness("darken-intensity", false);
@@ -297,13 +298,13 @@ public class LayerTest {
   public void testDarkenByLuma() {
     this.init();
 
-    ArrayList<IPixel> lop = new ArrayList<>();
-    ArrayList<ArrayList<IPixel>> currentLayer = new ArrayList<>();
+    List<IPixel> lop = new ArrayList<>();
+    List<List<IPixel>> currentLayer = new ArrayList<>();
 
     currentLayer.add(lop);
     lop.add(new Pixel(120,72,99));
 
-    for (ArrayList<IPixel> pixels : currentLayer) {
+    for (List<IPixel> pixels : currentLayer) {
       for (int j = 0; j < currentLayer.get(0).size(); j++) {
 
         pixels.get(j).modifyComponentByBrightness("darken-luma", false);
@@ -321,11 +322,11 @@ public class LayerTest {
   public void testModifyTransparencyWithWhiteBackGround() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> modifiedList =
+    List<List<IPixel>> modifiedList =
         this.layer1.modifyTransparency(this.layer5.getPixelsOnLayer(), true);
 
-    ArrayList<IPixel> lop = new ArrayList<>();
-    ArrayList<ArrayList<IPixel>> currentLayer = new ArrayList<>();
+    List<IPixel> lop = new ArrayList<>();
+    List<List<IPixel>> currentLayer = new ArrayList<>();
 
     currentLayer.add(lop);
     lop.add(new Pixel(255, 255, 255));
@@ -375,7 +376,7 @@ public class LayerTest {
   public void testModifyTransparencyWithOpaqueImageOnTop() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels = new ArrayList<>();
+    List<List<IPixel>> pixels = new ArrayList<>();
 
     for (int i = 0; i < 2; i++) {
       pixels.add(new ArrayList<>());
@@ -386,7 +387,7 @@ public class LayerTest {
 
     this.layer4.addImage(0, 0, pixels);
 
-    ArrayList<ArrayList<IPixel>> modifiedList =
+    List<List<IPixel>> modifiedList =
         this.layer4.modifyTransparency(this.layer6.getPixelsOnLayer(), false);
 
     for (int i = 0; i < 2; i++) {
@@ -404,7 +405,7 @@ public class LayerTest {
   public void testModifyTransparencyWithOpaqueImageOnTopAndTransparentBottom() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels1 = new ArrayList<>();
+    List<List<IPixel>> pixels1 = new ArrayList<>();
     for (int i = 0; i < 2; i++) {
       pixels1.add(new ArrayList<>());
       for (int j = 0; j < 2; j++) {
@@ -414,7 +415,7 @@ public class LayerTest {
 
     this.layer4.addImage(0, 0, pixels1);
 
-    ArrayList<ArrayList<IPixel>> pixels2 = new ArrayList<>();
+    List<List<IPixel>> pixels2 = new ArrayList<>();
 
     for (int i = 0; i < 2; i++) {
       pixels2.add(new ArrayList<>());
@@ -425,7 +426,7 @@ public class LayerTest {
 
     this.layer6.addImage(0, 0, pixels2);
 
-    ArrayList<ArrayList<IPixel>> modifiedList =
+    List<List<IPixel>> modifiedList =
         this.layer4.modifyTransparency(this.layer6.getPixelsOnLayer(), true);
 
     for (int i = 0; i < 2; i++) {
@@ -443,7 +444,7 @@ public class LayerTest {
   public void testModifyTransparencyWithDifferentTransparencies() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixels1 = new ArrayList<>();
+    List<List<IPixel>> pixels1 = new ArrayList<>();
 
     for (int i = 0; i < 2; i++) {
       pixels1.add(new ArrayList<>());
@@ -454,7 +455,7 @@ public class LayerTest {
 
     this.layer4.addImage(0, 0, pixels1);
 
-    ArrayList<ArrayList<IPixel>> pixels2 = new ArrayList<>();
+    List<List<IPixel>> pixels2 = new ArrayList<>();
 
     for (int i = 0; i < 2; i++) {
       pixels2.add(new ArrayList<>());
@@ -465,7 +466,7 @@ public class LayerTest {
 
     this.layer6.addImage(0, 0, pixels2);
 
-    ArrayList<ArrayList<IPixel>> modifiedList =
+    List<List<IPixel>> modifiedList =
         this.layer4.modifyTransparency(this.layer6.getPixelsOnLayer(), true);
 
     for (int i = 0; i < 2; i++) {

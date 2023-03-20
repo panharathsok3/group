@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,7 +61,7 @@ public interface CollageProject extends CollageProjectModel {
    * @return a copy of the layers on the collage
    * @throws IllegalStateException if the project has not been made yet
    */
-  ArrayList<ILayer> getLayers() throws IllegalStateException;
+  List<ILayer> getLayers() throws IllegalStateException;
 
   /**
    * Returns the name of this project.

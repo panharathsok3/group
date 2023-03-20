@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents the interface for a single layer that can hold images and modify it.
@@ -11,7 +12,7 @@ public interface ILayer {
    * Returns a copy of the pixels on this layer in a 2D array.
    * @return a copy of the pixels on this layer in a 2D array
    */
-  ArrayList<ArrayList<IPixel>> getPixelsOnLayer();
+  List<List<IPixel>> getPixelsOnLayer();
 
   /**
    * Returns the name of this layer.
@@ -30,7 +31,7 @@ public interface ILayer {
    */
 
 
-  void addImage(int xPos, int yPos, ArrayList<ArrayList<IPixel>> image);
+  void addImage(int xPos, int yPos, List<List<IPixel>> image);
 
   /**
    * Returns a 2D ArrayList of Pixels that flattens the previous image with the current image.
@@ -39,7 +40,7 @@ public interface ILayer {
    * @return a 2D ArrayList of Pixels that flattens the previous image with the current image
    * @throws IllegalArgumentException if the given arguments is null
    */
-  ArrayList<ArrayList<IPixel>> modifyTransparency(ArrayList<ArrayList<IPixel>> image,
+  List<List<IPixel>> modifyTransparency(List<List<IPixel>> image,
                                                  boolean hasAlpha);
 
 

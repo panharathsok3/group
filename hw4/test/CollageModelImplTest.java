@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import model.ILayer;
@@ -111,7 +112,7 @@ public class CollageModelImplTest {
     int height = sc.nextInt();
     int maxValue = sc.nextInt();
 
-    ArrayList<ArrayList<Pixel>> pixelsOnLayers = new ArrayList<>();
+    List<List<Pixel>> pixelsOnLayers = new ArrayList<>();
 
     for (int i = 0; i < height; i++) {
       pixelsOnLayers.add(new ArrayList<>());
@@ -323,7 +324,7 @@ public class CollageModelImplTest {
 
     //SET FILTER
     this.collage2.setFilter("L2", "darken-intensity");
-    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage2.getLayers().get(2)
+    List<List<IPixel>> pixelsOnLayerBefore = this.collage2.getLayers().get(2)
         .getPixelsOnLayer();
 
     assertEquals("darken-intensity", this.collage2.getFiltersOnProject().get("L2"));
@@ -646,7 +647,7 @@ public class CollageModelImplTest {
     int height = sc.nextInt();
     int maxValue = sc.nextInt();
 
-    ArrayList<ArrayList<Pixel>> pixelsOnImage = new ArrayList<>();
+    List<List<Pixel>> pixelsOnImage = new ArrayList<>();
 
     for (int i = 0; i < height; i++) {
       pixelsOnImage.add(new ArrayList<>());
@@ -969,7 +970,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.setFilter("L1", "normal");
 
-    ArrayList<ArrayList<IPixel>> pixelsOnLayer = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayer = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
     assertEquals("normal", this.collage1.getFiltersOnProject().get("L1"));
 
@@ -990,7 +991,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.setFilter("L1", "red-component");
 
-    ArrayList<ArrayList<IPixel>> pixelsOnLayer = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayer = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     assertEquals("red-component", this.collage1.getFiltersOnProject().get("L1"));
@@ -1012,7 +1013,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.setFilter("L1", "green-component");
 
-    ArrayList<ArrayList<IPixel>> pixelsOnLayer = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayer = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     assertEquals("green-component", this.collage1.getFiltersOnProject().get("L1"));
@@ -1034,7 +1035,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.setFilter("L1", "blue-component");
 
-    ArrayList<ArrayList<IPixel>> pixelsOnLayer = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayer = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
     assertEquals("blue-component", this.collage1.getFiltersOnProject().get("L1"));
 
@@ -1055,7 +1056,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
@@ -1068,7 +1069,7 @@ public class CollageModelImplTest {
     }
 
     this.collage1.setFilter("L1", "brighten-value");
-    ArrayList<ArrayList<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
@@ -1088,7 +1089,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
@@ -1101,7 +1102,7 @@ public class CollageModelImplTest {
     }
 
     this.collage1.setFilter("L1", "brighten-luma");
-    ArrayList<ArrayList<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     assertEquals("brighten-luma", this.collage1.getFiltersOnProject().get("L1"));
@@ -1122,7 +1123,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
@@ -1135,7 +1136,7 @@ public class CollageModelImplTest {
     }
 
     this.collage1.setFilter("L1", "brighten-intensity");
-    ArrayList<ArrayList<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     assertEquals("brighten-intensity", this.collage1.getFiltersOnProject().get("L1"));
@@ -1156,7 +1157,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
@@ -1169,7 +1170,7 @@ public class CollageModelImplTest {
     }
 
     this.collage1.setFilter("L1", "darken-value");
-    ArrayList<ArrayList<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
@@ -1189,7 +1190,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
@@ -1202,7 +1203,7 @@ public class CollageModelImplTest {
     }
 
     this.collage1.setFilter("L1", "darken-luma");
-    ArrayList<ArrayList<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     assertEquals("darken-luma", this.collage1.getFiltersOnProject().get("L1"));
@@ -1224,7 +1225,7 @@ public class CollageModelImplTest {
     this.collage1.addLayer("L1");
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    ArrayList<ArrayList<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     for (int i = 0; i < 2; i ++) {
@@ -1237,7 +1238,7 @@ public class CollageModelImplTest {
     }
 
     this.collage1.setFilter("L1", "darken-intensity");
-    ArrayList<ArrayList<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
+    List<List<IPixel>> pixelsOnLayerAfter = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
 
     assertEquals("darken-intensity", this.collage1.getFiltersOnProject().get("L1"));
@@ -1300,7 +1301,7 @@ public class CollageModelImplTest {
   public void testGetLayers() {
     this.init();
     this.collage1.newProject("C1", 1, 1);
-    ArrayList<ILayer> list = this.collage1.getLayers();
+    List<ILayer> list = this.collage1.getLayers();
     assertEquals(new Layer("Background", 1, 1, 0).getName(),
         list.get(0).getName());
 
@@ -1469,7 +1470,7 @@ public class CollageModelImplTest {
     this.collage2.setFilter("L1", "darken-intensity");
     this.collage2.loadProject("res/project/saveProjectAndLoadWhileWorking");
 
-    ArrayList<ILayer> backgroundLayer = this.collage2.getLayers();
+    List<ILayer> backgroundLayer = this.collage2.getLayers();
     assertEquals(1, backgroundLayer.size());
     assertEquals("Background", backgroundLayer.get(0).getName());
 
@@ -1830,7 +1831,7 @@ public class CollageModelImplTest {
     this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
     ILayer layer = this.collage1.makeFinalImage(false);
 
-    ArrayList<ArrayList<IPixel>> pixelsOnLayer = layer.getPixelsOnLayer();
+    List<List<IPixel>> pixelsOnLayer = layer.getPixelsOnLayer();
 
     assertEquals(173, pixelsOnLayer.get(0).get(0).getRedComponent());
     assertEquals(179, pixelsOnLayer.get(0).get(0).getGreenComponent());
@@ -1857,7 +1858,7 @@ public class CollageModelImplTest {
     this.collage1.setFilter("L1", "darken-intensity");
     ILayer layer = this.collage1.makeFinalImage(false);
 
-    ArrayList<ArrayList<IPixel>> pixelsOnLayer = layer.getPixelsOnLayer();
+    List<List<IPixel>> pixelsOnLayer = layer.getPixelsOnLayer();
 
     assertEquals(6, pixelsOnLayer.get(0).get(0).getRedComponent());
     assertEquals(12, pixelsOnLayer.get(0).get(0).getGreenComponent());

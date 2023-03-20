@@ -1,3 +1,4 @@
+import java.util.List;
 import model.ILayer;
 import model.IPixel;
 import model.Pixel;
@@ -75,12 +76,25 @@ public class BulkAssignMacroTest {
 
   }
 
+  @Test
+  public void testInvalidExecuteMarco() {
+    this.init();
+
+    MacroCollageEffects macro = new BulkAssignFilter(10, 15, "red-component");
+    try {
+      macro.executeMacro(null);
+      fail("Arguments can't be null");
+    } catch (IllegalArgumentException e) {
+      // do nothing
+    }
+  }
+
 
   @Test
   public void testExecutesMacro() {
     this.init();
 
-    ArrayList<ArrayList<IPixel>> pixelsOnCurrentLayer = new ArrayList<>();
+    List<List<IPixel>> pixelsOnCurrentLayer = new ArrayList<>();
 
 
     for (int i = 0; i < 10; i++) {
@@ -96,7 +110,7 @@ public class BulkAssignMacroTest {
     MacroCollageEffects macro = new BulkAssignFilter(10, 15, "red-component");
     macro.executeMacro(this.layer2);
 
-    for (ArrayList<IPixel> lop1 : this.layer2.getPixelsOnLayer()) {
+    for (List<IPixel> lop1 : this.layer2.getPixelsOnLayer()) {
       for (IPixel p : lop1) {
         assertEquals(21, p.getRedComponent());
         assertEquals(0, p.getGreenComponent());
@@ -111,7 +125,7 @@ public class BulkAssignMacroTest {
   @Test
   public void testBulkExecutesRedComponent() {
     this.init();
-    ArrayList<ArrayList<IPixel>> pixelsOnCurrentLayer = new ArrayList<>();
+    List<List<IPixel>> pixelsOnCurrentLayer = new ArrayList<>();
 
 
     for (int i = 0; i < 10; i++) {
@@ -128,7 +142,7 @@ public class BulkAssignMacroTest {
 
     macroCollageEffects.executeMacro(this.layer2);
 
-    for (ArrayList<IPixel> lop1 : this.layer2.getPixelsOnLayer()) {
+    for (List<IPixel> lop1 : this.layer2.getPixelsOnLayer()) {
       for (IPixel p : lop1) {
         assertEquals(21, p.getRedComponent());
         assertEquals(0, p.getGreenComponent());
@@ -141,7 +155,7 @@ public class BulkAssignMacroTest {
   @Test
   public void testBulkExecutesGreenComponent() {
     this.init();
-    ArrayList<ArrayList<IPixel>> pixelsOnCurrentLayer = new ArrayList<>();
+    List<List<IPixel>> pixelsOnCurrentLayer = new ArrayList<>();
 
 
     for (int i = 0; i < 2; i++) {
@@ -158,7 +172,7 @@ public class BulkAssignMacroTest {
 
     macroCollageEffects.executeMacro(this.layer3);
 
-    for (ArrayList<IPixel> lop1 : this.layer3.getPixelsOnLayer()) {
+    for (List<IPixel> lop1 : this.layer3.getPixelsOnLayer()) {
       for (IPixel p : lop1) {
         assertEquals(0, p.getRedComponent());
         assertEquals(11, p.getGreenComponent());
@@ -171,7 +185,7 @@ public class BulkAssignMacroTest {
   @Test
   public void testBulkExecutesBlueComponent() {
     this.init();
-    ArrayList<ArrayList<IPixel>> pixelsOnCurrentLayer = new ArrayList<>();
+    List<List<IPixel>> pixelsOnCurrentLayer = new ArrayList<>();
 
 
     for (int i = 0; i < 100; i++) {
@@ -188,7 +202,7 @@ public class BulkAssignMacroTest {
 
     macroCollageEffects.executeMacro(this.layer4);
 
-    for (ArrayList<IPixel> lop1 : this.layer4.getPixelsOnLayer()) {
+    for (List<IPixel> lop1 : this.layer4.getPixelsOnLayer()) {
       for (IPixel p : lop1) {
         assertEquals(0, p.getRedComponent());
         assertEquals(0, p.getGreenComponent());
