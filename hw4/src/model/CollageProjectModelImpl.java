@@ -15,7 +15,6 @@ import model.effects.BrightenDarkenMacro;
 import model.effects.BulkAssignFilter;
 import model.effects.ChangeTransparencyMacro;
 import model.effects.DarkenMultiplyBrightenScreenMacro;
-import model.effects.DarkenMultiplyMacro;
 import model.effects.InversionDifferenceMacro;
 import model.effects.MacroCollageEffects;
 
