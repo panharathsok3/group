@@ -378,21 +378,27 @@ public class CollageProjectModelImpl implements CollageProject {
     }
 
     this.newProject(projectName, canvasHeight, canvasWidth);
-    sc.next(); // max color
-    sc.next(); // background
-    sc.next(); // normal
 
-    int layerNum = 0;
-    this.addImageToLayerFromFile(sc, layerNum);
+    try {
+      sc.next(); // max color
+      sc.next(); // background
+      sc.next(); // normal
 
-    while (sc.hasNext()) {
-      String currentLayer = sc.next();
-      String filterType = sc.next();
-      this.addLayer(currentLayer);
-      this.setFilter(currentLayer, filterType);
-
-      layerNum++;
+      int layerNum = 0;
       this.addImageToLayerFromFile(sc, layerNum);
+
+      while (sc.hasNext()) {
+        String currentLayer = sc.next();
+        String filterType = sc.next();
+        this.addLayer(currentLayer);
+        this.setFilter(currentLayer, filterType);
+
+        layerNum++;
+        this.addImageToLayerFromFile(sc, layerNum);
+      }
+    } catch (IllegalStateException e) {
+      throw new IllegalStateException("Not enough information to add/create a new layer to add to "
+          + "the collage project");
     }
   }
 
@@ -424,17 +430,6 @@ public class CollageProjectModelImpl implements CollageProject {
     }
     boolean layerFound = false;
 
-    for (ILayer layer : this.project) {
-      if (layerName.equals(layer.getName())) {
-        layerFound = true;
-        this.layerFilter.put(layerName, filterOption);
-      }
-    }
-
-    if (!layerFound) {
-      throw new IllegalArgumentException("Layer not found");
-    }
-
     switch (filterOption) {
       case "normal":
       case "red-component":
@@ -450,6 +445,19 @@ public class CollageProjectModelImpl implements CollageProject {
       default:
         throw new IllegalArgumentException("Filter doesn't exist");
     }
+
+    for (ILayer layer : this.project) {
+      if (layerName.equals(layer.getName())) {
+        layerFound = true;
+        this.layerFilter.put(layerName, filterOption);
+      }
+    }
+
+    if (!layerFound) {
+      throw new IllegalArgumentException("Layer not found");
+    }
+
+
   }
 
   @Override

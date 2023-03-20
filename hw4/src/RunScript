@@ -1,0 +1,21 @@
+  new-project Project1 200 200
+  add-layer layer1
+  add-image-to-layer layer1 res/Images/dog.ppm 0 0
+  set-filter layer1 blue-component
+  save-image res/Images/newBlueDog2.ppm
+  add-layer layer2
+  add-image-to-layer layer2 res/Images/dog.ppm 100 50
+  set-filter layer2 darken-luma
+  save-image res/Images/newDarkenLumaDog2.ppm
+  save-project res/Project1Saved PPM
+  quit
+
+
+
+
+
+
+
+
+
+

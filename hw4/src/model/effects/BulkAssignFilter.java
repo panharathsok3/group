@@ -30,7 +30,11 @@ public class BulkAssignFilter implements MacroCollageEffects {
   }
 
   @Override
-  public void executeMacro(ILayer layer) {
+  public void executeMacro(ILayer layer) throws IllegalArgumentException {
+    if (layer == null) {
+      throw new IllegalArgumentException("Arguments can't be null");
+    }
+
     for (int i = 0; i < this.row; i++) {
       for (int j = 0; j < this.col; j++) {
         layer.getPixelsOnLayer().get(i).get(j).setFilter(this.optionFilter);
