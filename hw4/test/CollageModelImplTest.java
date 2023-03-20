@@ -22,11 +22,6 @@ import static org.junit.Assert.fail;
  * This is a test class for CollageModelImpl.
  */
 public class CollageModelImplTest {
-  IPixel pixel1;
-  IPixel pixel2;
-  IPixel pixel3;
-  IPixel pixel4;
-  IPixel pixel5;
   ILayer layer1;
   ILayer layer2;
   ILayer layer3;
@@ -39,11 +34,6 @@ public class CollageModelImplTest {
    * Initializes the values.
    */
   private void init() {
-    this.pixel1 = new Pixel(0, 0, 0, 1);
-    this.pixel2 = new Pixel(120, 72, 99);
-    this.pixel3 = new Pixel(21, 50, 68, 100);
-    this.pixel4 = new Pixel(12, 11, 10);
-    this.pixel5 = new Pixel(1, 1, 1);
 
     this.layer1 = new Layer("L1", 10, 10, 0);
     this.layer2 = new Layer("L2", 10, 10, 0);

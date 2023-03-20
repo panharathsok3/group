@@ -17,11 +17,6 @@ import static org.junit.Assert.fail;
  * This is a test class for BulkAssignMacro.
  */
 public class BulkAssignMacroTest {
-  IPixel pixel1;
-  IPixel pixel2;
-  IPixel pixel3;
-  IPixel pixel4;
-  IPixel pixel5;
   ILayer layer1;
   ILayer layer2;
   ILayer layer3;
@@ -31,12 +26,6 @@ public class BulkAssignMacroTest {
    * Initializes the values.
    */
   private void init() {
-    this.pixel1 = new Pixel(0, 0, 0, 1);
-    this.pixel2 = new Pixel(120, 72, 99);
-    this.pixel3 = new Pixel(21, 50, 68, 100);
-    this.pixel4 = new Pixel(12, 11, 10);
-    this.pixel5 = new Pixel(1, 1, 1);
-
     this.layer1 = new Layer("L1", 10, 20, 255);
     this.layer2 = new Layer("L2", 10, 15, 0);
     this.layer3 = new Layer("L3", 2, 2, 255);
@@ -100,7 +89,7 @@ public class BulkAssignMacroTest {
     for (int i = 0; i < 10; i++) {
       pixelsOnCurrentLayer.add(new ArrayList<>());
       for (int j = 0; j < 15; j++) {
-        pixelsOnCurrentLayer.get(i).add(this.pixel3);
+        pixelsOnCurrentLayer.get(i).add(new Pixel(21, 50, 68, 100));
       }
     }
 
@@ -131,7 +120,7 @@ public class BulkAssignMacroTest {
     for (int i = 0; i < 10; i++) {
       pixelsOnCurrentLayer.add(new ArrayList<>());
       for (int j = 0; j < 15; j++) {
-        pixelsOnCurrentLayer.get(i).add(this.pixel3);
+        pixelsOnCurrentLayer.get(i).add(new Pixel(21, 50, 68, 100));
       }
     }
 
@@ -161,7 +150,7 @@ public class BulkAssignMacroTest {
     for (int i = 0; i < 2; i++) {
       pixelsOnCurrentLayer.add(new ArrayList<>());
       for (int j = 0; j < 2; j++) {
-        pixelsOnCurrentLayer.get(i).add(this.pixel4);
+        pixelsOnCurrentLayer.get(i).add(new Pixel(12, 11, 10));
       }
     }
 
@@ -191,7 +180,7 @@ public class BulkAssignMacroTest {
     for (int i = 0; i < 100; i++) {
       pixelsOnCurrentLayer.add(new ArrayList<>());
       for (int j = 0; j < 100; j++) {
-        pixelsOnCurrentLayer.get(i).add(this.pixel5);
+        pixelsOnCurrentLayer.get(i).add(new Pixel(1, 1, 1));
       }
     }
 

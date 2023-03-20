@@ -1,6 +1,7 @@
 package model.effects;
 
 import model.ILayer;
+import model.Pixel;
 
 /**
  * A command that assigns a specified filter to a layer.
@@ -35,10 +36,43 @@ public class BulkAssignFilter implements MacroCollageEffects {
       throw new IllegalArgumentException("Arguments can't be null");
     }
 
-    for (int i = 0; i < this.row; i++) {
-      for (int j = 0; j < this.col; j++) {
-        layer.getPixelsOnLayer().get(i).get(j).setFilter(this.optionFilter);
-      }
+    switch (optionFilter) {
+      case "red-component":
+        for (int i = 0; i < this.row; i++) {
+          for (int j = 0; j < this.col; j++) {
+            int red = layer.getPixelsOnLayer().get(i).get(j).getRedComponent();
+            int alpha = layer.getPixelsOnLayer().get(i).get(j).getAlphaComponent();
+            layer.getPixelsOnLayer().get(i).set(j, new Pixel(red, 0, 0, alpha));
+          }
+        }
+        break;
+      case "green-component":
+        for (int i = 0; i < this.row; i++) {
+          for (int j = 0; j < this.col; j++) {
+            int green = layer.getPixelsOnLayer().get(i).get(j).getGreenComponent();
+            int alpha = layer.getPixelsOnLayer().get(i).get(j).getAlphaComponent();
+            layer.getPixelsOnLayer().get(i).set(j, new Pixel(0, green, 0, alpha));
+          }
+        }
+        break;
+      case "blue-component":
+        for (int i = 0; i < this.row; i++) {
+          for (int j = 0; j < this.col; j++) {
+            int blue = layer.getPixelsOnLayer().get(i).get(j).getBlueComponent();
+            int alpha = layer.getPixelsOnLayer().get(i).get(j).getAlphaComponent();
+            layer.getPixelsOnLayer().get(i).set(j, new Pixel(0, 0, blue, alpha));
+          }
+        }
+        break;
+      default:
+        throw new IllegalArgumentException("the option must be red, green, or blue");
     }
+
+//    for (int i = 0; i < this.row; i++) {
+//      for (int j = 0; j < this.col; j++) {
+//
+//        layer.getPixelsOnLayer().get(i).get(j).setFilter(this.optionFilter);
+//      }
+//    }
   }
 }

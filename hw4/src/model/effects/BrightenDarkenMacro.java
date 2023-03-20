@@ -1,6 +1,7 @@
 package model.effects;
 
 import model.ILayer;
+import model.Pixel;
 
 /**
  * This class handles the operation to brighten an image
@@ -42,18 +43,63 @@ public class BrightenDarkenMacro implements MacroCollageEffects {
       throw new IllegalArgumentException("Arguments can't be null");
     }
 
-    if (this.brighten) {
-      for (int i = 0; i < this.row; i++) {
-        for (int j = 0; j < this.col; j++) {
-          layer.getPixelsOnLayer().get(i).get(j).modifyComponentByBrightness(this.optionFilter,
-              true);
+    int brightness;
+    for (int i = 0; i < this.row; i++) {
+      for (int j = 0; j < this.col; j++) {
+        switch (this.optionFilter) {
+          case "brighten-luma":
+          case "darken-luma":
+            brightness = layer.getPixelsOnLayer().get(i).get(j).luma();
+            break;
+          case "brighten-value":
+          case "darken-value":
+            brightness = layer.getPixelsOnLayer().get(i).get(j).value();
+            break;
+          case "brighten-intensity":
+          case "darken-intensity":
+            brightness = layer.getPixelsOnLayer().get(i).get(j).intensity();
+            break;
+          default:
+            throw new IllegalArgumentException("The optionFilter must be brighten-luma, "
+                + "brighten-value, or brighten-intensity");
         }
-      }
-    } else {
-      for (int i = 0; i < this.row; i++) {
-        for (int j = 0; j < this.col; j++) {
-          layer.getPixelsOnLayer().get(i).get(j).modifyComponentByBrightness(this.optionFilter,
-              false);
+
+        int red = layer.getPixelsOnLayer().get(i).get(j).getRedComponent();
+        int green = layer.getPixelsOnLayer().get(i).get(j).getGreenComponent();
+        int blue = layer.getPixelsOnLayer().get(i).get(j).getBlueComponent();
+        int alpha = layer.getPixelsOnLayer().get(i).get(j).getAlphaComponent();
+
+        if (this.brighten) {
+          red += brightness;
+          green += brightness;
+          blue += brightness;
+
+          if (red > 255) {
+            red = 255;
+          }
+          if (green > 255) {
+            green = 255;
+          }
+          if (blue > 255) {
+            blue = 255;
+          }
+
+          layer.getPixelsOnLayer().get(i).set(j, new Pixel(red, green, blue, alpha));
+        } else {
+          red -= brightness;
+          green -= brightness;
+          blue -= brightness;
+
+          if (red < 0) {
+            red = 0;
+          }
+          if (green < 0) {
+            green = 0;
+          }
+          if (blue < 0) {
+            blue = 0;
+          }
+          layer.getPixelsOnLayer().get(i).set(j, new Pixel(red, green, blue, alpha));
         }
       }
     }

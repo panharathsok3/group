@@ -56,24 +56,24 @@ public interface IPixel {
   int luma();
 
 
-  /**
-   * Modifies the component by adding or subtracting it by a given value.
-   * @param brightnessOptions a string of values that can be applied to the component
-   * @param add               true if and only if the value is being added to and false otherwise
-   *                          which makes it subtract instead
-   * @throws IllegalArgumentException if the given component is null
-   *                                  or if the brightnessOptions is not brighten-luma,
-   *                                  brighten-value, or brighten-intensity
-   */
-  void modifyComponentByBrightness(String brightnessOptions, boolean add);
-
-  /**
-   * Filters for a specific color component by setting the other 2 to zero.
-   * @param option the color to filter to
-   * @throws IllegalArgumentException when the option is not red-component, green-component,
-   *                                  or blue-component or if the option is null
-   */
-  void setFilter(String option);
+//  /**
+//   * Modifies the component by adding or subtracting it by a given value.
+//   * @param brightnessOptions a string of values that can be applied to the component
+//   * @param add               true if and only if the value is being added to and false otherwise
+//   *                          which makes it subtract instead
+//   * @throws IllegalArgumentException if the given component is null
+//   *                                  or if the brightnessOptions is not brighten-luma,
+//   *                                  brighten-value, or brighten-intensity
+//   */
+//  void modifyComponentByBrightness(String brightnessOptions, boolean add);
+//
+//  /**
+//   * Filters for a specific color component by setting the other 2 to zero.
+//   * @param option the color to filter to
+//   * @throws IllegalArgumentException when the option is not red-component, green-component,
+//   *                                  or blue-component or if the option is null
+//   */
+//  void setFilter(String option);
 
 
   /**

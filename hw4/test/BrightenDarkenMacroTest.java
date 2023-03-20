@@ -19,15 +19,6 @@ import static org.junit.Assert.fail;
  * A test class for BrightenDarkenMacro.
  */
 public class BrightenDarkenMacroTest {
-
-  IPixel pixel1;
-  IPixel pixel2;
-  IPixel pixel3;
-  IPixel pixel4;
-  IPixel pixel5;
-  IPixel pixel6;
-  IPixel pixel7;
-
   ILayer layer1;
   ILayer layer2;
   ILayer layer3;
@@ -37,23 +28,12 @@ public class BrightenDarkenMacroTest {
 
   @Before
   public void init() {
-    this.pixel1 = new Pixel(0, 0, 0, 1);
-    this.pixel2 = new Pixel(120, 72, 99);
-    this.pixel3 = new Pixel(21, 50, 68, 100);
-    this.pixel4 = new Pixel(12, 11, 10, 21);
-    this.pixel5 = new Pixel(1, 1, 1);
-    this.pixel6 = new Pixel(33, 55, 99);
-    this.pixel7 = new Pixel(4, 4, 4);
-
-
     this.layer1 = new Layer("L1", 15, 15, 255);
     this.layer2 = new Layer("L2", 6, 6, 0);
     this.layer3 = new Layer("L3", 2, 2, 255);
     this.layer4 = new Layer("L4", 20, 20, 100);
     this.layer5 = new Layer("L5", 100, 100, 70);
     this.layer6 = new Layer("L6", 1, 1, 255);
-
-
   }
 
   @Test
@@ -109,14 +89,13 @@ public class BrightenDarkenMacroTest {
   public void testBrightenByLuma() {
     this.init();
 
-    IPixel pixel = new Pixel(5, 5, 5);
     List<List<IPixel>> pixels = new ArrayList<>();
 
 
     for (int i = 0; i < 2; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 2; j++) {
-        pixels.get(i).add(pixel);
+        pixels.get(i).add(new Pixel(5, 5, 5));
       }
     }
 
@@ -128,9 +107,9 @@ public class BrightenDarkenMacroTest {
 
     for (List<IPixel> list : this.layer3.getPixelsOnLayer()) {
       for (IPixel p : list) {
-        assertEquals(80, p.getRedComponent());
-        assertEquals(80, p.getGreenComponent());
-        assertEquals(80, p.getBlueComponent());
+        assertEquals(10, p.getRedComponent());
+        assertEquals(10, p.getGreenComponent());
+        assertEquals(10, p.getBlueComponent());
         assertEquals(255, p.getAlphaComponent());
       }
     }
@@ -146,7 +125,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 6; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 6; j++) {
-        pixels.get(i).add(this.pixel1);
+        pixels.get(i).add(new Pixel(0, 0, 0, 1));
       }
     }
 
@@ -176,7 +155,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 20; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 20; j++) {
-        pixels.get(i).add(this.pixel2);
+        pixels.get(i).add(new Pixel(120, 72, 99));
       }
     }
 
@@ -188,9 +167,9 @@ public class BrightenDarkenMacroTest {
 
     for (List<IPixel> list : this.layer4.getPixelsOnLayer()) {
       for (IPixel p : list) {
-        assertEquals(255, p.getRedComponent());
-        assertEquals(255, p.getGreenComponent());
-        assertEquals(255, p.getBlueComponent());
+        assertEquals(205, p.getRedComponent());
+        assertEquals(157, p.getGreenComponent());
+        assertEquals(184, p.getBlueComponent());
         assertEquals(255, p.getAlphaComponent());
       }
     }
@@ -205,7 +184,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 1; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 1; j++) {
-        pixels.get(i).add(this.pixel7);
+        pixels.get(i).add(new Pixel(4, 4, 4));
       }
     }
 
@@ -236,7 +215,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 15; i++) {
       pixelsOnCurrentLayer.add(new ArrayList<>());
       for (int j = 0; j < 15; j++) {
-        pixelsOnCurrentLayer.get(i).add(this.pixel4);
+        pixelsOnCurrentLayer.get(i).add(new Pixel(12, 11, 10, 21));
       }
     }
 
@@ -249,9 +228,9 @@ public class BrightenDarkenMacroTest {
 
     for (List<IPixel> lop1 : this.layer1.getPixelsOnLayer()) {
       for (IPixel p : lop1) {
-        assertEquals(255, p.getRedComponent());
-        assertEquals(255, p.getGreenComponent());
-        assertEquals(255, p.getBlueComponent());
+        assertEquals(23, p.getRedComponent());
+        assertEquals(22, p.getGreenComponent());
+        assertEquals(21, p.getBlueComponent());
         assertEquals(21, p.getAlphaComponent());
       }
     }
@@ -267,7 +246,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 6; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 6; j++) {
-        pixels.get(i).add(this.pixel1);
+        pixels.get(i).add(new Pixel(0, 0, 0, 1));
       }
     }
 
@@ -297,7 +276,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 20; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 20; j++) {
-        pixels.get(i).add(this.pixel2);
+        pixels.get(i).add(new Pixel(120, 72, 99));
       }
     }
 
@@ -309,9 +288,9 @@ public class BrightenDarkenMacroTest {
 
     for (List<IPixel> list : this.layer4.getPixelsOnLayer()) {
       for (IPixel p : list) {
-        assertEquals(255, p.getRedComponent());
-        assertEquals(255, p.getGreenComponent());
-        assertEquals(255, p.getBlueComponent());
+        assertEquals(217, p.getRedComponent());
+        assertEquals(169, p.getGreenComponent());
+        assertEquals(196, p.getBlueComponent());
         assertEquals(255, p.getAlphaComponent());
       }
     }
@@ -326,7 +305,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 1; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 1; j++) {
-        pixels.get(i).add(this.pixel7);
+        pixels.get(i).add(new Pixel(4, 4, 4));
       }
     }
 
@@ -356,7 +335,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 6; i++) {
       pixelsOnCurrentLayer.add(new ArrayList<>());
       for (int j = 0; j < 6; j++) {
-        pixelsOnCurrentLayer.get(i).add(this.pixel3);
+        pixelsOnCurrentLayer.get(i).add(new Pixel(21, 50, 68, 100));
       }
     }
 
@@ -369,9 +348,9 @@ public class BrightenDarkenMacroTest {
 
     for (List<IPixel> lop1 : this.layer2.getPixelsOnLayer()) {
       for (IPixel p : lop1) {
-        assertEquals(255, p.getRedComponent());
-        assertEquals(255, p.getGreenComponent());
-        assertEquals(255, p.getBlueComponent());
+        assertEquals(89, p.getRedComponent());
+        assertEquals(118, p.getGreenComponent());
+        assertEquals(136, p.getBlueComponent());
         assertEquals(100, p.getAlphaComponent());
       }
     }
@@ -387,7 +366,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 6; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 6; j++) {
-        pixels.get(i).add(this.pixel1);
+        pixels.get(i).add(new Pixel(0, 0, 0, 1));
       }
     }
 
@@ -417,7 +396,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 20; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 20; j++) {
-        pixels.get(i).add(this.pixel2);
+        pixels.get(i).add(new Pixel(120, 72, 99));
       }
     }
 
@@ -429,9 +408,9 @@ public class BrightenDarkenMacroTest {
 
     for (List<IPixel> list : this.layer4.getPixelsOnLayer()) {
       for (IPixel p : list) {
-        assertEquals(255, p.getRedComponent());
-        assertEquals(255, p.getGreenComponent());
-        assertEquals(255, p.getBlueComponent());
+        assertEquals(240, p.getRedComponent());
+        assertEquals(192, p.getGreenComponent());
+        assertEquals(219, p.getBlueComponent());
         assertEquals(255, p.getAlphaComponent());
       }
     }
@@ -446,7 +425,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 1; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 1; j++) {
-        pixels.get(i).add(this.pixel7);
+        pixels.get(i).add(new Pixel(4, 4, 4));
       }
     }
 
@@ -477,7 +456,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 2; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 2; j++) {
-        pixels.get(i).add(this.pixel6);
+        pixels.get(i).add(new Pixel(33, 55, 99));
       }
     }
 
@@ -490,8 +469,8 @@ public class BrightenDarkenMacroTest {
     for (List<IPixel> list : this.layer3.getPixelsOnLayer()) {
       for (IPixel p : list) {
         assertEquals(0, p.getRedComponent());
-        assertEquals(0, p.getGreenComponent());
-        assertEquals(35, p.getBlueComponent());
+        assertEquals(1, p.getGreenComponent());
+        assertEquals(45, p.getBlueComponent());
         assertEquals(255, p.getAlphaComponent());
       }
     }
@@ -507,7 +486,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 100; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 100; j++) {
-        pixels.get(i).add(this.pixel4);
+        pixels.get(i).add(new Pixel(12, 11, 10, 21));
       }
     }
 
@@ -537,7 +516,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 15; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 15; j++) {
-        pixels.get(i).add(this.pixel4);
+        pixels.get(i).add(new Pixel(12, 11, 10, 21));
       }
     }
 
@@ -568,7 +547,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 20; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 20; j++) {
-        pixels.get(i).add(this.pixel2);
+        pixels.get(i).add(new Pixel(120, 72, 99));
       }
     }
 
@@ -597,7 +576,7 @@ public class BrightenDarkenMacroTest {
     for (int i = 0; i < 2; i++) {
       pixels.add(new ArrayList<>());
       for (int j = 0; j < 2; j++) {
-        pixels.get(i).add(this.pixel6);
+        pixels.get(i).add(new Pixel(33, 55, 99));
       }
     }
 

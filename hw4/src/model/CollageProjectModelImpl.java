@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Scanner;
 import model.effects.BrightenDarkenMacro;
 import model.effects.BulkAssignFilter;
+import model.effects.ChangeTransparencyMacro;
+import model.effects.InversionDifferenceMacro;
 import model.effects.MacroCollageEffects;
 
 /**
@@ -315,6 +317,12 @@ public class CollageProjectModelImpl implements CollageProject {
           macro = new BrightenDarkenMacro(this.canvasHeight, this.canvasWidth, filter, false);
           macro.executeMacro(layer);
           break;
+        case "inversion-difference":
+        case "darken-multiply":
+        case "brighten-screen":
+          macro = new InversionDifferenceMacro(this.canvasHeight, this.canvasWidth, finalImage);
+          macro.executeMacro(layer);
+          break;
         default:
           //do nothing
       }
@@ -324,7 +332,11 @@ public class CollageProjectModelImpl implements CollageProject {
         isBackground = false;
       }
       else {
-        finalImage = layer.modifyTransparency(finalImage, hasAlpha);
+        macro = new ChangeTransparencyMacro(this.canvasHeight, this.canvasWidth, hasAlpha,
+            finalImage);
+        macro.executeMacro(layer);
+//        finalImage = layer.modifyTransparency(finalImage, hasAlpha);
+        finalImage = layer.getPixelsOnLayer();
       }
     }
 
