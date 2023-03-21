@@ -123,40 +123,4 @@ public class PixelTest {
     assertEquals(11, this.pixel4.luma());
     assertEquals(1, this.pixel5.luma());
   }
-//
-//  @Test
-//  public void testChangeTransparency() {
-//    this.init();
-//
-//    this.pixel1.changeTransparency(false, 10, 10, 10, 255);
-//    assertEquals(0, this.pixel1.getRedComponent());
-//    assertEquals(0, this.pixel1.getGreenComponent());
-//    assertEquals(0, this.pixel1.getBlueComponent());
-//    assertEquals(1, this.pixel1.getAlphaComponent());
-//
-//    this.pixel2.changeTransparency(true, 20, 30, 40, 20);
-//    assertEquals(120, this.pixel2.getRedComponent());
-//    assertEquals(72, this.pixel2.getGreenComponent());
-//    assertEquals(99, this.pixel2.getBlueComponent());
-//    assertEquals(255, this.pixel2.getAlphaComponent());
-//
-//    this.pixel4.changeTransparency(false, 10, 10, 10,20);
-//    assertEquals(12, this.pixel4.getRedComponent());
-//    assertEquals(11, this.pixel4.getGreenComponent());
-//    assertEquals(10, this.pixel4.getBlueComponent());
-//    assertEquals(255, this.pixel4.getAlphaComponent());
-//
-//    this.pixel4.changeTransparency(false, 10, 10, 10,20);
-//    assertEquals(12, this.pixel4.getRedComponent());
-//    assertEquals(11, this.pixel4.getGreenComponent());
-//    assertEquals(10, this.pixel4.getBlueComponent());
-//    assertEquals(255, this.pixel4.getAlphaComponent());
-//
-//
-//    this.pixel6.changeTransparency(true, 10, 20, 30, 30);
-//    assertEquals(98, this.pixel6.getRedComponent());
-//    assertEquals(59, this.pixel6.getGreenComponent());
-//    assertEquals(32, this.pixel6.getBlueComponent());
-//    assertEquals(224, this.pixel6.getAlphaComponent());
-//  }
 }
