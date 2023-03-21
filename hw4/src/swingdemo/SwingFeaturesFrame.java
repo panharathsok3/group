@@ -186,7 +186,7 @@ public class SwingFeaturesFrame extends JFrame implements ActionListener, ItemLi
     //imagePanel.setMaximumSize(null);
     mainPanel.add(imagePanel);
 
-    String[] images = {"Jellyfish.jpg", "Koala.jpg", "Penguins.jpg"};
+    String[] images = {"src/view/Jellyfish.jpg", "src/swingdemo/Koala.jpg", "src/swingdemo/Penguins.jpg"};
     JLabel[] imageLabel = new JLabel[images.length+1];
     JScrollPane[] imageScrollPane = new JScrollPane[images.length+1];
 

@@ -1,5 +1,9 @@
 package controller;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 import model.CollageProject;
 import model.CollageProjectModelImpl;
 import view.GUIView;
@@ -25,6 +29,11 @@ public class CollageGUIController implements Features {
 
   @Override
   public void setView(GUIView v) {
+
+  }
+
+  @Override
+  public void loadProject(String filePath) throws IllegalArgumentException, IllegalStateException {
 
   }
 }
