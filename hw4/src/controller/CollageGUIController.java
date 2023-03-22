@@ -17,19 +17,24 @@ public class CollageGUIController implements Features {
     this.model = model;
   }
 
-  public void setGUIView(GUIView view) {
+  @Override
+  public void setView(GUIView view) {
     this.view = view;
-    view.addFeatures(this);
+    this.view.addFeatures(this);
   }
 
   @Override
   public void exitProgram() {
-
+    System.exit(0);
   }
 
   @Override
-  public void setView(GUIView v) {
-
+  public void newProject(String typed) {
+    int height = this.view.getImageBorderHeight();
+    int width = this.view.getImageBorderWidth();
+    this.model.newProject(typed, height, width);
+    this.view.displayImage(this.view.getImageToPutOnScreen(height, width,
+        this.model.getLayers().get(0).getPixelsOnLayer()));
   }
 
   @Override

@@ -4,7 +4,9 @@ package controller;
 import view.GUIView;
 
 public interface Features {
+
   void exitProgram();
+
   void setView(GUIView v);
 
   /**
@@ -15,7 +17,9 @@ public interface Features {
    *                               or if a new project can't be made from the content inside
    *                               or if the file doesn't exist or can't be open
    */
-  void loadProject(String filePath) throws IllegalArgumentException,
-          IllegalStateException;
+  void loadProject(String filePath) throws IllegalArgumentException, IllegalStateException;
+
+
+  void newProject(String typed);
 
 }
