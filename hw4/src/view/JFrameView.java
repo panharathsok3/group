@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.io.File;
 
 import javax.swing.BorderFactory;
@@ -25,20 +26,19 @@ public class JFrameView extends JFrame implements GUIView {
 
   private JPanel mainPanel = new JPanel();;
   private JScrollPane mainScrollPane;
-  private JButton save;
-
-  private JButton saveImage;
-
-  private JButton load ;
-
-  private JButton newProject;
-
+  private JButton newProject, addLayer, addImageToLayer, setFilter, saveProject, saveImage, load;
   private JComboBox<String> effectsOptions;
 
   public JFrameView() {
     super();
     this.setTitle("Collager Project");
-    this.setSize(400, 400); //TODO
+
+    Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
+
+    int height = (int) screensize.getHeight();
+    int width = (int) screensize.getWidth();
+
+    this.setSize(width, height);
     this.setLayout(new FlowLayout());
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
@@ -61,8 +61,7 @@ public class JFrameView extends JFrame implements GUIView {
     //imagePanel.setMaximumSize(null);
 
 
-    String[] images = {"src/swingdemo/Jellyfish.jpg", "src/swingdemo/Koala.jpg",
-            "src/swingdemo/Penguins.jpg"};
+    String[] images = {"src/swingdemo/Jellyfish.jpg"};
     JLabel[] imageLabel = new JLabel[images.length];
     JScrollPane[] imageScrollPane = new JScrollPane[images.length];
 
@@ -83,7 +82,7 @@ public class JFrameView extends JFrame implements GUIView {
 //        imageLabel[i].setIcon(new ImageIcon(createImageFromScratch()));
 //      }
 
-      imageScrollPane[i].setPreferredSize(new Dimension(350, 500));
+      imageScrollPane[i].setPreferredSize(new Dimension(width / 2, height / 2));
       imagePanel.add(imageScrollPane[i]);
     }
 
@@ -93,7 +92,10 @@ public class JFrameView extends JFrame implements GUIView {
     commands.setBorder(BorderFactory.createTitledBorder("Effects"));
     commands.setBackground(Color.LIGHT_GRAY);
 
-    this.save = new JButton("Save A Project");
+    this.saveProject = new JButton("Save A Project");
+    this.addLayer = new JButton("Add a new Layer");
+    this.addImageToLayer = new JButton("Add an image to a Layer");
+    this.setFilter = new JButton("Set a filter on a Layer");
     this.load = new JButton("LoadA Project ");
     this.saveImage = new JButton("Save an Image");
     this.newProject = new JButton("New Project");
@@ -104,11 +106,14 @@ public class JFrameView extends JFrame implements GUIView {
                     "Darken-luma","Darken-intensity","Red-Component", "Green-Component",
                     "Blue-Component", "Inversion-difference", "Brightening-screen","Darken-multiply"});
 
-    commands.add(save);
-    commands.add(saveImage);
-    commands.add(load);
-    commands.add(newProject);
-    commands.add(effectsOptions);
+    commands.add(this.newProject);
+    commands.add(this.addLayer);
+    commands.add(this.addImageToLayer);
+    commands.add(this.setFilter);
+    commands.add(this.saveProject);
+    commands.add(this.saveImage);
+    commands.add(this.load);
+    commands.add(this.effectsOptions);
 
     //adding to the bottom of the main panel
     mainPanel.add(commands, BorderLayout.SOUTH);

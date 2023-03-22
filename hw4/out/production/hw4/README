@@ -283,6 +283,9 @@ NOTE: After all work has been done and saved, and you are
   Do: quit
 
 
+We used stackoverflow to get the screen size of a screen.
+
+
 NOTE FOR GRADER:
 Copy and paste the script in the RunScript file into the command line.
 The actions will be performed and the new images and project will be
@@ -291,7 +294,7 @@ saved in the specified path for viewing.
 Citations :
 https://www.goodhousekeeping.com/life/pets/g4531/cutest-dog-breeds/
 Copyright © 1994-2021, Oracle and/or its affiliates. All rights reserved.
-
+https://stackoverflow.com/questions/3680221/how-can-i-get-screen-resolution-in-java
 
 
 At least one example PPM image (different from any of the ones provided to you in this assignment),
