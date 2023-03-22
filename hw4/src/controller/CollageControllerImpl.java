@@ -1,10 +1,19 @@
 package controller;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import model.CollageProject;
+import model.ILayer;
+import model.IPixel;
+import model.Pixel;
 import view.CollageView;
 
 /**
@@ -15,6 +24,7 @@ public class CollageControllerImpl implements CollageController {
   private final Readable in;
   private final CollageProject collage;
   private final CollageView view;
+  private boolean projectMade;
 
   /**
    * Represents the controller for this CollageProjectModelImpl.
@@ -32,6 +42,7 @@ public class CollageControllerImpl implements CollageController {
     this.in = in;
     this.collage = collage;
     this.view = view;
+    this.projectMade = false;
   }
 
   @Override
@@ -59,26 +70,30 @@ public class CollageControllerImpl implements CollageController {
           int width = this.readValueInteger(sc);
           try {
             this.collage.newProject(name, height, width);
+            this.projectMade = true;
           } catch (IllegalArgumentException e) {
             this.renderMessage("Arguments can't be null");
+            this.projectMade = false;
           }
           break;
         case "load-project":
           String filename = this.readValueString(sc);
           try {
-            this.collage.loadProject(filename);
+            this.loadProject(filename);
+            this.projectMade = true;
           } catch (IllegalArgumentException e) {
             this.renderMessage("Arguments can't be null");
           } catch (IllegalStateException e) {
             this.renderMessage("File can't be open or file is not enough to start a load a "
                 + "project");
+            this.projectMade = false;
           }
           break;
         case "save-project":
           String filePath = this.readValueString(sc);
           String fileType = this.readValueString(sc);
           try {
-            this.collage.saveProject(filePath, fileType);
+            this.saveProject(filePath, fileType);
           } catch (IllegalArgumentException e) {
             this.renderMessage("Arguments can't be null");
           } catch (IllegalStateException e) {
@@ -123,7 +138,7 @@ public class CollageControllerImpl implements CollageController {
         case "save-image":
           String fileName = this.readValueString(sc);
           try {
-            this.collage.saveImage(fileName);
+            this.saveImage(fileName);
           } catch (IllegalArgumentException e) {
             this.renderMessage("Arguments can't be null");
           } catch (IllegalStateException e) {
@@ -133,6 +148,207 @@ public class CollageControllerImpl implements CollageController {
         default:
           this.renderMessage("Command doesn't exist");
       }
+    }
+  }
+
+
+  @Override
+  public void saveProject(String filePath, String projectType) throws IllegalArgumentException,
+      IllegalStateException {
+    if (filePath == null || projectType == null) {
+      throw new IllegalArgumentException("Cannot give null as an argument");
+    }
+    this.throwExceptionProjectNotMade();
+
+    if (projectType.equals("PPM")) {
+      try {
+        saveProjectHelper(this.collage.getProjectName(), this.collage.getHeight(),
+            this.collage.getWidth(), this.collage.getMaxValue(), filePath, this.collage.getLayers(),
+            this.collage.getFiltersOnProject(), false);
+      } catch (IOException e) {
+        throw new IllegalArgumentException("Was not able to save");
+      }
+    }
+  }
+
+  /**
+   * Helper method for saving a project to a file.
+   * @param projectName the name of the project
+   * @param height the height of the image/project
+   * @param width the width of the image/project
+   * @param maxValue the max value of a pixel component
+   * @param filePath the location where the file will be stored.
+   * @param layers the layers of the entire project
+   * @param filters the map of that has the layer name as the key and its filter as the value
+   * @param isSaveImage true if and only if this method is used to save an image
+   * @throws IllegalArgumentException if the given filePath is null
+   * @throws IOException if there is issue writing to the file
+   */
+  private void saveProjectHelper(String projectName, int height, int width, int maxValue,
+      String filePath, List<ILayer> layers, Map<String, String> filters, boolean isSaveImage)
+      throws IOException {
+
+    //write the new file to this path
+    FileWriter fileWriter = new FileWriter(filePath);
+
+    fileWriter.write(projectName + "\n");
+    fileWriter.write(height + " " + width + "\n");
+    //depends on what ever the colors in the project are
+    fileWriter.write(maxValue + "\n"); //because the max value of each pixel can be 255
+
+    for (ILayer layer : layers) {
+      if (!isSaveImage) {
+        String filter = filters.get(layer.getName());
+        fileWriter.write(layer.getName() + " " + filter + "\n");
+
+        List<List<IPixel>> pixels = layer.getPixelsOnLayer();
+
+        for (int j = 0; j < height; j++) {
+          for (int k = 0; k < width; k++) {
+            int redComponent = pixels.get(j).get(k).getRedComponent();
+            int greenComponent = pixels.get(j).get(k).getGreenComponent();
+            int blueComponent = pixels.get(j).get(k).getBlueComponent();
+            int alphaComponent = pixels.get(j).get(k).getAlphaComponent();
+            fileWriter.write(redComponent + " " + greenComponent + " " + blueComponent + " "
+                + alphaComponent + "\n");
+          }
+        }
+      }
+      else {
+        List<List<IPixel>> pixels = layer.getPixelsOnLayer();
+        for (int j = 0; j < height; j++) {
+          for (int k = 0; k < width; k++) {
+            int redComponent = pixels.get(j).get(k).getRedComponent();
+            int greenComponent = pixels.get(j).get(k).getGreenComponent();
+            int blueComponent = pixels.get(j).get(k).getBlueComponent();
+            fileWriter.write(redComponent + " " + greenComponent + " " + blueComponent + "\n");
+          }
+        }
+      }
+
+    }
+
+    fileWriter.close();
+  }
+
+  @Override
+  public void saveImage(String filePath) throws IllegalArgumentException, IllegalStateException {
+    this.throwExceptionProjectNotMade();
+
+    if (filePath == null) {
+      throw new IllegalArgumentException("Arguments can't be null");
+    }
+
+    ILayer finalImage;
+    if (filePath.endsWith(".ppm")) {
+      finalImage = this.collage.makeFinalImage(false);
+      List<ILayer> listLayer = new ArrayList<>();
+      listLayer.add(finalImage);
+
+      try {
+        this.saveProjectHelper("P3", this.collage.getHeight(), this.collage.getWidth(),
+            this.collage.getMaxValue(), filePath, listLayer, this.collage.getFiltersOnProject(),
+            true);
+      } catch (IOException e) {
+        throw new IllegalArgumentException("Was not able to save");
+      }
+    }
+  }
+
+
+  @Override
+  public void loadProject(String filePath) throws IllegalArgumentException,
+      IllegalStateException {
+
+    if (filePath == null) {
+      throw new IllegalArgumentException("Arguments can't be null");
+    }
+
+    Scanner sc;
+
+    try {
+      sc = new Scanner(new FileInputStream(filePath));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    if (!sc.hasNextLine()) {
+      throw new IllegalStateException("Nothing inside the file to load");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    sc = new Scanner(builder.toString());
+
+    String projectName = sc.next();
+
+    if (!sc.hasNextInt()) {
+      throw new IllegalStateException("this file cannot create a new project");
+    }
+    int canvasHeight = sc.nextInt();
+
+    if (!sc.hasNextInt()) {
+      throw new IllegalStateException("this file cannot create a new project");
+    }
+    int canvasWidth = sc.nextInt();
+
+    if (!sc.hasNext()) {
+      throw new IllegalStateException("this file cannot create a new project");
+    }
+
+    this.collage.newProject(projectName, canvasHeight, canvasWidth);
+
+    try {
+      sc.next(); // max color
+      sc.next(); // background
+      sc.next(); // normal
+
+      int layerNum = 0;
+      this.addImageToLayerFromFile(sc, layerNum, this.collage.getHeight(), this.collage.getWidth());
+
+      while (sc.hasNext()) {
+        String currentLayer = sc.next();
+        String filterType = sc.next();
+        this.collage.addLayer(currentLayer);
+        this.collage.setFilter(currentLayer, filterType);
+
+        layerNum++;
+        this.addImageToLayerFromFile(sc, layerNum,
+            this.collage.getHeight(), this.collage.getWidth());
+      }
+    } catch (IllegalStateException e) {
+      throw new IllegalStateException("Not enough information to add/create a new layer to add to "
+          + "the collage project");
+    }
+  }
+
+  /**
+   * Adds the content of the image from the file and place it on the Layer.
+   * @param sc the scanner to read from the file
+   * @param layerNum the number of the layer
+   */
+  private void addImageToLayerFromFile(Scanner sc, int layerNum, int height, int width) {
+    List<List<IPixel>> image = new ArrayList<>();
+
+    for (int i = 0; i < height; i++) {
+      image.add(new ArrayList<>());
+      for (int j = 0; j < width; j++) {
+        image.get(i).add(new Pixel(sc.nextInt(), sc.nextInt(), sc.nextInt(), sc.nextInt()));
+      }
+    }
+
+    this.collage.getLayers().get(layerNum).addImage(0, 0, image);
+  }
+
+  private void throwExceptionProjectNotMade() throws IllegalStateException {
+    if (!projectMade) {
+      throw new IllegalStateException("project has not been made");
     }
   }
 

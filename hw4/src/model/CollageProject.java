@@ -10,6 +10,17 @@ import java.util.Map;
 public interface CollageProject extends CollageProjectModel {
 
   /**
+   * Creates a new Project with a name and a set of dimensions.
+   * DEFAULT: every project has a white background layer by default.
+   * @param name the name of the project
+   * @param canvasHeight the height of the project desired by the user.
+   * @param canvasWidth the width of the project desired by the user.
+   * @throws IllegalArgumentException if the name is null
+   *                                  or if the canvas height or width is not positive
+   */
+  void newProject(String name, int canvasHeight,int canvasWidth) throws IllegalArgumentException;
+
+  /**
    * Adds a layer with a given name to the top of the whole project.
    * DEFAULT: a fully transparent white image and the normal filter.
    * @param layerName the name of the layer

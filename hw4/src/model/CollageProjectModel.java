@@ -6,17 +6,6 @@ package model;
 public interface CollageProjectModel {
 
   /**
-   * Creates a new Project with a name and a set of dimensions.
-   * DEFAULT: every project has a white background layer by default.
-   * @param name the name of the project
-   * @param canvasHeight the height of the project desired by the user.
-   * @param canvasWidth the width of the project desired by the user.
-   * @throws IllegalArgumentException if the name is null
-   *                                  or if the canvas height or width is not positive
-   */
-  void newProject(String name, int canvasHeight,int canvasWidth) throws IllegalArgumentException;
-
-  /**
    * Loads the project onto the program to resume the process.
    * @param filePath the file path to the file to be loaded
    * @throws IllegalArgumentException if the filePath is null
