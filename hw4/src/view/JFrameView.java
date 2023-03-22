@@ -149,6 +149,11 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
   }
 
+  public void errorMessage(String message) {
+    JOptionPane.showMessageDialog(null,
+            message,"Error",JOptionPane.ERROR_MESSAGE);
+  }
+
   @Override
   public void actionPerformed(ActionEvent arg0) {
     switch (arg0.getActionCommand()) {
@@ -156,7 +161,10 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
         this.projectName = JOptionPane.showInputDialog("Enter your project name");
         break;
       default:
+        errorMessage("Action doesn't exist");
+        setVisible(true);
         throw new IllegalStateException("action doesn't exist");
+
     }
   }
 

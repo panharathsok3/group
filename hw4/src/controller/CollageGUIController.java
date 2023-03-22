@@ -2,6 +2,7 @@ package controller;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.StringReader;
 import java.util.Scanner;
 
 import model.CollageProject;
@@ -12,6 +13,7 @@ public class CollageGUIController implements Features {
 
   private final CollageProject model;
   private GUIView view;
+
 
   public CollageGUIController(CollageProject model) {
     this.model = model;
