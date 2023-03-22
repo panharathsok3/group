@@ -1,10 +1,5 @@
 TODO:
 
-- test the Macros
-- need to test pixels HSL stuff
-- hello
-- hi
-
--new jessicaa
-
-222
+- test the Macros: DarkenMultiplyBrightenScreenMacro & InversionDifferenceMacro
+- test TextUI and move fully move the controller.
+- Work on GUI view & controller
