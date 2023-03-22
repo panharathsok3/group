@@ -1,5 +1,12 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import model.CollageProjectModel;
+import model.ILayer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -598,4 +605,734 @@ public class CollageProjectControllerTest {
     assertEquals("Command doesn't exist\n"
         + "The program has ended\n", this.out.toString());
   }
+
+
+  @Test
+  public void testSaveProjectImmediately() {
+    this.init();
+    this.in = new StringReader("new-project C1 2 2 save-project res/project/saveImmediately "
+        + "PPM quit");
+    this.out = new StringBuilder();
+
+    this.collageModel = new CollageProjectModelImpl();
+    CollageView view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, this.collageModel, view);
+    this.collageController.runProgram();
+
+    Scanner sc;
+
+    try {
+      sc = new Scanner(new FileInputStream("res/project/saveImmediately"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    //read the file line by line, and populate a string. This will throw away any comment lines
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    //now set up the scanner to read from the string we just built
+    sc = new Scanner(builder.toString());
+
+    assertEquals("C1", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("255", sc.next());
+    assertEquals("Background", sc.next());
+    assertEquals("normal", sc.next());
+
+    while (sc.hasNext()) {
+      assertEquals("255", sc.next());
+      assertEquals("255", sc.next());
+      assertEquals("255", sc.next());
+      assertEquals("255", sc.next());
+    }
+
+  }
+
+  @Test
+  public void testSaveProjectWithOneLayer() {
+    this.init();
+
+    this.in = new StringReader("new-project C1 200 200 add-layer L1 save-project "
+        + "res/project/saveOneLayer PPM quit");
+    this.out = new StringBuilder();
+
+    this.collageModel = new CollageProjectModelImpl();
+    CollageView view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, this.collageModel, view);
+    this.collageController.runProgram();
+
+    Scanner sc;
+
+    try {
+      sc = new Scanner(new FileInputStream("res/project/saveOneLayer"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    //read the file line by line, and populate a string. This will throw away any comment lines
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    //now set up the scanner to read from the string we just built
+    sc = new Scanner(builder.toString());
+
+    assertEquals("C1", sc.next());
+    assertEquals("200", sc.next());
+    assertEquals("200", sc.next());
+    assertEquals("255", sc.next());
+    assertEquals("Background", sc.next());
+    assertEquals("normal", sc.next());
+
+    for (int i = 0; i < 200; i++) {
+      for (int j = 0; j < 200; j++) {
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+      }
+    }
+
+    assertEquals("L1", sc.next());
+    assertEquals("normal", sc.next());
+
+    while (sc.hasNext()) {
+      assertEquals("255", sc.next());
+      assertEquals("255", sc.next());
+      assertEquals("255", sc.next());
+      assertEquals("0", sc.next());
+    }
+  }
+
+  @Test
+  public void testSaveProjectAfterModification() {
+    this.init();
+
+    this.in = new StringReader("new-project C1 2 2 add-layer L1 add-image-to-layer L1 "
+        + "src/tako.ppm 0 0 save-project res/project/saveAfterModification PPM quit");
+    this.out = new StringBuilder();
+
+    this.collageModel = new CollageProjectModelImpl();
+    CollageView view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, this.collageModel, view);
+    this.collageController.runProgram();
+
+    Scanner sc;
+
+    try {
+      sc = new Scanner(new FileInputStream("res/project/saveAfterModification"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    //read the file line by line, and populate a string. This will throw away any comment lines
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    //now set up the scanner to read from the string we just built
+    sc = new Scanner(builder.toString());
+
+    assertEquals("C1", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("255", sc.next());
+    assertEquals("Background", sc.next());
+    assertEquals("normal", sc.next());
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+      }
+    }
+
+    assertEquals("L1", sc.next());
+    assertEquals("normal", sc.next());
+
+    while (sc.hasNext()) {
+      assertEquals("173", sc.next());
+      assertEquals("179", sc.next());
+      assertEquals("151", sc.next());
+      assertEquals("255", sc.next());
+    }
+
+    this.in = new StringReader("load-project res/project/saveAfterModification set-filter L1 "
+        + "darken-intensity save-project res/project/saveAfterModification PPM quit");
+    this.out = new StringBuilder();
+
+    this.collageModel = new CollageProjectModelImpl();
+    view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, this.collageModel, view);
+    this.collageController.runProgram();
+
+    try {
+      sc = new Scanner(new FileInputStream("res/project/saveAfterModification"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    builder = new StringBuilder();
+    //read the file line by line, and populate a string. This will throw away any comment lines
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    //now set up the scanner to read from the string we just built
+    sc = new Scanner(builder.toString());
+
+    assertEquals("C1", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("255", sc.next());
+    assertEquals("Background", sc.next());
+    assertEquals("normal", sc.next());
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+      }
+    }
+
+    assertEquals("L1", sc.next());
+    assertEquals("darken-intensity", sc.next());
+
+    while (sc.hasNext()) {
+      assertEquals("173", sc.next());
+      assertEquals("179", sc.next());
+      assertEquals("151", sc.next());
+      assertEquals("255", sc.next());
+    }
+
+  }
+
+  @Test
+  public void testInvalidSaveProjects() {
+    this.in = new StringReader("save-project res/project/saveAfterModification PPM quit");
+    this.out = new StringBuilder();
+
+    this.collageModel = new CollageProjectModelImpl();
+    CollageView view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, this.collageModel, view);
+    this.collageController.runProgram();
+
+    try {
+      this.collageController.runProgram();
+      fail("The project hasn't been made yet");
+    } catch (IllegalStateException e) {
+      // do nothing
+    }
+
+    try {
+      this.collageController.saveProject(null, "ppm");
+      fail("Arguments can't be null");
+    } catch (IllegalArgumentException e) {
+      // do nothing
+    }
+
+    try {
+      this.collageController.saveProject("src/fileName", null);
+      fail("Arguments can't be null");
+    } catch (IllegalArgumentException e) {
+      // do nothing
+    }
+  }
+
+
+  @Test
+  public void testValidLoadProjectImmediately() {
+    this.init();
+
+    this.in = new StringReader("new-project C1 2 2 "
+        + "save-project res/project/saveProjectAndLoadImmediately PPM quit");
+    this.out = new StringBuilder();
+
+    this.collageModel = new CollageProjectModelImpl();
+    CollageView view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, this.collageModel, view);
+    this.collageController.runProgram();
+
+    this.in = new StringReader("load-project res/project/saveProjectAndLoadImmediately quit");
+    this.out = new StringBuilder();
+
+    CollageProject model = new CollageProjectModelImpl();
+    view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, model, view);
+    this.collageController.runProgram();
+
+    assertEquals("C1", model.getProjectName());
+    assertEquals(2, model.getHeight());
+    assertEquals(2, model.getWidth());
+    assertEquals(255, model.getMaxValue());
+
+    ILayer backgroundLayer = model.getLayers().get(0);
+    assertEquals("Background", backgroundLayer.getName());
+
+    Map<String, String> layerWithFilter = model.getFiltersOnProject();
+    assertEquals("normal", layerWithFilter.get("Background"));
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+  }
+
+  @Test
+  public void testValidLoadProjectAfterAddingLayer() {
+    this.init();
+
+    this.in = new StringReader("new-project C1 2 2 add-layer L1 "
+        + "save-project res/project/saveProjectAndLoadAfterAddingLayer PPM quit");
+    this.out = new StringBuilder();
+
+    this.collageModel = new CollageProjectModelImpl();
+    CollageView view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, this.collageModel, view);
+    this.collageController.runProgram();
+
+    this.in = new StringReader("load-project res/project/saveProjectAndLoadAfterAddingLayer"
+        + " quit");
+    this.out = new StringBuilder();
+
+    CollageProject model = new CollageProjectModelImpl();
+    view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, model, view);
+    this.collageController.runProgram();
+
+    assertEquals("C1", model.getProjectName());
+    assertEquals(2, model.getHeight());
+    assertEquals(2, model.getWidth());
+    assertEquals(255, model.getMaxValue());
+
+    ILayer backgroundLayer = model.getLayers().get(0);
+    assertEquals("Background", backgroundLayer.getName());
+
+    Map<String, String> layerWithFilter = model.getFiltersOnProject();
+    assertEquals("normal", layerWithFilter.get("Background"));
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+
+    backgroundLayer = model.getLayers().get(1);
+    assertEquals("L1", backgroundLayer.getName());
+
+    layerWithFilter = model.getFiltersOnProject();
+    assertEquals("normal", layerWithFilter.get("L1"));
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(0,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+  }
+
+  @Test
+  public void testValidLoadProjectAfterAddingLayerAndModifying() {
+    this.init();
+
+    this.in = new StringReader("new-project C1 2 2 add-layer L1 add-image-to-layer L1 "
+        + "src/tako.ppm 0 0 set-filter L1 darken-intensity "
+        + "save-project res/project/saveProjectAndLoadAfterAddingLayerAndModifying PPM quit");
+    this.out = new StringBuilder();
+
+    this.collageModel = new CollageProjectModelImpl();
+    CollageView view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, this.collageModel, view);
+    this.collageController.runProgram();
+
+    this.in = new StringReader("load-project "
+        + "res/project/saveProjectAndLoadAfterAddingLayerAndModifying quit");
+    this.out = new StringBuilder();
+
+    CollageProject model = new CollageProjectModelImpl();
+    view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, model, view);
+    this.collageController.runProgram();
+
+    assertEquals("C1", model.getProjectName());
+    assertEquals(2, model.getHeight());
+    assertEquals(2, model.getWidth());
+    assertEquals(255, model.getMaxValue());
+
+    ILayer backgroundLayer = model.getLayers().get(0);
+    assertEquals("Background", backgroundLayer.getName());
+
+    Map<String, String> layerWithFilter = model.getFiltersOnProject();
+    assertEquals("normal", layerWithFilter.get("Background"));
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(255,
+            backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+
+    backgroundLayer = model.getLayers().get(1);
+    assertEquals("L1", backgroundLayer.getName());
+
+    layerWithFilter = model.getFiltersOnProject();
+    assertEquals("darken-intensity", layerWithFilter.get("L1"));
+
+    for (int i = 0; i < 2; i ++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(173, backgroundLayer.getPixelsOnLayer().get(i).get(j)
+            .getRedComponent());
+        assertEquals(179, backgroundLayer.getPixelsOnLayer().get(i).get(j)
+            .getGreenComponent());
+        assertEquals(151, backgroundLayer.getPixelsOnLayer().get(i).get(j)
+            .getBlueComponent());
+        assertEquals(255, backgroundLayer.getPixelsOnLayer().get(i).get(j)
+            .getAlphaComponent());
+      }
+    }
+  }
+
+  @Test
+  public void testLoadProjectInTheMiddleOfWorkingOnAProject() {
+    this.init();
+
+    this.in = new StringReader("new-project C1 2 2 "
+        + "save-project res/project/saveProjectAndLoadWhileWorking PPM quit");
+    this.out = new StringBuilder();
+
+    this.collageModel = new CollageProjectModelImpl();
+    CollageView view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, this.collageModel, view);
+    this.collageController.runProgram();
+
+    this.in = new StringReader("new-project C1 2 2 add-layer L1 add-image-to-layer L1 "
+        + "src/tako.ppm 0 0 set-filter L1 darken-intensity "
+        + "load-project res/project/saveProjectAndLoadWhileWorking quit");
+    this.out = new StringBuilder();
+
+    CollageProject model = new CollageProjectModelImpl();
+    view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, model, view);
+    this.collageController.runProgram();
+
+    model.newProject("C1", 2, 2);
+    model.saveProject("res/project/saveProjectAndLoadWhileWorking",
+        "PPM");
+
+    model.newProject("C2", 2, 2);
+    model.addLayer("L1");
+    model.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    model.setFilter("L1", "darken-intensity");
+    model.loadProject("res/project/saveProjectAndLoadWhileWorking");
+
+    List<ILayer> backgroundLayer = model.getLayers();
+    assertEquals(1, backgroundLayer.size());
+    assertEquals("Background", backgroundLayer.get(0).getName());
+
+    Map<String, String> layerWithFilter = model.getFiltersOnProject();
+    assertEquals(1, layerWithFilter.size());
+    assertEquals("normal", layerWithFilter.get("Background"));
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(255,
+            backgroundLayer.get(0).getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(255,
+            backgroundLayer.get(0).getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(255,
+            backgroundLayer.get(0).getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(255,
+            backgroundLayer.get(0).getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+  }
+
+  @Test
+  public void testInvalidLoadProjectController() {
+    this.init();
+
+    this.in = new StringReader("");
+    this.out = new StringBuilder();
+
+    this.collageModel = new CollageProjectModelImpl();
+    CollageView view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, this.collageModel, view);
+
+    try {
+      this.collageController.loadProject(null);
+      fail("Arguments can't be null");
+    } catch (IllegalArgumentException e) {
+      // do nothing
+    }
+
+    try {
+      this.collageController.loadProject("a");
+      fail("File not found");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+
+    try {
+      FileWriter fileWriter = new FileWriter("res/project/nothingInside");
+      fileWriter.close();
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException");
+    }
+
+    try {
+      this.collageController.loadProject("res/project/nothingInside");
+      fail("Nothing is inside the file");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+
+    try {
+      FileWriter fileWriter = new FileWriter("res/project/nothingInside");
+      fileWriter.write("C1" + "\n");
+      fileWriter.close();
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException");
+    }
+
+    try {
+      this.collageController.loadProject("res/project/nothingInside");
+      fail("Not enough to make a project");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+
+    try {
+      FileWriter fileWriter = new FileWriter("res/project/nothingInside");
+      fileWriter.write("C1" + "\n");
+      fileWriter.write("100 100" + "\n");
+      fileWriter.close();
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException");
+    }
+
+    try {
+      this.collageController.loadProject("res/project/nothingInside");
+      fail("Not enough to make a project");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+
+    try {
+      FileWriter fileWriter = new FileWriter("res/project/nothingInside");
+      fileWriter.write("C1" + "\n");
+      fileWriter.write("a 100" + "\n");
+      fileWriter.write("255" + "\n");
+      fileWriter.close();
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException");
+    }
+
+    try {
+      this.collageController.loadProject("res/project/nothingInside");
+      fail("Not enough to make a project");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+
+    try {
+      FileWriter fileWriter = new FileWriter("res/project/nothingInside");
+      fileWriter.write("C1" + "\n");
+      fileWriter.write("100 a" + "\n");
+      fileWriter.write("255" + "\n");
+      fileWriter.close();
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException");
+    }
+
+    try {
+      this.collageController.loadProject("res/project/nothingInside");
+      fail("Not enough to make a project");
+    } catch (IllegalStateException e) {
+      //do nothing
+    }
+  }
+
+
+  @Test
+  public void testSaveImageOfBackGround() {
+    this.init();
+    this.collage1 = new CollageProjectModelImpl();
+    this.collage1.newProject("C1", 2, 2);
+    this.collage1.saveImage("res/Images/background.ppm");
+
+    Scanner sc;
+    try {
+      sc = new Scanner(new FileInputStream("res/Images/background.ppm"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    sc = new Scanner(builder.toString());
+
+    assertEquals("P3", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("255", sc.next());
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+        assertEquals("255", sc.next());
+      }
+    }
+  }
+
+  @Test
+  public void testValidSaveImageAfterPuttingAnImage() {
+    this.init();
+    this.collage1 = new CollageProjectModelImpl();
+    this.collage1.newProject("C1", 2, 2);
+    this.collage1.addLayer("L1");
+    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    this.collage1.saveImage("res/Images/saveImageImmediately.ppm");
+
+    Scanner sc;
+    try {
+      sc = new Scanner(new FileInputStream("res/Images/saveImageImmediately.ppm"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    sc = new Scanner(builder.toString());
+
+    assertEquals("P3", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("255", sc.next());
+
+    while (sc.hasNext()) {
+      assertEquals("173", sc.next());
+      assertEquals("179", sc.next());
+      assertEquals("151", sc.next());
+    }
+  }
+
+  @Test
+  public void testSaveImageThenModifyIt() {
+    this.init();
+    this.collage1 = new CollageProjectModelImpl();
+    this.collage1.newProject("C1", 2, 2);
+    this.collage1.addLayer("L1");
+    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    this.collage1.setFilter("L1", "darken-intensity");
+    this.collage1.saveImage("res/Images/saveImageModified.ppm");
+
+    Scanner sc;
+    try {
+      sc = new Scanner(new FileInputStream("res/Images/saveImageModified.ppm"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    sc = new Scanner(builder.toString());
+
+    assertEquals("P3", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("2", sc.next());
+    assertEquals("255", sc.next());
+
+    while (sc.hasNext()) {
+      assertEquals("6", sc.next());
+      assertEquals("12", sc.next());
+      assertEquals("0", sc.next());
+    }
+  }
+
+  @Test
+  public void testInvalidSaveImage() {
+    this.collage1 = new CollageProjectModelImpl();
+    try {
+      this.collage1.saveImage("src/new");
+      fail("file doesn't exist");
+    } catch (IllegalStateException e) {
+      // do nothing
+    }
+
+    try {
+      this.collage1.saveImage(null);
+      fail("Arguments can't be null");
+    } catch (IllegalStateException e) {
+      // do nothing
+    }
+  }
+
 }
