@@ -57,7 +57,7 @@ public class CollageProjectModelImpl implements CollageProject {
     this.createdProject = true;
     this.canvasHeight = canvasHeight;
     this.canvasWidth = canvasWidth;
-    this.project = new LinkedList<>();
+    this.project = new ArrayList<>();
     this.layerFilter = new HashMap<>();
     this.addLayer("Background");
     this.backgroundMade = true;

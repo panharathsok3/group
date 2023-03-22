@@ -2,12 +2,23 @@ package view;
 
 import controller.Features;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.io.File;
-import java.io.IOException;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class JFrameView extends JFrame implements GUIView {
@@ -100,7 +111,7 @@ public class JFrameView extends JFrame implements GUIView {
     commands.add(effectsOptions);
 
     //adding to the bottom of the main panel
-    mainPanel.add(commands,BorderLayout.SOUTH);
+    mainPanel.add(commands, BorderLayout.SOUTH);
 
 
    //pack();
