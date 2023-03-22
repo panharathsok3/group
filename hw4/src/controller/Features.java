@@ -9,6 +9,8 @@ public interface Features {
 
   void setView(GUIView v);
 
+  void newProject(String typed, String height, String width);
+
   /**
    * Loads the project onto the program to resume the process.
    * @param filePath the file path to the file to be loaded
@@ -18,8 +20,5 @@ public interface Features {
    *                               or if the file doesn't exist or can't be open
    */
   void loadProject(String filePath) throws IllegalArgumentException, IllegalStateException;
-
-
-  void newProject(String typed);
 
 }

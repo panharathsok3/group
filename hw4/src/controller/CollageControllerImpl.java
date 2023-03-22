@@ -21,9 +21,9 @@ import view.CollageView;
  * read user input and perform actions accordingly.
  */
 public class CollageControllerImpl implements CollageController {
-  private final Readable in;
-  private final CollageProject collage;
-  private final CollageView view;
+  private Readable in;
+  private CollageProject collage;
+  private CollageView view;
   private boolean projectMade;
 
   /**
@@ -43,6 +43,10 @@ public class CollageControllerImpl implements CollageController {
     this.collage = collage;
     this.view = view;
     this.projectMade = false;
+  }
+
+  public CollageControllerImpl() {
+    //nothing.
   }
 
   @Override
