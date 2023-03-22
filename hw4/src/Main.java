@@ -1,3 +1,5 @@
+import controller.CollageController;
+import controller.CollageControllerImpl;
 import controller.CollageGUIController;
 import controller.Features;
 import model.CollageProject;
@@ -9,7 +11,9 @@ public class Main {
   public static void main(String[] args) {
     CollageProject collage = new CollageProjectModelImpl();
     GUIView view = new JFrameView();
-    Features controller = new CollageGUIController(collage);
+
+    CollageController textUIController = new CollageControllerImpl();
+    Features controller = new CollageGUIController(collage, textUIController);
     controller.setView(view);
   }
 }

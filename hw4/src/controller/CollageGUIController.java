@@ -1,22 +1,17 @@
 package controller;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.StringReader;
-import java.util.Scanner;
-
 import model.CollageProject;
-import model.CollageProjectModelImpl;
 import view.GUIView;
 
 public class CollageGUIController implements Features {
 
   private final CollageProject model;
+  private final CollageController textUIController;
   private GUIView view;
 
-
-  public CollageGUIController(CollageProject model) {
+  public CollageGUIController(CollageProject model, CollageController textUIController) {
     this.model = model;
+    this.textUIController = textUIController;
   }
 
   @Override
@@ -31,11 +26,12 @@ public class CollageGUIController implements Features {
   }
 
   @Override
-  public void newProject(String typed) {
-    int height = this.view.getImageBorderHeight();
-    int width = this.view.getImageBorderWidth();
-    this.model.newProject(typed, height, width);
-    this.view.displayImage(this.view.getImageToPutOnScreen(height, width,
+  public void newProject(String typed, String height, String width) {
+    int hieght2 = Integer.parseInt(height);
+    int width2 = Integer.parseInt(width);
+
+    this.model.newProject(typed, hieght2, width2);
+    this.view.displayImage(this.view.getImageToPutOnScreen(hieght2, width2,
         this.model.getLayers().get(0).getPixelsOnLayer()));
   }
 

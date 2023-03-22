@@ -126,6 +126,9 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     this.newProject.setActionCommand("new-project");
     this.newProject.addActionListener(this);
 
+    this.saveImage.setActionCommand("save-image");
+    this.saveImage.addActionListener(this);
+
     //a drop-down menu to show the list of filer options.
     this.effectsOptions = new JComboBox<>(
             new String[] {"Brighten-value","Brighten-luma","Brighten-intensity","Darken-value",
@@ -158,7 +161,10 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
   public void actionPerformed(ActionEvent arg0) {
     switch (arg0.getActionCommand()) {
       case "new-project":
-        this.projectName = JOptionPane.showInputDialog("Enter your project name");
+//        this.projectName = JOptionPane.showInputDialog("Enter your project name");
+        break;
+      case "save-image":
+        String a = JOptionPane.showInputDialog("Enter something");
         break;
       default:
         errorMessage("Action doesn't exist");
@@ -175,7 +181,11 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
    */
   @Override
   public void addFeatures(Features features) {
-    this.newProject.addActionListener(e -> features.newProject(this.projectName));
+    this.newProject.addActionListener(e -> features.newProject(
+        JOptionPane.showInputDialog("Enter your project name"),
+        JOptionPane.showInputDialog("Enter the height"),
+        JOptionPane.showInputDialog("Enter your width")));
+
     this.load.addActionListener(e -> {
        JFileChooser fileChooser =
               new JFileChooser("");
