@@ -193,7 +193,12 @@ public class Pixel implements IPixel {
     double g = convertFn(this.hue, this.saturation, this.lightness, 8) * 255;
     double b = convertFn(this.hue, this.saturation, this.lightness, 4) * 255;
 
-    return new Pixel(r, g, b);
+    //convert double to int
+    int rInt = (int)Math.round(r);
+    int gInt = (int)Math.round(g);
+    int bInt = (int)Math.round(b);
+
+    return new Pixel(rInt, gInt, bInt);
   }
 
   /**
