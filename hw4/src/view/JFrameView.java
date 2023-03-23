@@ -27,6 +27,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
   private JScrollPane imageScrollPane;
   private int height;
   private int width;
+  private int layerNum;
 
   public JFrameView() {
     super();
@@ -93,6 +94,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
     this.addLayer.setActionCommand("add-layer");
     this.addLayer.addActionListener(this);
+    this.layerNum = 1;
 
     //a drop-down menu to show the list of filer options.
     this.effectsOptions = new JComboBox<>(
@@ -153,7 +155,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
       case "save-project":
         break;
       case "add-layer":
-
+        this.layerNum++;
         break;
       case "add-image-to-layer":
         break;
@@ -183,8 +185,9 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
             JOptionPane.showInputDialog("Enter the height"),
             JOptionPane.showInputDialog("Enter your width")));
 
-    this.addLayer.addActionListener(e -> features.addLayer(
-            JOptionPane.showInputDialog("Enter a layer name")));
+    this.addLayer.addActionListener(e -> features.addLayer("Layer "+ layerNum));
+
+
 
 //    this.setFilter.addActionListener(e -> features.setFilter
 //            (JOptionPane.showInputDialog("Enter the layer you want to transform name"),

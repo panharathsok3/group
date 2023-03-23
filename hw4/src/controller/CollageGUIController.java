@@ -61,13 +61,11 @@ public class CollageGUIController implements Features {
   @Override
   public void saveProject(String filePath, String projectType) {
     this.model.saveProject(filePath, projectType);
-    this.view.refresh();
   }
 
   @Override
   public void saveImage(String filePath) {
     this.model.saveImage(filePath);
-    this.view.refresh();
   }
 
   @Override
