@@ -1,33 +1,21 @@
 package view;
 
-import controller.Features;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
+import java.util.HashMap;
 import java.util.List;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import java.util.Map;
+import java.util.function.Consumer;
+
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import controller.Features;
 import model.IPixel;
+import model.effects.BrightenDarkenMacro;
 
 public class JFrameView extends JFrame implements GUIView, ActionListener {
 
@@ -108,9 +96,9 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
     //a drop-down menu to show the list of filer options.
     this.effectsOptions = new JComboBox<>(
-            new String[] {"Brighten-value","Brighten-luma","Brighten-intensity","Darken-value",
-                    "Darken-luma","Darken-intensity","Red-Component", "Green-Component",
-                    "Blue-Component", "Inversion-difference", "Brightening-screen","Darken-multiply"});
+            new String[]{"Brighten-value", "Brighten-luma", "Brighten-intensity", "Darken-value",
+                    "Darken-luma", "Darken-intensity", "Red-Component", "Green-Component",
+                    "Blue-Component", "Inversion-difference", "Brightening-screen", "Darken-multiply"});
 
     commands.add(this.newProject);
     commands.add(this.addLayer);
@@ -123,15 +111,32 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
     this.mainPanel.add(commands, BorderLayout.SOUTH);
 
+    JPanel currentLayers = new JPanel();
+    currentLayers.setLayout(new FlowLayout());
+    currentLayers.add(new JLabel("Layers"));
 
-   //pack();
+    //pack();
     setVisible(true);
 
   }
 
   public void errorMessage(String message) {
     JOptionPane.showMessageDialog(null,
-            message,"Error",JOptionPane.ERROR_MESSAGE);
+            message, "Error", JOptionPane.ERROR_MESSAGE);
+  }
+
+  public void displayMessage(String message) {
+    JLabel msgLabel = new JLabel();
+    msgLabel.setText(message);
+  }
+
+  /**
+   * Updates the view every time something new is displayed.
+   * SIDE EFFECTS : based on whatever action is invoked.
+   */
+  @Override
+  public void refresh() {
+    this.repaint();
   }
 
   @Override
@@ -148,6 +153,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
       case "save-project":
         break;
       case "add-layer":
+
         break;
       case "add-image-to-layer":
         break;
@@ -162,63 +168,78 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     }
   }
 
-  /**
-   * Updates the view every time something new is displayed.
-   * SIDE EFFECTS : based on whatever action is invoked.
-   */
-  @Override
-  public void refresh() {
-    this.repaint();
-  }
 
   /**
    * These are call backs that respond to operations on buttons in the view.
    * SIDE EFFECTS: performs an event based on what button on a panel is pressed.
+   *
    * @param features the object we are calling in this function to make the view operational.
    */
   @Override
   public void addFeatures(Features features) {
 
     this.newProject.addActionListener(e -> features.newProject(
-        JOptionPane.showInputDialog("Enter your project name"),
-        JOptionPane.showInputDialog("Enter the height"),
-        JOptionPane.showInputDialog("Enter your width")));
+            JOptionPane.showInputDialog("Enter your project name"),
+            JOptionPane.showInputDialog("Enter the height"),
+            JOptionPane.showInputDialog("Enter your width")));
 
     this.addLayer.addActionListener(e -> features.addLayer(
             JOptionPane.showInputDialog("Enter a layer name")));
 
-    this.setFilter.addActionListener(e -> features.setFilter
-            (JOptionPane.showInputDialog("Enter the layer you want to transform name"),
-            JOptionPane.showInputDialog("Enter the filter you want to apply")));
+//    this.setFilter.addActionListener(e -> features.setFilter
+//            (JOptionPane.showInputDialog("Enter the layer you want to transform name"),
+//            JOptionPane.showInputDialog("Enter the filter you want to apply")));
+
+
+    Map<String, Consumer<Features>> effectOptions =
+            this.getActionsForCommands();
+
+    this.setFilter.addActionListener(e -> {
+      int optionIndex = JFrameView.this.effectsOptions.getSelectedIndex();
+      String option = JFrameView.this.effectsOptions.getItemAt(optionIndex);
+
+      if (effectOptions.containsKey(option)) {
+        Consumer<Features> commands = effectOptions.get(option);
+        commands.accept(features);
+      } else {
+        errorMessage("Action doesn't exist");
+      }
+    });
 
     this.addImageToLayer.addActionListener(e -> features.addImageToLayer
             (JOptionPane.showInputDialog("Enter the layer you want to add the image to"),
                     JOptionPane.showInputDialog("Enter the image you want to add"),
-            JOptionPane.showInputDialog("Enter the x position"),
-            JOptionPane.showInputDialog("Enter  the y position")));
+    JOptionPane.showInputDialog("Enter the x position"),
+                    JOptionPane.showInputDialog("Enter  the y position")))
+    ;
 
 
     this.saveImage.addActionListener(e -> {
       JFileChooser fileChooser = new JFileChooser("./");
+
       int returnValue = fileChooser.showSaveDialog(JFrameView.this);
+
       if (returnValue == JFileChooser.APPROVE_OPTION) {
         File file = fileChooser.getSelectedFile();
+
         int slash = file.getAbsolutePath().lastIndexOf(File.separator);
         int dot = file.getAbsolutePath().lastIndexOf(".");
+
         String fileName = file.getAbsolutePath().substring(slash + 1, dot);
         features.saveImage(fileName);
-      }});
+      }
+    });
 
 
     this.load.addActionListener(e -> {
-       JFileChooser fileChooser =
+      JFileChooser fileChooser =
               new JFileChooser("./src");
 
-      FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("PPM",
-              "ppm");
+      FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("PPM","JPEG",
+              "JPG","ppm","jpeg","jpg");
 
       fileChooser.setFileFilter(extensionFilter);
-      int returnValue = fileChooser.showSaveDialog(JFrameView.this);
+      int returnValue = fileChooser.showOpenDialog(JFrameView.this);
 
       if (returnValue == JFileChooser.APPROVE_OPTION) {
         File file = fileChooser.getSelectedFile();
@@ -227,30 +248,53 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
         String filePath = file.getAbsolutePath().substring(slash + 1, dot);
         features.loadProject(filePath);
-
-      }});
-
-
-
-
+        this.refresh();
+      }
+    });
 
   }
+
+  private Map<String, Consumer<Features>> getActionsForCommands() {
+    Map<String, Consumer<Features>> effectOptions =
+            new HashMap<>();
+
+    effectOptions.put("Brighten", features -> {
+      String[] effects = {"luma", "intensity", "value"};
+      int chosen = JOptionPane.showOptionDialog(null,
+              "Pick one", "Color picker",
+              JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+              effects, effects[0]);
+
+//      this.setFilter.addActionListener(e -> features.setFilter
+//              (JOptionPane.showInputDialog("Enter the layer you want to transform name"),
+//                      JOptionPane.showInputDialog("Enter the filter you want to apply")));
+
+      String ext = effects[chosen].toLowerCase();
+      String layerName = null;
+
+      switch (effects[chosen]) {
+        case "red-component":
+      }
+    });
+    return effectOptions;
+  }
+
 
   @Override
   public Image getImageToPutOnScreen(int height, int width, List<List<IPixel>> imageToAdd) {
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
-    for(int x = 0; x < image.getWidth(); x++) {
-      for(int y = 0; y < image.getHeight(); y++) {
+    for (int x = 0; x < image.getWidth(); x++) {
+      for (int y = 0; y < image.getHeight(); y++) {
         int r = imageToAdd.get(x).get(y).getRedComponent();
         int g = imageToAdd.get(x).get(y).getGreenComponent();
         int b = imageToAdd.get(x).get(y).getBlueComponent();
 
         int a = imageToAdd.get(x).get(y).getAlphaComponent();
-        if(y * image.getWidth() + x >= 35000) {
+        if (y * image.getWidth() + x >= 35000) {
           a = 100;
         }
-        if (y * image.getWidth() +x >= 90000) {
+        if (y * image.getWidth() + x >= 90000) {
           a = 0;
         }
         if (y * image.getWidth() + x >= 110000) {
