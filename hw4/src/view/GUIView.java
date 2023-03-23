@@ -9,6 +9,7 @@ import model.IPixel;
 
 public interface GUIView {
 
+  void refresh();
   void addFeatures(Features features);
 
   void displayImage(Image image);

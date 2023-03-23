@@ -36,7 +36,37 @@ public class CollageGUIController implements Features {
   }
 
   @Override
-  public void loadProject(String filePath) throws IllegalArgumentException, IllegalStateException {
+  public void loadProject(String filePath) {
+    this.model.loadProject(filePath);
+  }
+
+  @Override
+  public void addLayer(String layerName) {
+    this.model.addLayer(layerName);
+  }
+
+  @Override
+  public void addImageToLayer(String layerName, String filePath, String xPos, String yPos) {
+    int xPosition = Integer.parseInt(xPos);
+    int yPosition = Integer.parseInt(yPos);
+    this.model.addImageToLayer(layerName,filePath,xPosition,yPosition);
+  }
+
+  @Override
+  public void saveProject(String filePath, String projectType) {
+    this.model.saveProject(filePath,projectType);
+  }
+
+  @Override
+  public void saveImage(String filePath) {
+    this.model.saveImage(filePath);
+  }
+
+  @Override
+  public void setFilter(String layerName, String filterOption) {
+    this.model.setFilter(layerName,filterOption);
 
   }
+
+
 }

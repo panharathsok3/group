@@ -39,7 +39,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
   private JScrollPane imageScrollPane;
   private int height;
   private int width;
-  private String projectName;
 
   public JFrameView() {
     super();
@@ -84,31 +83,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     this.imageScrollPane.setPreferredSize(new Dimension(this.width, this.height));
     this.imagePanel.add(this.imageScrollPane);
 
-//    String[] images = {"src/swingdemo/Jellyfish.jpg"};
-//    JLabel[] imageLabel = new JLabel[images.length];
-//    JScrollPane[] imageScrollPane = new JScrollPane[images.length];
-//
-//    JLabel imageLabel = new JLabel();
-//    JScrollPane imageScrollPane = new JScrollPane();
-//    imageLabel.setIcon(new ImageIcon(images[0]));
-//    imagePanel.add(imageLabel);
-//
-//    for (int i = 0; i < imageLabel.length; i++) {
-//      imageLabel[i] = new JLabel();
-//      imageScrollPane[i] = new JScrollPane(imageLabel[i]);
-//
-//      imageLabel[i].setIcon(new ImageIcon(images[i]));
-//
-//      if(i < images.length) {
-//        imageLabel[i].setIcon(new ImageIcon(images[i]));
-//      } else {
-//        imageLabel[i].setIcon(new ImageIcon(createImageFromScratch()));
-//      }
-//
-//      imageScrollPane[i].setPreferredSize(new Dimension(this.width, this.height));
-//      this.imagePanel.add(imageScrollPane[i]);
-//    }
-
     //Commands and image effects
     JPanel commands = new JPanel();
     commands.setLayout(new GridLayout());
@@ -119,7 +93,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     this.addLayer = new JButton("Add a new Layer");
     this.addImageToLayer = new JButton("Add an image to a Layer");
     this.setFilter = new JButton("Set a filter on a Layer");
-    this.load = new JButton("LoadA Project ");
+    this.load = new JButton("Load A Project ");
     this.saveImage = new JButton("Save an Image");
     this.newProject = new JButton("New Project");
 
@@ -128,6 +102,9 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
     this.saveImage.setActionCommand("save-image");
     this.saveImage.addActionListener(this);
+
+    this.addLayer.setActionCommand("add-layer");
+    this.addLayer.addActionListener(this);
 
     //a drop-down menu to show the list of filer options.
     this.effectsOptions = new JComboBox<>(
@@ -164,7 +141,18 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 //        this.projectName = JOptionPane.showInputDialog("Enter your project name");
         break;
       case "save-image":
-        String a = JOptionPane.showInputDialog("Enter something");
+        //String a = JOptionPane.showInputDialog("Enter something");
+        break;
+      case "load-project":
+        break;
+      case "save-project":
+        break;
+      case "add-layer":
+        break;
+      case "add-image-to-layer":
+        break;
+      case "set-filter":
+
         break;
       default:
         errorMessage("Action doesn't exist");
@@ -175,34 +163,77 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
   }
 
   /**
+   * Updates the view every time something new is displayed.
+   * SIDE EFFECTS : based on whatever action is invoked.
+   */
+  @Override
+  public void refresh() {
+    this.repaint();
+  }
+
+  /**
    * These are call backs that respond to operations on buttons in the view.
    * SIDE EFFECTS: performs an event based on what button on a panel is pressed.
    * @param features the object we are calling in this function to make the view operational.
    */
   @Override
   public void addFeatures(Features features) {
+
     this.newProject.addActionListener(e -> features.newProject(
         JOptionPane.showInputDialog("Enter your project name"),
         JOptionPane.showInputDialog("Enter the height"),
         JOptionPane.showInputDialog("Enter your width")));
 
+    this.addLayer.addActionListener(e -> features.addLayer(
+            JOptionPane.showInputDialog("Enter a layer name")));
+
+    this.setFilter.addActionListener(e -> features.setFilter
+            (JOptionPane.showInputDialog("Enter the layer you want to transform name"),
+            JOptionPane.showInputDialog("Enter the filter you want to apply")));
+
+    this.addImageToLayer.addActionListener(e -> features.addImageToLayer
+            (JOptionPane.showInputDialog("Enter the layer you want to add the image to"),
+                    JOptionPane.showInputDialog("Enter the image you want to add"),
+            JOptionPane.showInputDialog("Enter the x position"),
+            JOptionPane.showInputDialog("Enter  the y position")));
+
+
+    this.saveImage.addActionListener(e -> {
+      JFileChooser fileChooser = new JFileChooser("./");
+      int returnValue = fileChooser.showSaveDialog(JFrameView.this);
+      if (returnValue == JFileChooser.APPROVE_OPTION) {
+        File file = fileChooser.getSelectedFile();
+        int slash = file.getAbsolutePath().lastIndexOf(File.separator);
+        int dot = file.getAbsolutePath().lastIndexOf(".");
+        String fileName = file.getAbsolutePath().substring(slash + 1, dot);
+        features.saveImage(fileName);
+      }});
+
+
     this.load.addActionListener(e -> {
        JFileChooser fileChooser =
-              new JFileChooser("");
+              new JFileChooser("./src");
 
       FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("PPM",
               "ppm");
 
       fileChooser.setFileFilter(extensionFilter);
+      int returnValue = fileChooser.showSaveDialog(JFrameView.this);
 
-      File fileName = fileChooser.getSelectedFile();
-      String path = fileName.getAbsolutePath();
-      try{
-        features.loadProject(path);
-      } catch (IllegalStateException exception) {
-        throw new IllegalStateException(exception.getMessage());
-      }
-    });
+      if (returnValue == JFileChooser.APPROVE_OPTION) {
+        File file = fileChooser.getSelectedFile();
+        int slash = file.getAbsolutePath().lastIndexOf(File.separator);
+        int dot = file.getAbsolutePath().lastIndexOf(".");
+
+        String filePath = file.getAbsolutePath().substring(slash + 1, dot);
+        features.loadProject(filePath);
+
+      }});
+
+
+
+
+
   }
 
   @Override
