@@ -3,3 +3,5 @@ TODO:
 - test the Macros: DarkenMultiplyBrightenScreenMacro & InversionDifferenceMacro
 - test TextUI and move fully move the controller.
 - Work on GUI view & controller
+- List of Layers - Selection lists
+- Need to keep updating the Image on screen with the list of layers
