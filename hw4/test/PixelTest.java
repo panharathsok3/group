@@ -18,6 +18,13 @@ public class PixelTest {
   IPixel pixel4;
   IPixel pixel5;
   IPixel pixel6;
+  IPixel pixel7;
+  IPixel pixel8;
+  IPixel pixel9;
+  IPixel pixel10;
+  IPixel pixel11;
+  IPixel pixel12;
+
 
   @Before
   public void init() {
@@ -27,6 +34,12 @@ public class PixelTest {
     this.pixel4 = new Pixel(12, 11, 10);
     this.pixel5 = new Pixel(1, 1, 1);
     this.pixel6 = new Pixel(100, 60, 33, 220);
+    this.pixel7 = new Pixel(0.0, 0.0, 0.0);
+    this.pixel8 = new Pixel(120.0, 0.72, 0.99);
+    this.pixel9 = new Pixel(21.0, 0.50, 0.68);
+    this.pixel10 = new Pixel(12.0, 0.11, 0.10);
+    this.pixel11 = new Pixel(1.0, 0.10, 0.10);
+    this.pixel12 = new Pixel(100.0, 0.60, 0.33);
   }
 
   @Test
@@ -59,6 +72,28 @@ public class PixelTest {
     } catch (IllegalArgumentException e) {
       // do nothing
     }
+
+    try {
+      IPixel pixel1 = new Pixel(-1.0, 0.0, 0.0);
+      fail("the given component can't be negative");
+    } catch (IllegalArgumentException e) {
+      // do nothing
+    }
+
+    try {
+      IPixel pixel1 = new Pixel(370, 0.0, 0.0);
+      fail("the given component can't be negative");
+    } catch (IllegalArgumentException e) {
+      // do nothing
+    }
+
+    try {
+      IPixel pixel1 = new Pixel(0.0, 120.0, 0.0);
+      fail("the given component can't be negative");
+    } catch (IllegalArgumentException e) {
+      // do nothing
+    }
+
 
   }
 
@@ -94,6 +129,37 @@ public class PixelTest {
   }
 
   @Test
+  public void testGetHueComponent() {
+    this.init();
+    assertEquals(0.0, this.pixel7.getHueComponent(), 0.01);
+    assertEquals(120.0, this.pixel8.getHueComponent(), 0.01);
+    assertEquals(21.0, this.pixel9.getHueComponent(), 0.01);
+    assertEquals(12.0, this.pixel10.getHueComponent(), 0.01);
+    assertEquals(1.0, this.pixel11.getHueComponent(), 0.01);
+  }
+
+
+  @Test
+  public void testGetSaturationComponent() {
+    this.init();
+    assertEquals(0.0, this.pixel7.getSaturationComponent(), 0.01);
+    assertEquals(0.72, this.pixel8.getSaturationComponent(), 0.01);
+    assertEquals(0.50, this.pixel9.getSaturationComponent(), 0.01);
+    assertEquals(0.11, this.pixel10.getSaturationComponent(), 0.01);
+    assertEquals(0.1, this.pixel11.getSaturationComponent(), 0.01);
+  }
+
+  @Test
+  public void testGetLightnessComponent() {
+    this.init();
+    assertEquals(0.0, this.pixel7.getLightnessComponent(), 0.01);
+    assertEquals(0.99, this.pixel8.getLightnessComponent(), 0.01);
+    assertEquals(0.68, this.pixel9.getLightnessComponent(), 0.01);
+    assertEquals(0.10, this.pixel10.getLightnessComponent(), 0.01);
+    assertEquals(0.10, this.pixel11.getLightnessComponent(), 0.01);
+  }
+
+  @Test
   public void testValue() {
     this.init();
     assertEquals(0, this.pixel1.value());
@@ -123,4 +189,56 @@ public class PixelTest {
     assertEquals(11, this.pixel4.luma());
     assertEquals(1, this.pixel5.luma());
   }
+
+  @Test
+  public void testConvertRGBtoHSL() {
+    this.init();
+
+    System.out.println(this.pixel4.convertRGBtoHSL().getHueComponent());
+    System.out.println(this.pixel4.convertRGBtoHSL().getSaturationComponent());
+    System.out.println(this.pixel4.convertRGBtoHSL().getLightnessComponent());
+
+    assertEquals(0.0, this.pixel1.convertRGBtoHSL().getHueComponent(), 0.01);
+    assertEquals(0.0, this.pixel1.convertRGBtoHSL().getSaturationComponent(), 0.01);
+    assertEquals(0.0, this.pixel1.convertRGBtoHSL().getLightnessComponent(), 0.01);
+
+    //returns a negative value?
+    assertEquals(0.0, this.pixel2.convertRGBtoHSL().getHueComponent(), 0.01);
+    assertEquals(0.0, this.pixel2.convertRGBtoHSL().getSaturationComponent(), 0.01);
+    assertEquals(0.0, this.pixel2.convertRGBtoHSL().getLightnessComponent(), 0.01);
+
+    assertEquals(202.98, this.pixel3.convertRGBtoHSL().getHueComponent(), 0.01);
+    assertEquals(0.52, this.pixel3.convertRGBtoHSL().getSaturationComponent(), 0.01);
+    assertEquals(0.17, this.pixel3.convertRGBtoHSL().getLightnessComponent(), 0.01);
+
+    assertEquals(30.0, this.pixel4.convertRGBtoHSL().getHueComponent(), 0.01);
+    assertEquals(0.09, this.pixel4.convertRGBtoHSL().getSaturationComponent(), 0.01);
+    assertEquals(0.04, this.pixel4.convertRGBtoHSL().getLightnessComponent(), 0.01);
+
+
+  }
+
+  @Test
+  public void testConvertHSLtoRGB() {
+    this.init();
+
+    assertEquals(0, this.pixel7.convertHSLtoRGB().getRedComponent(), 0.01);
+    assertEquals(0, this.pixel7.convertHSLtoRGB().getGreenComponent(), 0.01);
+    assertEquals(0, this.pixel7.convertHSLtoRGB().getBlueComponent(), 0.01);
+
+    assertEquals(251, this.pixel8.convertHSLtoRGB().getRedComponent(), 0.01);
+    assertEquals(254, this.pixel8.convertHSLtoRGB().getGreenComponent(), 0.01);
+    assertEquals(251, this.pixel8.convertHSLtoRGB().getBlueComponent(), 0.01);
+
+    assertEquals(214, this.pixel9.convertHSLtoRGB().getRedComponent(), 0.01);
+    assertEquals(161, this.pixel9.convertHSLtoRGB().getGreenComponent(), 0.01);
+    assertEquals(133, this.pixel9.convertHSLtoRGB().getBlueComponent(), 0.01);
+
+    assertEquals(28, this.pixel10.convertHSLtoRGB().getRedComponent(), 0.01);
+    assertEquals(24, this.pixel10.convertHSLtoRGB().getGreenComponent(), 0.01);
+    assertEquals(23, this.pixel10.convertHSLtoRGB().getBlueComponent(), 0.01);
+
+  }
+
+
 }

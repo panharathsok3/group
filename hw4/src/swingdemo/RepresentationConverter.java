@@ -83,7 +83,7 @@ public class RepresentationConverter {
     
     //demo main
     public static void main(String[] args) {
-	RepresentationConverter.convertRGBtoHSL(0.0, 0.0, 0.0);
+	RepresentationConverter.convertRGBtoHSL(120, 72, 99);
 	RepresentationConverter.convertRGBtoHSL(1.0, 1.0, 1.0);
 	RepresentationConverter.convertRGBtoHSL(1.0, 0.0, 0.0);
 	
