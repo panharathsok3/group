@@ -15,7 +15,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import controller.Features;
 import model.IPixel;
-import model.effects.BrightenDarkenMacro;
 
 public class JFrameView extends JFrame implements GUIView, ActionListener {
 
@@ -78,29 +77,44 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     commands.setBorder(BorderFactory.createTitledBorder("Effects"));
     commands.setBackground(Color.LIGHT_GRAY);
 
-    this.saveProject = new JButton("Save A Project");
-    this.addLayer = new JButton("Add a new Layer");
-    this.addImageToLayer = new JButton("Add an image to a Layer");
-    this.setFilter = new JButton("Set a filter on a Layer");
-    this.load = new JButton("Load A Project ");
-    this.saveImage = new JButton("Save an Image");
-    this.newProject = new JButton("New Project");
 
+    this.addImageToLayer = new JButton("Add an image to a Layer");
+    this.addImageToLayer.setActionCommand("add-image-to-layer");
+    this.addImageToLayer.addActionListener(this);
+
+    this.load = new JButton("Load A Project");
+    this.load.setActionCommand("load-project");
+    this.load.addActionListener(this);
+
+    this.saveProject = new JButton("Save A Project");
+    this.saveProject.setActionCommand("save-project");
+    this.saveProject.addActionListener(this);
+
+    this.newProject = new JButton("New Project");
     this.newProject.setActionCommand("new-project");
     this.newProject.addActionListener(this);
 
+    this.saveImage = new JButton("Save an Image");
     this.saveImage.setActionCommand("save-image");
     this.saveImage.addActionListener(this);
 
+    this.addLayer = new JButton("Add a new Layer");
     this.addLayer.setActionCommand("add-layer");
     this.addLayer.addActionListener(this);
     this.layerNum = 1;
 
     //a drop-down menu to show the list of filer options.
     this.effectsOptions = new JComboBox<>(
-            new String[]{"Brighten-value", "Brighten-luma", "Brighten-intensity", "Darken-value",
+            new String[]{"Normal", "Brighten-value", "Brighten-luma", "Brighten-intensity", "Darken-value",
                     "Darken-luma", "Darken-intensity", "Red-Component", "Green-Component",
                     "Blue-Component", "Inversion-difference", "Brightening-screen", "Darken-multiply"});
+    this.effectsOptions.setActionCommand("set-filter");
+    this.effectsOptions.addActionListener(this);
+
+    this.setFilter = new JButton("Set a filter on a Layer");
+    this.setFilter.setActionCommand("set-filter");
+    this.setFilter.addActionListener(this);
+
 
     commands.add(this.newProject);
     commands.add(this.addLayer);
@@ -122,6 +136,13 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
   }
 
+  /**
+   * Helper method that displays an error message to the screen.
+   * SIDE EFFECTS: Displays a pop-up box that has a descriptive error message
+   * if the user is trying to perform an action that is not supported.
+   *
+   * @param message the specific message relating to the command that has been invoked.
+   */
   public void errorMessage(String message) {
     JOptionPane.showMessageDialog(null,
             message, "Error", JOptionPane.ERROR_MESSAGE);
@@ -160,7 +181,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
       case "add-image-to-layer":
         break;
       case "set-filter":
-
         break;
       default:
         errorMessage("Action doesn't exist");
@@ -180,18 +200,91 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
   @Override
   public void addFeatures(Features features) {
 
-    this.newProject.addActionListener(e -> features.newProject(
-            JOptionPane.showInputDialog("Enter your project name"),
-            JOptionPane.showInputDialog("Enter the height"),
-            JOptionPane.showInputDialog("Enter your width")));
+    this.newProject.addActionListener(e -> {
+      try {
+        features.newProject(
+                JOptionPane.showInputDialog("Enter your project name"),
+                JOptionPane.showInputDialog("Enter the height"),
+                JOptionPane.showInputDialog("Enter your width"));
+      } catch (IllegalStateException ise) {
+        errorMessage(ise.getMessage());
+      }
+    });
 
-    this.addLayer.addActionListener(e -> features.addLayer("Layer "+ layerNum));
+
+    this.addLayer.addActionListener(e -> {
+      try {
+        features.addLayer("Layer " + layerNum);
+      } catch (IllegalStateException ise) {
+        errorMessage(ise.getMessage());
+      }
+    });
 
 
+    this.saveImage.addActionListener(e -> {
+      JFileChooser fileChooser = new JFileChooser("./");
+      int returnValue = fileChooser.showSaveDialog(JFrameView.this);
+      if (returnValue == JFileChooser.APPROVE_OPTION) {
+        File file = fileChooser.getSelectedFile();
+        String fileName = file.getAbsolutePath();
+        try {
+          features.saveImage(fileName);
+        } catch (IllegalStateException ise) {
+          errorMessage(ise.getMessage());
+        }
+      }
+    });
 
-//    this.setFilter.addActionListener(e -> features.setFilter
-//            (JOptionPane.showInputDialog("Enter the layer you want to transform name"),
-//            JOptionPane.showInputDialog("Enter the filter you want to apply")));
+
+    this.saveProject.addActionListener(e -> {
+      try {
+        features.saveProject(
+                (JOptionPane.showInputDialog("SAVE AS: ")),
+                JOptionPane.showInputDialog(saveProject));
+      } catch (IllegalStateException ise) {
+        errorMessage(ise.getMessage());
+      }
+    });
+
+
+    this.load.addActionListener(e -> {
+      JFileChooser fileChooser =
+              new JFileChooser("./src");
+
+      FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("PPM", "JPEG",
+              "JPG", "ppm", "jpeg", "jpg");
+
+      fileChooser.setFileFilter(extensionFilter);
+      int returnValue = fileChooser.showOpenDialog(JFrameView.this);
+
+      if (returnValue == JFileChooser.APPROVE_OPTION) {
+        File file = fileChooser.getSelectedFile();
+        int slash = file.getAbsolutePath().lastIndexOf(File.separator);
+        int dot = file.getAbsolutePath().lastIndexOf(".");
+
+        String filePath = file.getAbsolutePath().substring(slash + 1, dot);
+        try {
+          features.loadProject(filePath);
+        } catch (IllegalStateException ise) {
+          errorMessage(ise.getMessage());
+        }
+        this.refresh();
+      }
+    });
+
+    this.addImageToLayer.addActionListener(e -> {
+
+      try {
+        features.addImageToLayer
+                (JOptionPane.showInputDialog("Enter the layer you want to add the image to"),
+                        JOptionPane.showInputDialog(load),
+                        JOptionPane.showInputDialog("Enter the x position"),
+                        JOptionPane.showInputDialog("Enter  the y position"));
+      } catch (IllegalStateException ise) {
+        errorMessage(ise.getMessage());
+      }
+
+    });
 
 
     Map<String, Consumer<Features>> effectOptions =
@@ -209,51 +302,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
       }
     });
 
-    this.addImageToLayer.addActionListener(e -> features.addImageToLayer
-            (JOptionPane.showInputDialog("Enter the layer you want to add the image to"),
-                    JOptionPane.showInputDialog("Enter the image you want to add"),
-    JOptionPane.showInputDialog("Enter the x position"),
-                    JOptionPane.showInputDialog("Enter  the y position")))
-    ;
-
-
-    this.saveImage.addActionListener(e -> {
-      JFileChooser fileChooser = new JFileChooser("./");
-
-      int returnValue = fileChooser.showSaveDialog(JFrameView.this);
-
-      if (returnValue == JFileChooser.APPROVE_OPTION) {
-        File file = fileChooser.getSelectedFile();
-
-        int slash = file.getAbsolutePath().lastIndexOf(File.separator);
-        int dot = file.getAbsolutePath().lastIndexOf(".");
-
-        String fileName = file.getAbsolutePath().substring(slash + 1, dot);
-        features.saveImage(fileName);
-      }
-    });
-
-
-    this.load.addActionListener(e -> {
-      JFileChooser fileChooser =
-              new JFileChooser("./src");
-
-      FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("PPM","JPEG",
-              "JPG","ppm","jpeg","jpg");
-
-      fileChooser.setFileFilter(extensionFilter);
-      int returnValue = fileChooser.showOpenDialog(JFrameView.this);
-
-      if (returnValue == JFileChooser.APPROVE_OPTION) {
-        File file = fileChooser.getSelectedFile();
-        int slash = file.getAbsolutePath().lastIndexOf(File.separator);
-        int dot = file.getAbsolutePath().lastIndexOf(".");
-
-        String filePath = file.getAbsolutePath().substring(slash + 1, dot);
-        features.loadProject(filePath);
-        this.refresh();
-      }
-    });
 
   }
 
