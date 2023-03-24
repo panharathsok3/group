@@ -342,15 +342,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
         int b = imageToAdd.get(x).get(y).getBlueComponent();
 
         int a = imageToAdd.get(x).get(y).getAlphaComponent();
-        if (y * image.getWidth() + x >= 35000) {
-          a = 100;
-        }
-        if (y * image.getWidth() + x >= 90000) {
-          a = 0;
-        }
-        if (y * image.getWidth() + x >= 110000) {
-          a = 255;
-        }
 
         int argb = a << 24;
         argb |= r << 16;
