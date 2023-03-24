@@ -229,7 +229,6 @@ public class CollageControllerImpl implements CollageController {
           }
         }
       }
-
     }
 
     fileWriter.close();

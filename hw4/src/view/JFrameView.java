@@ -14,11 +14,13 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import controller.Features;
+import model.ILayer;
 import model.IPixel;
 
 public class JFrameView extends JFrame implements GUIView, ActionListener {
 
-  private JPanel mainPanel, imagePanel;
+  private JPanel mainPanel, imagePanel, currentLayers;
+
   private JScrollPane mainScrollPane;
   private JButton newProject, addLayer, addImageToLayer, setFilter, saveProject, saveImage, load;
   private JComboBox<String> effectsOptions;
@@ -27,6 +29,9 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
   private int height;
   private int width;
   private int layerNum;
+  private JList<ILayer> listOfLayers;
+  private JList<Integer> layerNumbers;
+
 
   public JFrameView() {
     super();
@@ -105,9 +110,12 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
     //a drop-down menu to show the list of filer options.
     this.effectsOptions = new JComboBox<>(
-            new String[]{"Normal", "Brighten-value", "Brighten-luma", "Brighten-intensity", "Darken-value",
-                    "Darken-luma", "Darken-intensity", "Red-Component", "Green-Component",
-                    "Blue-Component", "Inversion-difference", "Brightening-screen", "Darken-multiply"});
+            new String[]
+                    {"Normal",
+                            "Brighten-value", "Brighten-luma", "Brighten-intensity", "Darken-value",
+                            "Darken-luma", "Darken-intensity", "Red-Component", "Green-Component",
+                            "Blue-Component", "Inversion-difference", "Brightening-screen", "Darken-multiply"});
+
     this.effectsOptions.setActionCommand("set-filter");
     this.effectsOptions.addActionListener(this);
 
@@ -116,6 +124,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     this.setFilter.addActionListener(this);
 
 
+    //commands
     commands.add(this.newProject);
     commands.add(this.addLayer);
     commands.add(this.addImageToLayer);
@@ -127,9 +136,18 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
     this.mainPanel.add(commands, BorderLayout.SOUTH);
 
-    JPanel currentLayers = new JPanel();
-    currentLayers.setLayout(new FlowLayout());
-    currentLayers.add(new JLabel("Layers"));
+
+    //Layers selection list
+    this.currentLayers = new JPanel();
+    currentLayers.setBorder(BorderFactory.createTitledBorder("List of Layers"));
+    currentLayers.setLayout(new BoxLayout(currentLayers, BoxLayout.X_AXIS));
+    this.mainPanel.add(currentLayers);
+
+
+    JLabel layerMessage = new JLabel();
+    layerMessage = new JLabel("Layers on your project will appear here");
+    currentLayers.add(layerMessage);
+
 
     //pack();
     setVisible(true);
@@ -177,6 +195,12 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
         break;
       case "add-layer":
         this.layerNum++;
+        DefaultListModel<Integer> dataForListOfIntegers = new DefaultListModel<>();
+        // for (int i = 0; i < layerNum; i++)
+        dataForListOfIntegers.addElement(layerNum);
+        layerNumbers = new JList<>(dataForListOfIntegers);
+        layerNumbers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        currentLayers.add(layerNumbers +"Layer",new JButton());
         break;
       case "add-image-to-layer":
         break;
@@ -222,7 +246,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
 
     this.saveImage.addActionListener(e -> {
-      JFileChooser fileChooser = new JFileChooser("./");
+      final JFileChooser fileChooser = new JFileChooser("./");
       int returnValue = fileChooser.showSaveDialog(JFrameView.this);
       if (returnValue == JFileChooser.APPROVE_OPTION) {
         File file = fileChooser.getSelectedFile();
@@ -237,22 +261,36 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
 
     this.saveProject.addActionListener(e -> {
-      try {
-        features.saveProject(
-                (JOptionPane.showInputDialog("SAVE AS: ")),
-                JOptionPane.showInputDialog(saveProject));
-      } catch (IllegalStateException ise) {
-        errorMessage(ise.getMessage());
+      final JFileChooser fileChooser = new JFileChooser("./");
+      int returnValue = fileChooser.showSaveDialog(JFrameView.this);
+
+
+      if (returnValue == JFileChooser.APPROVE_OPTION) {
+        File file = fileChooser.getSelectedFile();
+        String fileName = file.getAbsolutePath();
+
+        int slash = file.getAbsolutePath().lastIndexOf(File.separator);
+        int dot = file.getAbsolutePath().lastIndexOf(".");
+        String filePath = file.getAbsolutePath().substring(slash + 1, dot);
+
+
+        try {
+          //(JOptionPane.showInputDialog("SAVE AS: "))
+          features.saveProject(fileName, filePath);
+        } catch (IllegalStateException ise) {
+          errorMessage(ise.getMessage());
+        }
       }
     });
+
 
 
     this.load.addActionListener(e -> {
       JFileChooser fileChooser =
               new JFileChooser("./src");
 
-      FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter("PPM", "JPEG",
-              "JPG", "ppm", "jpeg", "jpg");
+      FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter
+              ("PPM, JPEG & JPG ", "ppm", "jpeg", "jpg");
 
       fileChooser.setFileFilter(extensionFilter);
       int returnValue = fileChooser.showOpenDialog(JFrameView.this);
@@ -268,6 +306,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
         } catch (IllegalStateException ise) {
           errorMessage(ise.getMessage());
         }
+        //remove this
         this.refresh();
       }
     });
@@ -377,4 +416,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
   public int getImageBorderWidth() {
     return this.width;
   }
+
+
 }

@@ -379,7 +379,8 @@ public class SwingFeaturesFrame extends JFrame implements ActionListener, ItemLi
         inputDisplay.setText(JOptionPane.showInputDialog("Please enter your username"));
         break;
       case "Option": {
-        String[] options = {"Uno", "Dos", "Tres", "Cuatro", "Cinco", "seis", "siete", "ocho", "nueve", "dies"};
+        String[] options = {"Uno", "Dos", "Tres", "Cuatro",
+                "Cinco", "seis", "siete", "ocho", "nueve", "dies"};
         int retvalue = JOptionPane.showOptionDialog(SwingFeaturesFrame.this, "Please choose number", "Options", JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[4]);
         optionDisplay.setText(options[retvalue]);
       }

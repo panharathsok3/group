@@ -72,7 +72,6 @@ public class CollageGUIController implements Features {
   public void setFilter(String layerName, String filterOption) {
     this.model.setFilter(layerName, filterOption);
     this.view.refresh();
-
   }
 
 
