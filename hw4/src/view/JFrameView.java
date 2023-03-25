@@ -32,9 +32,9 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
   private int layerNum;
   private JList<ILayer> listOfLayers;
   private JList<Integer> layerNumbers;
- private  List<String> layerNames = new ArrayList<>();
+  private  List<String> layerNames = new ArrayList<>();
 
- private JComboBox<String> layersOnProject;
+  private JComboBox<String> layersOnProject;
 
 
   public JFrameView() {

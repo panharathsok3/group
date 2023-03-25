@@ -23,3 +23,4 @@ public interface GUIView {
 
   Image getImageToPutOnScreen(int height, int width, List<List<IPixel>> imageToAdd);
 }
+
