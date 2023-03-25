@@ -1,7 +1,5 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import model.CollageProject;
 import view.GUIView;
@@ -41,7 +39,7 @@ public class CollageGUIController implements Features {
   @Override
   public void loadProject(String filePath) {
     this.model.loadProject(filePath);
-    this.view.displayMessage("Project has been loaded");
+    this.view.displayMessage("Image loaded");
     //this.view.displayImage();
 //
   }
