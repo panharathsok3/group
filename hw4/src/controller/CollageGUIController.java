@@ -41,7 +41,7 @@ public class CollageGUIController implements Features {
   @Override
   public void loadProject(String filePath) {
     this.model.loadProject(filePath);
-    this.view.displayMessage("Image loaded");
+    this.view.displayMessage("Project has been loaded");
     //this.view.displayImage();
 //
   }

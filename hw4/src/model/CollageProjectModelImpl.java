@@ -373,7 +373,7 @@ public class CollageProjectModelImpl implements CollageProject {
     StringBuilder builder = new StringBuilder();
     while (sc.hasNextLine()) {
       String s = sc.nextLine();
-      if (s.charAt(0) != '#') {
+      if (s.length()>0 && s.charAt(0) != '#') {
         builder.append(s + System.lineSeparator());
       }
     }
