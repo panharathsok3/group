@@ -1,5 +1,8 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import model.CollageProject;
 import view.GUIView;
 
@@ -38,12 +41,14 @@ public class CollageGUIController implements Features {
   @Override
   public void loadProject(String filePath) {
     this.model.loadProject(filePath);
+    this.view.displayMessage("Image loaded");
+    //this.view.displayImage();
+//
   }
 
   @Override
   public void addLayer(String layerName) {
     this.model.addLayer(layerName);
-    this.view.refresh();
   }
 
   @Override
@@ -56,25 +61,23 @@ public class CollageGUIController implements Features {
     this.view.displayImage(this.view.getImageToPutOnScreen(xPosition, yPosition,
             this.model.getLayers().get(0).getPixelsOnLayer()));
 
+    this.view.displayMessage("Image added");
   }
 
   @Override
   public void saveProject(String filePath, String projectType) {
     this.model.saveProject(filePath, projectType);
-    this.view.refresh();
   }
 
   @Override
   public void saveImage(String filePath) {
     this.model.saveImage(filePath);
-    this.view.refresh();
   }
 
   @Override
   public void setFilter(String layerName, String filterOption) {
     this.model.setFilter(layerName, filterOption);
     this.view.refresh();
-
   }
 
 
