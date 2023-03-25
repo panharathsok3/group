@@ -27,6 +27,11 @@ public class GUIViewConfirmMethodCallValidReturnMock implements GUIView {
   }
 
   @Override
+  public void displayMessage(String message) {
+
+  }
+
+  @Override
   public int getImageBorderHeight() {
     return 0;
   }

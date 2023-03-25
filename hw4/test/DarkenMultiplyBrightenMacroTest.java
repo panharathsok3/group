@@ -87,7 +87,7 @@ public class DarkenMultiplyBrightenMacroTest {
       pixelsOnCurrentLayer.add(new ArrayList<>());
       for (int j = 0; j < 10; j++) {
         pixelsOnCurrentLayer.get(i).add(new Pixel(21, 50,
-                68, 100));
+                68, 1));
       }
     }
 
@@ -112,9 +112,9 @@ public class DarkenMultiplyBrightenMacroTest {
 
     for (List<IPixel> lop : this.layer3.getPixelsOnLayer()) {
       for (IPixel p : lop) {
-        //assertEquals(4, p.getRedComponent());
-        //assertEquals(9, p.getGreenComponent());
-        //assertEquals(12, p.getBlueComponent());
+        assertEquals(4, p.getRedComponent());
+        assertEquals(9, p.getGreenComponent());
+        assertEquals(12, p.getBlueComponent());
         assertEquals(189.66, p.getAlphaComponent(), 0.1);
       }
     }

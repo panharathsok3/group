@@ -60,11 +60,13 @@ public class Pixel implements IPixel {
    * @param hue the hue of this Pixel
    * @param saturation the saturation of this Pixel
    * @param lightness the lightness of this Pixel
+   * @param alphaComponent the alphaComponent of this Pixel
    * @throws IllegalArgumentException if 0 > hue >= 360
    *                                  or 0 > saturation > 1
    *                                  or 0 > lightness > 1
    */
-  public Pixel(double hue, double saturation, double lightness) throws IllegalArgumentException {
+  public Pixel(double hue, double saturation, double lightness, int alphaComponent)
+      throws IllegalArgumentException {
 
     if (hue < 0 || hue >= 360 || saturation < 0 || saturation > 1 || lightness < 0
         || lightness > 1) {
@@ -76,6 +78,7 @@ public class Pixel implements IPixel {
     this.saturation = saturation;
     this.lightness = lightness;
     this.isRGB = false;
+    this.alphaComponent = alphaComponent;
   }
 
 
@@ -99,7 +102,6 @@ public class Pixel implements IPixel {
 
   @Override
   public int getAlphaComponent() throws IllegalStateException {
-    this.throwErrorIfNotCorrectRepresentation(!this.isRGB);
     return this.alphaComponent;
   }
 
@@ -181,7 +183,7 @@ public class Pixel implements IPixel {
       hue = hue * 60;
     }
 
-    return new Pixel(hue, saturation, lightness);
+    return new Pixel(hue, saturation, lightness, this.alphaComponent);
   }
 
 
@@ -201,7 +203,7 @@ public class Pixel implements IPixel {
     int gInt = (int)Math.round(g);
     int bInt = (int)Math.round(b);
 
-    return new Pixel(rInt, gInt, bInt);
+    return new Pixel(rInt, gInt, bInt, this.alphaComponent);
   }
 
   /**
@@ -217,7 +219,7 @@ public class Pixel implements IPixel {
 
   private void throwErrorIfNotCorrectRepresentation(boolean wrongRepresentation) {
     if (wrongRepresentation) {
-      throw new IllegalArgumentException("");
+      throw new IllegalArgumentException("This is wrong!");
     }
   }
 }

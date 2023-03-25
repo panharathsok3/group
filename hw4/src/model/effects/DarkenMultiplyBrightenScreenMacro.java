@@ -6,6 +6,9 @@ import model.ILayer;
 import model.IPixel;
 import model.Pixel;
 
+/**
+ *
+ */
 public class DarkenMultiplyBrightenScreenMacro implements MacroCollageEffects {
 
   private final int height;
@@ -55,10 +58,11 @@ public class DarkenMultiplyBrightenScreenMacro implements MacroCollageEffects {
 
         if (this.brightenDarken) {
           layer.getPixelsOnLayer().get(i).set(j, new Pixel(hue, saturation,
-              lightness * prevLightness).convertHSLtoRGB());
+              lightness * prevLightness, pixel.getAlphaComponent()).convertHSLtoRGB());
         } else {
           layer.getPixelsOnLayer().get(i).set(j, new Pixel(hue, saturation,
-              (1 - ((1 - lightness) * (1 - prevLightness)))).convertHSLtoRGB());
+              (1 - ((1 - lightness) * (1 - prevLightness))), pixel.getAlphaComponent())
+              .convertHSLtoRGB());
         }
       }
     }
