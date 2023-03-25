@@ -14,6 +14,9 @@ public interface GUIView {
 
   void displayImage(Image image);
 
+
+  void displayMessage(String message);
+
   int getImageBorderHeight();
 
   int getImageBorderWidth();

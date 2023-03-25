@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,9 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
   private int layerNum;
   private JList<ILayer> listOfLayers;
   private JList<Integer> layerNumbers;
+ private  List<String> layerNames = new ArrayList<>();
+
+ private JComboBox<String> layersOnProject;
 
 
   public JFrameView() {
@@ -108,7 +112,11 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     this.addLayer.addActionListener(this);
     this.layerNum = 1;
 
-    //a drop-down menu to show the list of filer options.
+
+
+
+
+    //a drop-down menu to show the list of filter options.
     this.effectsOptions = new JComboBox<>(
             new String[]
                     {"Normal",
@@ -118,6 +126,37 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
     this.effectsOptions.setActionCommand("set-filter");
     this.effectsOptions.addActionListener(this);
+
+
+    int a = this.effectsOptions.getSelectedIndex();
+    if (a == 1) {
+      this.effectsOptions.addActionListener(this);
+    } else if (a == 2) {
+      this.effectsOptions.addActionListener(this);
+    } else if (a == 3) {
+      this.effectsOptions.addActionListener(this);
+    } else if (a == 4) {
+      this.effectsOptions.addActionListener(this);
+    } else if (a == 5) {
+      this.effectsOptions.addActionListener(this);
+    } else if (a == 6) {
+      this.effectsOptions.addActionListener(this);
+    } else if (a == 7) {
+      this.effectsOptions.addActionListener(this);
+    } else if (a == 8) {
+      this.effectsOptions.addActionListener(this);
+    } else if (a == 9) {
+      this.effectsOptions.addActionListener(this);
+    } else if (a == 10) {
+      this.effectsOptions.addActionListener(this);
+    } else if (a == 11) {
+      this.effectsOptions.addActionListener(this);
+    } else if (a == 12) {
+      this.effectsOptions.addActionListener(this);
+    } else {
+      this.effectsOptions.addActionListener(this);
+    }
+
 
     this.setFilter = new JButton("Set a filter on a Layer");
     this.setFilter.setActionCommand("set-filter");
@@ -133,8 +172,9 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     commands.add(this.saveImage);
     commands.add(this.load);
     commands.add(this.effectsOptions);
-
     this.mainPanel.add(commands, BorderLayout.SOUTH);
+
+
 
 
     //Layers selection list
@@ -144,9 +184,11 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     this.mainPanel.add(currentLayers);
 
 
-    JLabel layerMessage = new JLabel();
-    layerMessage = new JLabel("Layers on your project will appear here");
+    this.layersOnProject = new JComboBox<>(layerNames.toArray(new String[0]));
+    JLabel layerMessage = new JLabel("Layers on your project will appear here");
+
     currentLayers.add(layerMessage);
+    currentLayers.add(layersOnProject);
 
 
     //pack();
@@ -166,9 +208,14 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
             message, "Error", JOptionPane.ERROR_MESSAGE);
   }
 
+//  public void displayMessage(String message) {
+//    JLabel msgLabel = new JLabel();
+//    msgLabel.setText(message);
+//  }
+
+  @Override
   public void displayMessage(String message) {
-    JLabel msgLabel = new JLabel();
-    msgLabel.setText(message);
+    JOptionPane.showMessageDialog(this, message);
   }
 
   /**
@@ -200,7 +247,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
         dataForListOfIntegers.addElement(layerNum);
         layerNumbers = new JList<>(dataForListOfIntegers);
         layerNumbers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        currentLayers.add(layerNumbers +"Layer",new JButton());
+        currentLayers.add(layerNumbers + "Layer", new JButton());
         break;
       case "add-image-to-layer":
         break;
@@ -229,7 +276,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
         features.newProject(
                 JOptionPane.showInputDialog("Enter your project name"),
                 JOptionPane.showInputDialog("Enter the height"),
-                JOptionPane.showInputDialog("Enter your width"));
+                JOptionPane.showInputDialog("Enter the width"));
       } catch (IllegalStateException ise) {
         errorMessage(ise.getMessage());
       }
@@ -237,11 +284,15 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
 
     this.addLayer.addActionListener(e -> {
+      String layerName = "Layer: " + layerNum;
       try {
-        features.addLayer("Layer " + layerNum);
+        layerNames.add(layerName);
+        features.addLayer(layerName);
       } catch (IllegalStateException ise) {
         errorMessage(ise.getMessage());
       }
+      System.out.println(layerNames.toArray(new String[0]).length);
+      this.layersOnProject = new JComboBox<>(layerNames.toArray(new String[0]) );
     });
 
 
@@ -284,7 +335,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     });
 
 
-
     this.load.addActionListener(e -> {
       JFileChooser fileChooser =
               new JFileChooser("./src");
@@ -297,17 +347,13 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
       if (returnValue == JFileChooser.APPROVE_OPTION) {
         File file = fileChooser.getSelectedFile();
-        int slash = file.getAbsolutePath().lastIndexOf(File.separator);
-        int dot = file.getAbsolutePath().lastIndexOf(".");
 
-        String filePath = file.getAbsolutePath().substring(slash + 1, dot);
+        String filePath = file.getAbsolutePath();
         try {
           features.loadProject(filePath);
         } catch (IllegalStateException ise) {
           errorMessage(ise.getMessage());
         }
-        //remove this
-        this.refresh();
       }
     });
 
@@ -340,9 +386,11 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
         errorMessage("Action doesn't exist");
       }
     });
-
-
   }
+
+
+
+
 
   private Map<String, Consumer<Features>> getActionsForCommands() {
     Map<String, Consumer<Features>> effectOptions =
@@ -363,7 +411,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
       String layerName = null;
 
       switch (effects[chosen]) {
-        case "red-component":
+        case "":
       }
     });
     return effectOptions;
@@ -397,6 +445,8 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     this.imageLabel.setIcon(new ImageIcon(image));
     this.repaint();
   }
+
+
 
   @Override
   public int getImageBorderHeight() {
