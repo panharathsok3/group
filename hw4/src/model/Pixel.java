@@ -165,7 +165,10 @@ public class Pixel implements IPixel {
       saturation = delta / (1 - Math.abs(2 * lightness - 1));
       hue = 0;
       if (componentMax == red) {
-        hue = (green - blue)/delta;
+        hue = (green - blue) / delta;
+        while (hue < 0) {
+          hue += 6; //hue must be positive to find the appropriate modulus
+        }
         hue = hue % 6;
       } else if (componentMax == green) {
         hue = (blue - red) / delta;
