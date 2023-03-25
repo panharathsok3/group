@@ -14,9 +14,13 @@ public interface GUIView {
 
   void displayImage(Image image);
 
+
+  void displayMessage(String message);
+
   int getImageBorderHeight();
 
   int getImageBorderWidth();
 
   Image getImageToPutOnScreen(int height, int width, List<List<IPixel>> imageToAdd);
 }
+
