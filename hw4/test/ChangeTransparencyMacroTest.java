@@ -26,9 +26,9 @@ public class ChangeTransparencyMacroTest  {
   @Before
   public void init() {
     this.layer1 = new Layer("L1", 10, 15, 255);
-    this.layer2 = new Layer("L2", 15, 30, 0);
-    this.layer3 = new Layer("L3", 40, 40, 255);
-    this.layer4 = new Layer("L4", 10, 10, 20);
+    this.layer2 = new Layer("L2", 15, 30, 100);
+    this.layer3 = new Layer("L3", 40, 40, 150);
+    this.layer4 = new Layer("L4", 10, 10, 255);
   }
 
   @Test
@@ -94,15 +94,37 @@ public class ChangeTransparencyMacroTest  {
       pixelsOnCurrentLayer.add(new ArrayList<>());
       for (int j = 0; j < 15; j++) {
         pixelsOnCurrentLayer.get(i).add(new Pixel(21, 50,
-                68, 100));
+                68, 255));
       }
     }
 
     this.layer2.addImage(0, 0, pixelsOnCurrentLayer);
 
+    List<List<IPixel>> pixelsOnCurrentLayer2 = new ArrayList<>();
+
+    for (int i = 0; i < 10; i++) {
+      pixelsOnCurrentLayer2.add(new ArrayList<>());
+      for (int j = 0; j < 15; j++) {
+        pixelsOnCurrentLayer2.get(i).add(new Pixel(21, 50,
+                68, 100));
+      }
+    }
+
+    this.layer3.addImage(0, 0, pixelsOnCurrentLayer2);
+
     MacroCollageEffects macro = new ChangeTransparencyMacro(10, 15, true,
             pixelsOnCurrentLayer);
-    macro.executeMacro(this.layer2);
+    macro.executeMacro(this.layer3);
+
+    for (List<IPixel> list : this.layer4.getPixelsOnLayer()) {
+      for (IPixel p : list) {
+        assertEquals(15, p.getRedComponent());
+        assertEquals(150, p.getGreenComponent());
+        assertEquals(70, p.getBlueComponent());
+        assertEquals(255, p.getAlphaComponent());
+      }
+    }
+
 
   }
 
