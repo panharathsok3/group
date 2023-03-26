@@ -18,7 +18,6 @@ public class ModelConfirmMethodCallValidReturnMock implements CollageProject {
    * Creates a mock keeps track of the method calls.
    */
   public ModelConfirmMethodCallValidReturnMock(Appendable log) {
-
     this.log = log;
   }
 
@@ -99,5 +98,11 @@ public class ModelConfirmMethodCallValidReturnMock implements CollageProject {
       //
     }
   }
+
+
+  public String getLog() {
+    return this.log.toString();
+  }
+
 
 }
