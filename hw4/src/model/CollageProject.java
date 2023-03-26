@@ -1,13 +1,12 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
  * An interface to represent the collage operations that can be done with our program.
  */
-public interface CollageProject extends CollageProjectModel {
+public interface CollageProject {
 
   /**
    * Creates a new Project with a name and a set of dimensions.

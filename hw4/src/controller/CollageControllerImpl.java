@@ -22,7 +22,7 @@ import view.CollageView;
  */
 public class CollageControllerImpl implements CollageController {
   private Readable in;
-  private CollageProject collage;
+  private final CollageProject collage;
   private CollageView view;
   private boolean projectMade;
 
@@ -45,8 +45,9 @@ public class CollageControllerImpl implements CollageController {
     this.projectMade = false;
   }
 
-  public CollageControllerImpl() {
-    //nothing.
+  public CollageControllerImpl(CollageProject collage, boolean projectMade) {
+    this.collage = collage;
+    this.projectMade = projectMade;
   }
 
   @Override

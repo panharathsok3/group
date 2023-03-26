@@ -100,34 +100,4 @@ public class ModelConfirmMethodCallValidReturnMock implements CollageProject {
     }
   }
 
-  @Override
-  public void loadProject(String filePath) throws IllegalArgumentException, IllegalStateException {
-    try {
-      this.log.append(String.format("Loaded a project with the given argument = %s\n", filePath));
-    } catch (IOException ioe) {
-      //
-    }
-  }
-
-  @Override
-  public void saveProject(String filePath, String projectType) throws IllegalArgumentException,
-      IllegalStateException {
-    try {
-      this.log.append(String.format("Saved a project with the given arguments = %s, %s\n", filePath,
-          projectType));
-    } catch (IOException ioe) {
-      //
-    }
-  }
-
-  @Override
-  public void saveImage(String filePath) throws IllegalArgumentException, IllegalStateException {
-    try {
-      this.log.append(String.format("Saved an image with the given argument = %s\n", filePath));
-    } catch (IOException ioe) {
-      //
-    }
-  }
-
-
 }

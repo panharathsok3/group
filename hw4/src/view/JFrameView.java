@@ -5,37 +5,34 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import controller.Features;
-import model.ILayer;
 import model.IPixel;
 
-public class JFrameView extends JFrame implements GUIView, ActionListener {
+public class JFrameView extends JFrame implements GUIView, ActionListener, ListSelectionListener {
 
-  private JPanel mainPanel, imagePanel, currentLayers;
+  private JPanel mainPanel, imagePanel;
 
   private JScrollPane mainScrollPane;
   private JButton newProject, addLayer, addImageToLayer, setFilter, saveProject, saveImage, load;
   private JComboBox<String> effectsOptions;
   private JLabel imageLabel;
   private JScrollPane imageScrollPane;
+  private JList<String> listOfStrings;
   private int height;
   private int width;
   private int layerNum;
-  private JList<ILayer> listOfLayers;
-  private JList<Integer> layerNumbers;
-  private  List<String> layerNames = new ArrayList<>();
-
-  private JComboBox<String> layersOnProject;
-
+  private String currSelectedLayer;
+  private DefaultListModel<String> dataForListOfStrings;
 
   public JFrameView() {
     super();
@@ -58,6 +55,10 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
 
     //scroll bars around this main panel
     this.mainScrollPane = new JScrollPane(mainPanel);
+
+    int scaleHeight = 300;
+    int scaleWidth = 400;
+    this.mainScrollPane.setPreferredSize(new Dimension(width - scaleWidth, height - scaleHeight));
     this.add(mainScrollPane);
 
 
@@ -112,7 +113,17 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     this.addLayer.addActionListener(this);
     this.layerNum = 1;
 
+    //Selection lists
+    JPanel selectionListPanel = new JPanel();
+    selectionListPanel.setBorder(BorderFactory.createTitledBorder("Selection lists"));
+    selectionListPanel.setLayout(new BoxLayout(selectionListPanel, BoxLayout.X_AXIS));
+    this.mainPanel.add(selectionListPanel);
 
+    this.dataForListOfStrings = new DefaultListModel<>();
+    this.listOfStrings = new JList<>(this.dataForListOfStrings);
+    this.listOfStrings.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    this.listOfStrings.addListSelectionListener(this);
+    selectionListPanel.add(listOfStrings);
 
 
 
@@ -175,22 +186,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     this.mainPanel.add(commands, BorderLayout.SOUTH);
 
 
-
-
-    //Layers selection list
-    this.currentLayers = new JPanel();
-    currentLayers.setBorder(BorderFactory.createTitledBorder("List of Layers"));
-    currentLayers.setLayout(new BoxLayout(currentLayers, BoxLayout.X_AXIS));
-    this.mainPanel.add(currentLayers);
-
-
-    this.layersOnProject = new JComboBox<>(layerNames.toArray(new String[0]));
-    JLabel layerMessage = new JLabel("Layers on your project will appear here");
-
-    currentLayers.add(layerMessage);
-    currentLayers.add(layersOnProject);
-
-
     //pack();
     setVisible(true);
 
@@ -231,7 +226,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
   public void actionPerformed(ActionEvent arg0) {
     switch (arg0.getActionCommand()) {
       case "new-project":
-//        this.projectName = JOptionPane.showInputDialog("Enter your project name");
+        //do nothing
         break;
       case "save-image":
         //String a = JOptionPane.showInputDialog("Enter something");
@@ -243,11 +238,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
       case "add-layer":
         this.layerNum++;
         DefaultListModel<Integer> dataForListOfIntegers = new DefaultListModel<>();
-        // for (int i = 0; i < layerNum; i++)
         dataForListOfIntegers.addElement(layerNum);
-        layerNumbers = new JList<>(dataForListOfIntegers);
-        layerNumbers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        currentLayers.add(layerNumbers + "Layer", new JButton());
         break;
       case "add-image-to-layer":
         break;
@@ -280,19 +271,20 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
       } catch (IllegalStateException ise) {
         errorMessage(ise.getMessage());
       }
+      this.dataForListOfStrings.addElement("Background");
+      this.currSelectedLayer = "Background";
     });
 
 
     this.addLayer.addActionListener(e -> {
-      String layerName = "Layer: " + layerNum;
+      String layerName = "Layer " + this.layerNum;
+      this.dataForListOfStrings.addElement(layerName);
+      this.currSelectedLayer = layerName;
       try {
-        layerNames.add(layerName);
         features.addLayer(layerName);
       } catch (IllegalStateException ise) {
         errorMessage(ise.getMessage());
       }
-      System.out.println(layerNames.toArray(new String[0]).length);
-      this.layersOnProject = new JComboBox<>(layerNames.toArray(new String[0]) );
     });
 
 
@@ -458,5 +450,8 @@ public class JFrameView extends JFrame implements GUIView, ActionListener {
     return this.width;
   }
 
-
+  @Override
+  public void valueChanged(ListSelectionEvent e) {
+    this.currSelectedLayer = this.listOfStrings.getSelectedValue();
+  }
 }

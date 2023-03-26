@@ -2,17 +2,19 @@ package controller;
 
 
 import model.CollageProject;
+import model.ILayer;
 import view.GUIView;
 
 public class CollageGUIController implements Features {
 
   private final CollageProject model;
-  private final CollageController textUIController;
+  private CollageController textUIController;
   private GUIView view;
+  private ILayer currentSelectedLayer;
 
-  public CollageGUIController(CollageProject model, CollageController textUIController) {
+  public CollageGUIController(CollageProject model) {
     this.model = model;
-    this.textUIController = textUIController;
+    this.textUIController = new CollageControllerImpl(this.model, false);
   }
 
   @Override
@@ -34,11 +36,12 @@ public class CollageGUIController implements Features {
     this.model.newProject(typed, height2, width2);
     this.view.displayImage(this.view.getImageToPutOnScreen(height2, width2,
             this.model.getLayers().get(0).getPixelsOnLayer()));
+    this.textUIController = new CollageControllerImpl(this.model, true);
   }
 
   @Override
   public void loadProject(String filePath) {
-    this.model.loadProject(filePath);
+    this.textUIController.loadProject(filePath);
     this.view.displayMessage("Image loaded");
     //this.view.displayImage();
 //
@@ -64,12 +67,12 @@ public class CollageGUIController implements Features {
 
   @Override
   public void saveProject(String filePath, String projectType) {
-    this.model.saveProject(filePath, projectType);
+    this.textUIController.saveProject(filePath, projectType);
   }
 
   @Override
   public void saveImage(String filePath) {
-    this.model.saveImage(filePath);
+    this.textUIController.saveImage(filePath);
   }
 
   @Override

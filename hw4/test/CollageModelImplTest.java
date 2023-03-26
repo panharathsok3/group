@@ -45,7 +45,6 @@ public class CollageModelImplTest {
     this.collage4 = new CollageProjectModelImpl();
 
     this.collage1.newProject("C1", 2, 2);
-    this.collage1.saveProject("res/project/saveProjectAndLoadImmediately", "PPM");
   }
 
   @Test
@@ -129,134 +128,14 @@ public class CollageModelImplTest {
       }
     }
 
-    //SAVE IMAGE
-    this.collage1.saveImage("res/Images/EntireProgam.ppm");
-
-    try {
-      sc = new Scanner(new FileInputStream("res/Images/EntireProgam.ppm"));
-    } catch (FileNotFoundException e) {
-      throw new IllegalStateException("File not found!");
-    }
-
-    builder = new StringBuilder();
-    while (sc.hasNextLine()) {
-      String s = sc.nextLine();
-      if (s.charAt(0) != '#') {
-        builder.append(s + System.lineSeparator());
-      }
-    }
-
-    sc = new Scanner(builder.toString());
-
-    assertEquals("P3", sc.next());
-    assertEquals("2", sc.next());
-    assertEquals("2", sc.next());
-    assertEquals("255", sc.next());
-
-    int counter = 0;
-    while (counter < 4) {
-      assertEquals("173", sc.next());
-      assertEquals("179", sc.next());
-      assertEquals("151", sc.next());
-      counter++;
-    }
-
-
-    //SAVE PROJECT
-    this.collage1.saveProject("res/project/saveEntireProgram", "PPM");
-
-    try {
-      sc = new Scanner(new FileInputStream("res/project/saveEntireProgram"));
-    } catch (FileNotFoundException e) {
-      throw new IllegalStateException("File not found!");
-    }
-
-    builder = new StringBuilder();
-    while (sc.hasNextLine()) {
-      String s = sc.nextLine();
-      if (s.charAt(0) != '#') {
-        builder.append(s + System.lineSeparator());
-      }
-    }
-
-    sc = new Scanner(builder.toString());
-
-    assertEquals("C1", sc.next());
-    assertEquals("2", sc.next());
-    assertEquals("2", sc.next());
-    assertEquals("255", sc.next());
-    assertEquals("Background", sc.next());
-    assertEquals("normal", sc.next());
-
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 2; j++) {
-        assertEquals("255", sc.next());
-        assertEquals("255", sc.next());
-        assertEquals("255", sc.next());
-        assertEquals("255", sc.next());
-      }
-    }
-
-    assertEquals("L1", sc.next());
-    assertEquals("normal", sc.next());
-
-    while (sc.hasNext()) {
-      assertEquals("173", sc.next());
-      assertEquals("179", sc.next());
-      assertEquals("151", sc.next());
-      assertEquals("255", sc.next());
-    }
-
-    //LOAD PROJECT
-    this.collage2.loadProject("res/project/saveEntireProgram");
-
-    assertEquals("C1", this.collage2.getProjectName());
-    assertEquals(2, this.collage2.getHeight());
-    assertEquals(2, this.collage2.getWidth());
-    assertEquals(255, this.collage2.getMaxValue());
-
-    ILayer backgroundLayer = this.collage2.getLayers().get(0);
-    assertEquals("Background", backgroundLayer.getName());
-
-    Map<String, String> layerWithFilter = this.collage2.getFiltersOnProject();
-    assertEquals("normal", layerWithFilter.get("Background"));
-
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 2; j++) {
-        assertEquals(255,
-            backgroundLayer.getPixelsOnLayer().get(i).get(j).getRedComponent());
-        assertEquals(255,
-            backgroundLayer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
-        assertEquals(255,
-            backgroundLayer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
-        assertEquals(255,
-            backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
-      }
-    }
-
-    backgroundLayer = this.collage2.getLayers().get(1);
-    assertEquals("L1", backgroundLayer.getName());
-
-    layerWithFilter = this.collage2.getFiltersOnProject();
-    assertEquals("normal", layerWithFilter.get("L1"));
-
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 2; j++) {
-        assertEquals(173, backgroundLayer.getPixelsOnLayer().get(i).get(j).getRedComponent());
-        assertEquals(179, backgroundLayer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
-        assertEquals(151, backgroundLayer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
-        assertEquals(255, backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
-      }
-    }
-
     //ADD LAYER
-    this.collage2.addLayer("L2");
-    assertEquals(3, this.collage2.getLayers().size());
-    assertEquals("L2", this.collage2.getLayers().get(2).getName());
-    assertEquals("normal", this.collage2.getFiltersOnProject().get("L2"));
+    this.collage1.addLayer("L2");
+    assertEquals(3, this.collage1.getLayers().size());
+    assertEquals("L2", this.collage1.getLayers().get(2).getName());
+    assertEquals("normal", this.collage1.getFiltersOnProject().get("L2"));
 
     //ADD IMAGE TO LAYER
-    this.collage2.addImageToLayer("L2", "src/tako.ppm", 0, 0);
+    this.collage1.addImageToLayer("L2", "src/tako.ppm", 0, 0);
 
     try {
       sc = new Scanner(new FileInputStream("src/tako.ppm"));
@@ -313,11 +192,11 @@ public class CollageModelImplTest {
     }
 
     //SET FILTER
-    this.collage2.setFilter("L2", "darken-intensity");
-    List<List<IPixel>> pixelsOnLayerBefore = this.collage2.getLayers().get(2)
+    this.collage1.setFilter("L2", "darken-intensity");
+    List<List<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(2)
         .getPixelsOnLayer();
 
-    assertEquals("darken-intensity", this.collage2.getFiltersOnProject().get("L2"));
+    assertEquals("darken-intensity", this.collage1.getFiltersOnProject().get("L2"));
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
         assertEquals(173, pixelsOnLayerBefore.get(i).get(j).getRedComponent());
@@ -327,160 +206,6 @@ public class CollageModelImplTest {
       }
     }
 
-    //SAVE PROJECT
-    this.collage2.saveProject("res/project/saveEntireProgram", "PPM");
-
-    try {
-      sc = new Scanner(new FileInputStream("res/project/saveEntireProgram"));
-    } catch (FileNotFoundException e) {
-      throw new IllegalStateException("File not found!");
-    }
-
-    builder = new StringBuilder();
-    while (sc.hasNextLine()) {
-      String s = sc.nextLine();
-      if (s.charAt(0) != '#') {
-        builder.append(s + System.lineSeparator());
-      }
-    }
-
-    sc = new Scanner(builder.toString());
-
-    assertEquals("C1", sc.next());
-    assertEquals("2", sc.next());
-    assertEquals("2", sc.next());
-    assertEquals("255", sc.next());
-    assertEquals("Background", sc.next());
-    assertEquals("normal", sc.next());
-
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 2; j++) {
-        assertEquals("255", sc.next());
-        assertEquals("255", sc.next());
-        assertEquals("255", sc.next());
-        assertEquals("255", sc.next());
-      }
-    }
-
-    assertEquals("L1", sc.next());
-    assertEquals("normal", sc.next());
-
-    int l1Counter = 0;
-    while (l1Counter < 4) {
-      assertEquals("173", sc.next());
-      assertEquals("179", sc.next());
-      assertEquals("151", sc.next());
-      assertEquals("255", sc.next());
-      l1Counter++;
-    }
-
-    assertEquals("L2", sc.next());
-    assertEquals("darken-intensity", sc.next());
-
-    int l2Counter = 0;
-    while (l2Counter < 4) {
-      assertEquals("173", sc.next());
-      assertEquals("179", sc.next());
-      assertEquals("151", sc.next());
-      assertEquals("255", sc.next());
-      l2Counter++;
-    }
-
-    //LOAD PROJECT
-    this.collage3.loadProject("res/project/saveEntireProgram");
-    assertEquals("C1", this.collage3.getProjectName());
-    assertEquals(2, this.collage3.getHeight());
-    assertEquals(2, this.collage3.getWidth());
-    assertEquals(255, this.collage3.getMaxValue());
-
-    backgroundLayer = this.collage3.getLayers().get(0);
-    assertEquals("Background", backgroundLayer.getName());
-
-    layerWithFilter = this.collage3.getFiltersOnProject();
-    assertEquals("normal", layerWithFilter.get("Background"));
-
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 2; j++) {
-        assertEquals(255,
-            backgroundLayer.getPixelsOnLayer().get(i).get(j).getRedComponent());
-        assertEquals(255,
-            backgroundLayer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
-        assertEquals(255,
-            backgroundLayer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
-        assertEquals(255,
-            backgroundLayer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
-      }
-    }
-
-    backgroundLayer = this.collage3.getLayers().get(1);
-    assertEquals("L1", backgroundLayer.getName());
-
-    layerWithFilter = this.collage3.getFiltersOnProject();
-    assertEquals("normal", layerWithFilter.get("L1"));
-
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 2; j++) {
-        assertEquals(173, backgroundLayer.getPixelsOnLayer().get(0).get(1)
-            .getRedComponent());
-        assertEquals(179, backgroundLayer.getPixelsOnLayer().get(0).get(1)
-            .getGreenComponent());
-        assertEquals(151, backgroundLayer.getPixelsOnLayer().get(0).get(1)
-            .getBlueComponent());
-        assertEquals(255, backgroundLayer.getPixelsOnLayer().get(0).get(1)
-            .getAlphaComponent());
-      }
-    }
-
-    backgroundLayer = this.collage3.getLayers().get(2);
-    assertEquals("L2", backgroundLayer.getName());
-
-    layerWithFilter = this.collage3.getFiltersOnProject();
-    assertEquals("darken-intensity", layerWithFilter.get("L2"));
-
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 2; j++) {
-        assertEquals(173, backgroundLayer.getPixelsOnLayer().get(0).get(1)
-            .getRedComponent());
-        assertEquals(179, backgroundLayer.getPixelsOnLayer().get(0).get(1)
-            .getGreenComponent());
-        assertEquals(151, backgroundLayer.getPixelsOnLayer().get(0).get(1)
-            .getBlueComponent());
-        assertEquals(255, backgroundLayer.getPixelsOnLayer().get(0).get(1)
-            .getAlphaComponent());
-      }
-    }
-
-    //SAVE IMAGE
-    this.collage3.saveImage("res/Images/EntireProgam.ppm");
-
-    try {
-      sc = new Scanner(new FileInputStream("res/Images/EntireProgam.ppm"));
-    } catch (FileNotFoundException e) {
-      throw new IllegalStateException("File not found!");
-    }
-
-    builder = new StringBuilder();
-    while (sc.hasNextLine()) {
-      String s = sc.nextLine();
-      if (s.charAt(0) != '#') {
-        builder.append(s + System.lineSeparator());
-      }
-    }
-
-    sc = new Scanner(builder.toString());
-
-    assertEquals("P3", sc.next());
-    assertEquals("2", sc.next());
-    assertEquals("2", sc.next());
-    assertEquals("255", sc.next());
-
-    counter = 0;
-    while (counter < 4) {
-      assertEquals("6", sc.next());
-      assertEquals("12", sc.next());
-      assertEquals("0", sc.next());
-      counter++;
-    }
   }
 
   @Test
