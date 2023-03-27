@@ -9,7 +9,7 @@ public interface Features {
 
   void setView(GUIView v);
 
-  void newProject(String typed, String height, String width);
+  void newProject(String typed, String height, String width, String hasAlpha);
 
   /**
    * Loads the project onto the program to resume the process.
@@ -27,9 +27,4 @@ public interface Features {
   void saveImage(String filePath);
 
   void setFilter(String layerName, String filterOption);
-
-
-
-
-
 }

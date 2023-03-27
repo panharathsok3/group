@@ -69,8 +69,8 @@ public class Layer implements ILayer {
       throw new IllegalArgumentException("Arguments can't be null and they can't be negative");
     }
 
-    int height = image.size();
-    int width = image.get(0).size();
+    int height = image.size() + yPos;
+    int width = image.get(0).size() + xPos;
     if (image.size() > this.height) {
       height = this.height;
     }
@@ -78,10 +78,16 @@ public class Layer implements ILayer {
       width = this.width;
     }
 
-    for (int i = xPos; i < height; i++) {
-      for (int j = yPos; j < width; j++) {
-        this.pixelsOnLayer.get(i).set(j, image.get(i).get(j));
+    int imageHeight = 0;
+    int imageWidth;
+
+    for (int i = yPos; i < height; i++) {
+      imageWidth = 0;
+      for (int j = xPos; j < width; j++) {
+        this.pixelsOnLayer.get(i).set(j, image.get(imageHeight).get(imageWidth));
+        imageWidth++;
       }
+      imageHeight++;
     }
   }
 

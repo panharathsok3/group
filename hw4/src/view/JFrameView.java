@@ -13,7 +13,6 @@ import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import controller.Features;
 import model.IPixel;
@@ -31,7 +30,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
   private int height;
   private int width;
   private int layerNum;
-  private String currSelectedLayer;
+  private String currSelectedLayer, currSelectedFilter;
   private DefaultListModel<String> dataForListOfStrings;
 
   public JFrameView() {
@@ -84,7 +83,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     //Commands and image effects
     JPanel commands = new JPanel();
     commands.setLayout(new GridLayout());
-    commands.setBorder(BorderFactory.createTitledBorder("Effects"));
+    commands.setBorder(BorderFactory.createTitledBorder("Actions"));
     commands.setBackground(Color.LIGHT_GRAY);
 
 
@@ -128,46 +127,13 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
 
 
     //a drop-down menu to show the list of filter options.
-    this.effectsOptions = new JComboBox<>(
-            new String[]
-                    {"Normal",
-                            "Brighten-value", "Brighten-luma", "Brighten-intensity", "Darken-value",
-                            "Darken-luma", "Darken-intensity", "Red-Component", "Green-Component",
-                            "Blue-Component", "Inversion-difference", "Brightening-screen", "Darken-multiply"});
+    this.effectsOptions = new JComboBox<>(new String[]{"normal", "brighten-value",
+        "brighten-luma", "brighten-intensity", "darken-value", "darken-luma",
+        "darken-intensity", "red-component", "green-Component", "blue-component",
+        "inversion-difference", "brightening-screen", "darken-multiply"});
 
     this.effectsOptions.setActionCommand("set-filter");
     this.effectsOptions.addActionListener(this);
-
-
-    int a = this.effectsOptions.getSelectedIndex();
-    if (a == 1) {
-      this.effectsOptions.addActionListener(this);
-    } else if (a == 2) {
-      this.effectsOptions.addActionListener(this);
-    } else if (a == 3) {
-      this.effectsOptions.addActionListener(this);
-    } else if (a == 4) {
-      this.effectsOptions.addActionListener(this);
-    } else if (a == 5) {
-      this.effectsOptions.addActionListener(this);
-    } else if (a == 6) {
-      this.effectsOptions.addActionListener(this);
-    } else if (a == 7) {
-      this.effectsOptions.addActionListener(this);
-    } else if (a == 8) {
-      this.effectsOptions.addActionListener(this);
-    } else if (a == 9) {
-      this.effectsOptions.addActionListener(this);
-    } else if (a == 10) {
-      this.effectsOptions.addActionListener(this);
-    } else if (a == 11) {
-      this.effectsOptions.addActionListener(this);
-    } else if (a == 12) {
-      this.effectsOptions.addActionListener(this);
-    } else {
-      this.effectsOptions.addActionListener(this);
-    }
-
 
     this.setFilter = new JButton("Set a filter on a Layer");
     this.setFilter.setActionCommand("set-filter");
@@ -202,11 +168,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     JOptionPane.showMessageDialog(null,
             message, "Error", JOptionPane.ERROR_MESSAGE);
   }
-
-//  public void displayMessage(String message) {
-//    JLabel msgLabel = new JLabel();
-//    msgLabel.setText(message);
-//  }
 
   @Override
   public void displayMessage(String message) {
@@ -243,6 +204,8 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
       case "add-image-to-layer":
         break;
       case "set-filter":
+        int optionIndex = this.effectsOptions.getSelectedIndex();
+        this.currSelectedFilter = this.effectsOptions.getItemAt(optionIndex);
         break;
       default:
         errorMessage("Action doesn't exist");
@@ -265,9 +228,10 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     this.newProject.addActionListener(e -> {
       try {
         features.newProject(
-                JOptionPane.showInputDialog("Enter your project name"),
-                JOptionPane.showInputDialog("Enter the height"),
-                JOptionPane.showInputDialog("Enter the width"));
+            JOptionPane.showInputDialog("Enter your project name"),
+            JOptionPane.showInputDialog("Enter the height"),
+            JOptionPane.showInputDialog("Enter the width"),
+            JOptionPane.showInputDialog("Does your project have an alpha value? Answer yes or no"));
       } catch (IllegalStateException ise) {
         errorMessage(ise.getMessage());
       }
@@ -280,6 +244,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
       String layerName = "Layer " + this.layerNum;
       this.dataForListOfStrings.addElement(layerName);
       this.currSelectedLayer = layerName;
+
       try {
         features.addLayer(layerName);
       } catch (IllegalStateException ise) {
@@ -289,98 +254,92 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
 
 
     this.saveImage.addActionListener(e -> {
-      final JFileChooser fileChooser = new JFileChooser("./");
-      int returnValue = fileChooser.showSaveDialog(JFrameView.this);
-      if (returnValue == JFileChooser.APPROVE_OPTION) {
-        File file = fileChooser.getSelectedFile();
-        String fileName = file.getAbsolutePath();
-        try {
-          features.saveImage(fileName);
-        } catch (IllegalStateException ise) {
-          errorMessage(ise.getMessage());
-        }
+      try {
+        features.saveImage(this.returnFilePathOfSelectedFile());
+      } catch (IllegalStateException ise) {
+        errorMessage(ise.getMessage());
       }
     });
 
 
     this.saveProject.addActionListener(e -> {
-      final JFileChooser fileChooser = new JFileChooser("./");
-      int returnValue = fileChooser.showSaveDialog(JFrameView.this);
+      String projectType = JOptionPane.showInputDialog("What kind of project is this? eg: ppm, "
+          + "png, jpeg, etc. We currently only support ppm");
 
-
-      if (returnValue == JFileChooser.APPROVE_OPTION) {
-        File file = fileChooser.getSelectedFile();
-        String fileName = file.getAbsolutePath();
-
-        int slash = file.getAbsolutePath().lastIndexOf(File.separator);
-        int dot = file.getAbsolutePath().lastIndexOf(".");
-        String filePath = file.getAbsolutePath().substring(slash + 1, dot);
-
-
-        try {
-          //(JOptionPane.showInputDialog("SAVE AS: "))
-          features.saveProject(fileName, filePath);
-        } catch (IllegalStateException ise) {
-          errorMessage(ise.getMessage());
-        }
+      try {
+        features.saveProject(this.returnFilePathOfSelectedFile(), projectType);
+      } catch (IllegalStateException ise) {
+        errorMessage(ise.getMessage());
       }
     });
 
 
     this.load.addActionListener(e -> {
-      JFileChooser fileChooser =
-              new JFileChooser("./src");
-
-      FileNameExtensionFilter extensionFilter = new FileNameExtensionFilter
-              ("PPM, JPEG & JPG ", "ppm", "jpeg", "jpg");
-
-      fileChooser.setFileFilter(extensionFilter);
-      int returnValue = fileChooser.showOpenDialog(JFrameView.this);
-
-      if (returnValue == JFileChooser.APPROVE_OPTION) {
-        File file = fileChooser.getSelectedFile();
-
-        String filePath = file.getAbsolutePath();
-        try {
-          features.loadProject(filePath);
-        } catch (IllegalStateException ise) {
-          errorMessage(ise.getMessage());
-        }
+      try {
+        features.loadProject(this.returnFilePathOfSelectedFile());
+      } catch (IllegalStateException ise) {
+        errorMessage(ise.getMessage());
       }
     });
 
     this.addImageToLayer.addActionListener(e -> {
-
       try {
-        features.addImageToLayer
-                (JOptionPane.showInputDialog("Enter the layer you want to add the image to"),
-                        JOptionPane.showInputDialog(load),
-                        JOptionPane.showInputDialog("Enter the x position"),
-                        JOptionPane.showInputDialog("Enter  the y position"));
+        features.addImageToLayer(
+            JOptionPane.showInputDialog("Enter the layer you want to add the image to"),
+            this.returnFilePathOfSelectedFile(),
+            JOptionPane.showInputDialog("Enter the x position"),
+            JOptionPane.showInputDialog("Enter the y position"));
       } catch (IllegalStateException ise) {
         errorMessage(ise.getMessage());
       }
-
     });
 
 
-    Map<String, Consumer<Features>> effectOptions =
-            this.getActionsForCommands();
+//    Map<String, Consumer<Features>> effectOptions =
+//            this.getActionsForCommands();
 
     this.setFilter.addActionListener(e -> {
-      int optionIndex = JFrameView.this.effectsOptions.getSelectedIndex();
-      String option = JFrameView.this.effectsOptions.getItemAt(optionIndex);
+      features.setFilter(this.currSelectedLayer, this.currSelectedFilter);
 
-      if (effectOptions.containsKey(option)) {
-        Consumer<Features> commands = effectOptions.get(option);
-        commands.accept(features);
-      } else {
-        errorMessage("Action doesn't exist");
-      }
+//      if (effectOptions.containsKey(option)) {
+//        Consumer<Features> commands = effectOptions.get(option);
+//        commands.accept(features);
+//      } else {
+//        errorMessage("Action doesn't exist");
+//      }
     });
   }
 
+  @Override
+  public void updateLayers(int layerNumber) {
 
+    this.dataForListOfStrings.addElement("Background");
+    for (int i = 1; i < layerNumber; i++) {
+      this.dataForListOfStrings.addElement("Layer " + this.layerNum);
+      this.layerNum++;
+    }
+    this.currSelectedLayer = this.dataForListOfStrings.get(layerNumber - 1);
+  }
+
+  public void displayOnSelectedLayerFilter() {
+
+  }
+
+  /**
+   *
+   * @return
+   */
+  private String returnFilePathOfSelectedFile() {
+    JFileChooser fileChooser = new JFileChooser("./");
+    int returnValue = fileChooser.showSaveDialog(JFrameView.this);
+    String filePath = null;
+    if (returnValue == JFileChooser.APPROVE_OPTION) {
+      File file = fileChooser.getSelectedFile();
+
+      filePath = file.getAbsolutePath();
+    }
+    return filePath;
+  }
 
 
 
@@ -411,11 +370,11 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
 
 
   @Override
-  public Image getImageToPutOnScreen(int height, int width, List<List<IPixel>> imageToAdd) {
+  public void getImageToPutOnScreen(int height, int width, List<List<IPixel>> imageToAdd) {
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
-    for (int x = 0; x < image.getWidth(); x++) {
-      for (int y = 0; y < image.getHeight(); y++) {
+    for (int x = 0; x < image.getHeight(); x++) {
+      for (int y = 0; y < image.getWidth(); y++) {
         int r = imageToAdd.get(x).get(y).getRedComponent();
         int g = imageToAdd.get(x).get(y).getGreenComponent();
         int b = imageToAdd.get(x).get(y).getBlueComponent();
@@ -426,28 +385,12 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
         argb |= r << 16;
         argb |= g << 8;
         argb |= b;
-        image.setRGB(x, y, argb);
+        image.setRGB(y, x, argb);
       }
     }
-    return image;
-  }
 
-  @Override
-  public void displayImage(Image image) {
     this.imageLabel.setIcon(new ImageIcon(image));
     this.repaint();
-  }
-
-
-
-  @Override
-  public int getImageBorderHeight() {
-    return this.height;
-  }
-
-  @Override
-  public int getImageBorderWidth() {
-    return this.width;
   }
 
   @Override

@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.util.List;
 
 import controller.Features;
@@ -22,7 +21,7 @@ public class GUIViewConfirmMethodCallValidReturnMock implements GUIView {
   }
 
   @Override
-  public void displayImage(Image image) {
+  public void updateLayers(int layerNumber) {
 
   }
 
@@ -32,17 +31,7 @@ public class GUIViewConfirmMethodCallValidReturnMock implements GUIView {
   }
 
   @Override
-  public int getImageBorderHeight() {
-    return 0;
-  }
+  public void getImageToPutOnScreen(int height, int width, List<List<IPixel>> imageToAdd) {
 
-  @Override
-  public int getImageBorderWidth() {
-    return 0;
-  }
-
-  @Override
-  public Image getImageToPutOnScreen(int height, int width, List<List<IPixel>> imageToAdd) {
-    return null;
   }
 }

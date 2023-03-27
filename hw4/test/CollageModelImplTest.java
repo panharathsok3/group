@@ -1,10 +1,7 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import model.ILayer;
 import model.IPixel;
@@ -68,7 +65,7 @@ public class CollageModelImplTest {
     assertEquals("normal", this.collage1.getFiltersOnProject().get("L1"));
 
     //ADD IMAGE TO LAYER
-    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    this.collage1.addImageToLayer("L1", this.getImageFromTakoPPM(), 0, 0);
 
     Scanner sc;
 
@@ -135,7 +132,7 @@ public class CollageModelImplTest {
     assertEquals("normal", this.collage1.getFiltersOnProject().get("L2"));
 
     //ADD IMAGE TO LAYER
-    this.collage1.addImageToLayer("L2", "src/tako.ppm", 0, 0);
+    this.collage1.addImageToLayer("L2", this.getImageFromTakoPPM(), 0, 0);
 
     try {
       sc = new Scanner(new FileInputStream("src/tako.ppm"));
@@ -329,52 +326,10 @@ public class CollageModelImplTest {
 
     this.collage1.newProject("C1", 100, 100);
     this.collage1.addLayer("L1");
-    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
 
-    Scanner sc;
+    List<List<IPixel>> pixelsOnImage = this.getImageFromTakoPPM();
 
-    try {
-      sc = new Scanner(new FileInputStream("src/tako.ppm"));
-    } catch (FileNotFoundException e) {
-      throw new IllegalStateException("File not found!");
-    }
-
-    StringBuilder builder = new StringBuilder();
-    //read the file line by line, and populate a string. This will throw away any comment lines
-    while (sc.hasNextLine()) {
-      String s = sc.nextLine();
-      if (s.charAt(0) != '#') {
-        builder.append(s + System.lineSeparator());
-      }
-    }
-
-    //now set up the scanner to read from the string we just built
-    sc = new Scanner(builder.toString());
-
-    String token;
-
-    token = sc.next();
-    if (!token.equals("P3")) {
-      throw new IllegalStateException("Invalid PPM file: plain RAW file should begin with P3");
-    }
-
-    int width = sc.nextInt();
-    int height = sc.nextInt();
-    int maxValue = sc.nextInt();
-
-    List<List<Pixel>> pixelsOnImage = new ArrayList<>();
-
-    for (int i = 0; i < height; i++) {
-      pixelsOnImage.add(new ArrayList<>());
-      for (int j = 0; j < width; j++) {
-        int r = sc.nextInt();
-        int g = sc.nextInt();
-        int b = sc.nextInt();
-
-        pixelsOnImage.get(i).add(new Pixel(r, g, b));
-
-      }
-    }
+    this.collage1.addImageToLayer("L1", pixelsOnImage, 0, 0);
 
     for (int i = 0; i < 100; i++) {
       for (int j = 0; j < 100; j++) {
@@ -394,7 +349,7 @@ public class CollageModelImplTest {
   public void testInvalidAddImageToLayer() {
     this.collage1 = new CollageProjectModelImpl();
     try {
-      this.collage1.addImageToLayer("L1", "src/tako.ppm",0,0);
+      this.collage1.addImageToLayer("L1", new ArrayList<>(1),0,0);
       fail("Didn't start a new project yet");
     } catch (IllegalStateException e) {
       //do nothing
@@ -404,7 +359,7 @@ public class CollageModelImplTest {
 
     try {
       this.collage4.newProject("C4",100,100);
-      this.collage4.addImageToLayer(null,"src/tako.ppm",0,0);
+      this.collage4.addImageToLayer(null, new ArrayList<>(1),0,0);
       fail("arguments are invalid");
     } catch (IllegalArgumentException e) {
       // do nothing
@@ -420,7 +375,8 @@ public class CollageModelImplTest {
 
     try {
       this.collage3.newProject("C3",100,100);
-      this.collage3.addImageToLayer(layer1.getName(),"src/tako.ppm",-200,0);
+      this.collage3.addImageToLayer(layer1.getName(), new ArrayList<>(1),
+          -200,0);
       fail("arguments are invalid");
     } catch (IllegalArgumentException e) {
       // do nothing
@@ -429,7 +385,8 @@ public class CollageModelImplTest {
     try {
       this.collage4 = new CollageProjectModelImpl();
       this.collage4.newProject("C4",100,100);
-      this.collage4.addImageToLayer(layer1.getName(),"src/tako.ppm",0,120);
+      this.collage4.addImageToLayer(layer1.getName(), new ArrayList<>(1),
+          0,120);
       fail("arguments are invalid");
     } catch (IllegalArgumentException e) {
       // do nothing
@@ -437,7 +394,8 @@ public class CollageModelImplTest {
 
     try {
       this.collage1.newProject("C1",100,100);
-      this.collage1.addImageToLayer("L3", "src/tako.ppm", 10, 10);
+      this.collage1.addImageToLayer("L3", new ArrayList<>(1),
+          10, 10);
       fail("Layer doesn't exist");
     } catch (IllegalArgumentException e) {
       // do nothing
@@ -536,7 +494,7 @@ public class CollageModelImplTest {
     this.init();
     this.collage1.newProject("C1", 2, 2);
     this.collage1.addLayer("L1");
-    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    this.collage1.addImageToLayer("L1", this.getImageFromTakoPPM(), 0, 0);
 
     List<List<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
@@ -569,7 +527,7 @@ public class CollageModelImplTest {
     this.init();
     this.collage1.newProject("C1", 2, 2);
     this.collage1.addLayer("L1");
-    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    this.collage1.addImageToLayer("L1", this.getImageFromTakoPPM(), 0, 0);
 
     List<List<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
@@ -603,7 +561,7 @@ public class CollageModelImplTest {
     this.init();
     this.collage1.newProject("C1", 2, 2);
     this.collage1.addLayer("L1");
-    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    this.collage1.addImageToLayer("L1", this.getImageFromTakoPPM(), 0, 0);
 
     List<List<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
@@ -637,7 +595,7 @@ public class CollageModelImplTest {
     this.init();
     this.collage1.newProject("C1", 2, 2);
     this.collage1.addLayer("L1");
-    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    this.collage1.addImageToLayer("L1", this.getImageFromTakoPPM(), 0, 0);
 
     List<List<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
@@ -670,7 +628,7 @@ public class CollageModelImplTest {
     this.init();
     this.collage1.newProject("C1", 2, 2);
     this.collage1.addLayer("L1");
-    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    this.collage1.addImageToLayer("L1", this.getImageFromTakoPPM(), 0, 0);
 
     List<List<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
@@ -705,7 +663,7 @@ public class CollageModelImplTest {
     this.init();
     this.collage1.newProject("C1", 2, 2);
     this.collage1.addLayer("L1");
-    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    this.collage1.addImageToLayer("L1", this.getImageFromTakoPPM(), 0, 0);
 
     List<List<IPixel>> pixelsOnLayerBefore = this.collage1.getLayers().get(1)
         .getPixelsOnLayer();
@@ -930,7 +888,7 @@ public class CollageModelImplTest {
   public void testMakeFinalImageWithNoChanges() {
     this.init();
     this.collage1.addLayer("L1");
-    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    this.collage1.addImageToLayer("L1", this.getImageFromTakoPPM(), 0, 0);
     ILayer layer = this.collage1.makeFinalImage(false);
 
     List<List<IPixel>> pixelsOnLayer = layer.getPixelsOnLayer();
@@ -956,7 +914,7 @@ public class CollageModelImplTest {
   public void testMakeFinalImageWithChanges() {
     this.init();
     this.collage1.addLayer("L1");
-    this.collage1.addImageToLayer("L1", "src/tako.ppm", 0, 0);
+    this.collage1.addImageToLayer("L1", this.getImageFromTakoPPM(), 0, 0);
     this.collage1.setFilter("L1", "darken-intensity");
     ILayer layer = this.collage1.makeFinalImage(false);
 
@@ -977,5 +935,58 @@ public class CollageModelImplTest {
     assertEquals(6, pixelsOnLayer.get(1).get(1).getRedComponent());
     assertEquals(12, pixelsOnLayer.get(1).get(1).getGreenComponent());
     assertEquals(0, pixelsOnLayer.get(1).get(1).getBlueComponent());
+  }
+
+  /**
+   * Returns a 2d Array of Pixels from tako.ppm.
+   * @return a 2d Array of Pixels from tako.ppm
+   */
+  private List<List<IPixel>> getImageFromTakoPPM() {
+    Scanner sc;
+
+    try {
+      sc = new Scanner(new FileInputStream("src/tako.ppm"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    //read the file line by line, and populate a string. This will throw away any comment lines
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    //now set up the scanner to read from the string we just built
+    sc = new Scanner(builder.toString());
+
+    String token;
+
+    token = sc.next();
+    if (!token.equals("P3")) {
+      throw new IllegalStateException("Invalid PPM file: plain RAW file should begin with P3");
+    }
+
+    int width = sc.nextInt();
+    int height = sc.nextInt();
+    int maxValue = sc.nextInt();
+
+    List<List<IPixel>> pixelsOnImage = new ArrayList<>();
+
+    for (int i = 0; i < height; i++) {
+      pixelsOnImage.add(new ArrayList<>());
+      for (int j = 0; j < width; j++) {
+        int r = sc.nextInt();
+        int g = sc.nextInt();
+        int b = sc.nextInt();
+
+        pixelsOnImage.get(i).add(new Pixel(r, g, b));
+
+      }
+    }
+
+    return pixelsOnImage;
   }
 }
