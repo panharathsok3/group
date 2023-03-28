@@ -27,4 +27,6 @@ public interface Features {
   void saveImage(String filePath);
 
   void setFilter(String layerName, String filterOption);
+
+  boolean projectMade();
 }

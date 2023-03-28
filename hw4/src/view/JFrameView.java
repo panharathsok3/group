@@ -169,11 +169,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
             message, "Error", JOptionPane.ERROR_MESSAGE);
   }
 
-  @Override
-  public void displayMessage(String message) {
-    JOptionPane.showMessageDialog(this, message);
-  }
-
   /**
    * Updates the view every time something new is displayed.
    * SIDE EFFECTS : based on whatever action is invoked.
@@ -208,7 +203,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
         this.currSelectedFilter = this.effectsOptions.getItemAt(optionIndex);
         break;
       default:
-        errorMessage("Action doesn't exist");
+        this.errorMessage("Action doesn't exist");
         setVisible(true);
         throw new IllegalStateException("action doesn't exist");
 
@@ -232,44 +227,55 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
             JOptionPane.showInputDialog("Enter the height"),
             JOptionPane.showInputDialog("Enter the width"),
             JOptionPane.showInputDialog("Does your project have an alpha value? Answer yes or no"));
-      } catch (IllegalStateException ise) {
-        errorMessage(ise.getMessage());
+        this.dataForListOfStrings.addElement("Background");
+        this.currSelectedLayer = "Background";
+      } catch (IllegalArgumentException ex) {
+        //do nothing
       }
-      this.dataForListOfStrings.addElement("Background");
-      this.currSelectedLayer = "Background";
+
     });
 
 
     this.addLayer.addActionListener(e -> {
-      String layerName = "Layer " + this.layerNum;
-      this.dataForListOfStrings.addElement(layerName);
-      this.currSelectedLayer = layerName;
-
       try {
+        this.throwErrorIfProjectNotMade(features);
+
+        String layerName = "Layer " + this.layerNum;
         features.addLayer(layerName);
-      } catch (IllegalStateException ise) {
-        errorMessage(ise.getMessage());
+        this.dataForListOfStrings.addElement(layerName);
+        this.currSelectedLayer = layerName;
+      } catch (IllegalArgumentException ex) {
+        //do nothing
+      } catch (IllegalStateException ex) {
+        this.errorMessage("A project has not been made");
       }
     });
 
 
     this.saveImage.addActionListener(e -> {
       try {
+        this.throwErrorIfProjectNotMade(features);
         features.saveImage(this.returnFilePathOfSelectedFile());
-      } catch (IllegalStateException ise) {
-        errorMessage(ise.getMessage());
+      } catch (IllegalStateException ex) {
+        this.errorMessage("A project has not been made");
+      } catch (IllegalArgumentException ex) {
+        //do nothing
       }
     });
 
 
     this.saveProject.addActionListener(e -> {
-      String projectType = JOptionPane.showInputDialog("What kind of project is this? eg: ppm, "
-          + "png, jpeg, etc. We currently only support ppm");
-
       try {
+        this.throwErrorIfProjectNotMade(features);
+
+        String projectType = JOptionPane.showInputDialog("What kind of project is this? eg: ppm, "
+            + "png, jpeg, etc. We currently only support ppm");
+
         features.saveProject(this.returnFilePathOfSelectedFile(), projectType);
-      } catch (IllegalStateException ise) {
-        errorMessage(ise.getMessage());
+      } catch (IllegalStateException ex) {
+        this.errorMessage("A project has not been made");
+      } catch (IllegalArgumentException ex) {
+        //do nothing
       }
     });
 
@@ -277,36 +283,38 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     this.load.addActionListener(e -> {
       try {
         features.loadProject(this.returnFilePathOfSelectedFile());
-      } catch (IllegalStateException ise) {
-        errorMessage(ise.getMessage());
+      }  catch (IllegalArgumentException ise) {
+        //do nothing
       }
     });
 
     this.addImageToLayer.addActionListener(e -> {
       try {
+
+        this.throwErrorIfProjectNotMade(features);
+
         features.addImageToLayer(
             JOptionPane.showInputDialog("Enter the layer you want to add the image to"),
             this.returnFilePathOfSelectedFile(),
             JOptionPane.showInputDialog("Enter the x position"),
             JOptionPane.showInputDialog("Enter the y position"));
-      } catch (IllegalStateException ise) {
-        errorMessage(ise.getMessage());
+      } catch (IllegalStateException ex) {
+        this.errorMessage("A project has not been made");
+      } catch (IllegalArgumentException ex) {
+        //do nothing
       }
     });
 
-
-//    Map<String, Consumer<Features>> effectOptions =
-//            this.getActionsForCommands();
-
     this.setFilter.addActionListener(e -> {
-      features.setFilter(this.currSelectedLayer, this.currSelectedFilter);
 
-//      if (effectOptions.containsKey(option)) {
-//        Consumer<Features> commands = effectOptions.get(option);
-//        commands.accept(features);
-//      } else {
-//        errorMessage("Action doesn't exist");
-//      }
+      try {
+        this.throwErrorIfProjectNotMade(features);
+        features.setFilter(this.currSelectedLayer, this.currSelectedFilter);
+      } catch (IllegalStateException ex) {
+        this.errorMessage("A project has not been made");
+      } catch (IllegalArgumentException ex) {
+        //do nothing
+      }
     });
   }
 
@@ -319,10 +327,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
       this.layerNum++;
     }
     this.currSelectedLayer = this.dataForListOfStrings.get(layerNumber - 1);
-  }
-
-  public void displayOnSelectedLayerFilter() {
-
   }
 
   /**
@@ -396,5 +400,15 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
   @Override
   public void valueChanged(ListSelectionEvent e) {
     this.currSelectedLayer = this.listOfStrings.getSelectedValue();
+  }
+
+  /**
+   * Helper method that throws error when the project has not been made yet.
+   * @param features the Feature that is being used
+   */
+  private void throwErrorIfProjectNotMade(Features features) {
+    if (!features.projectMade()) {
+      throw new IllegalStateException("project has not been made");
+    }
   }
 }

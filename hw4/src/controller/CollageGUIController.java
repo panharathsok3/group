@@ -10,9 +10,11 @@ public class CollageGUIController implements Features {
   private CollageController textUIController;
   private GUIView view;
   private boolean hasAlpha;
+  private boolean projectMade;
 
   public CollageGUIController(CollageProject model) {
     this.model = model;
+    this.projectMade = false;
     this.textUIController = new CollageControllerImpl(this.model, false);
   }
 
@@ -48,10 +50,11 @@ public class CollageGUIController implements Features {
       this.model.newProject(typed, height2, width2);
       this.showImage();
 
+      this.projectMade = true;
       this.textUIController = new CollageControllerImpl(this.model, true);
 
     } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Can't use strings for the ");
+      throw new IllegalArgumentException("Can't use strings as inputs for height and width");
     }
   }
 
@@ -83,11 +86,14 @@ public class CollageGUIController implements Features {
       }
 
       this.model.addImageToLayer(layerName,
-          this.textUIController.readImage(filePath, this.hasAlpha, imageToken), xPosition, yPosition);
+          this.textUIController.readImage(filePath, this.hasAlpha, imageToken),
+          xPosition, yPosition);
+
+
 
       this.showImage();
     } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Can't use strings for the ");
+      throw new IllegalArgumentException("x and y position needs to be integers");
     }
   }
 
@@ -106,6 +112,11 @@ public class CollageGUIController implements Features {
     this.model.setFilter(layerName, filterOption);
     this.showImage();
     this.view.refresh();
+  }
+
+  @Override
+  public boolean projectMade() {
+    return this.projectMade;
   }
 
   private void showImage() {

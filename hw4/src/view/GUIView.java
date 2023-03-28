@@ -26,7 +26,7 @@ public interface GUIView {
    */
   void updateLayers(int layerNumber);
 
-  void displayMessage(String message);
+  void errorMessage(String message);
 
   /**
    * Displays the current image that the user is working on.

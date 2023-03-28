@@ -90,6 +90,7 @@ public class CollageProjectModelImpl implements CollageProject {
   public void addImageToLayer(String layerName, List<List<IPixel>> image, int xPos, int yPos)
           throws IllegalArgumentException {
 
+    System.out.println("a");
     this.throwExceptionProjectNotMade();
 
     if (layerName == null || layerName.equals("") || image == null ||

@@ -26,7 +26,7 @@ public class GUIViewConfirmMethodCallValidReturnMock implements GUIView {
   }
 
   @Override
-  public void displayMessage(String message) {
+  public void errorMessage(String message) {
 
   }
 
