@@ -5,7 +5,7 @@ import java.util.List;
 import model.IPixel;
 
 /**
- *
+ * The GUI that will display information onto the screen and make events occur based on user inputs.
  */
 public interface GUIView {
 
@@ -26,6 +26,10 @@ public interface GUIView {
    */
   void updateLayers(int layerNumber);
 
+  /**
+   * Displays an error message onto the screen.
+   * @param message the message to be displayed
+   */
   void errorMessage(String message);
 
   /**

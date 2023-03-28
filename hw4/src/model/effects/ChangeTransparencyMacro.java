@@ -23,7 +23,7 @@ public class ChangeTransparencyMacro implements MacroCollageEffects {
    * @param width the width of the layer
    * @param hasAlpha true if and only if the original image has an alpha value
    * @param prevLayer a 2D array of IPixels from the previous layer
-   * @throws IllegalArgumentException
+   * @throws IllegalArgumentException if the given arguments are null
    */
   public ChangeTransparencyMacro(int height, int width, boolean hasAlpha,
       List<List<IPixel>> prevLayer) throws IllegalArgumentException {

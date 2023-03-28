@@ -17,10 +17,13 @@ import javax.swing.event.ListSelectionListener;
 import controller.Features;
 import model.IPixel;
 
+/**
+ * The GUI that the user will interact with and uses the Features interface as the controller which
+ * performs actions from the listeners in the GUI.
+ */
 public class JFrameView extends JFrame implements GUIView, ActionListener, ListSelectionListener {
 
   private JPanel mainPanel, imagePanel;
-
   private JScrollPane mainScrollPane;
   private JButton newProject, addLayer, addImageToLayer, setFilter, saveProject, saveImage, load;
   private JComboBox<String> effectsOptions;
@@ -33,6 +36,9 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
   private String currSelectedLayer, currSelectedFilter;
   private DefaultListModel<String> dataForListOfStrings;
 
+  /**
+   * The GUI that will be displayed to the user. Also sets up listeners and other things to display.
+   */
   public JFrameView() {
     super();
     this.setTitle("Collager Project");
@@ -57,7 +63,8 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
 
     int scaleHeight = 300;
     int scaleWidth = 400;
-    this.mainScrollPane.setPreferredSize(new Dimension(width - scaleWidth, height - scaleHeight));
+    this.mainScrollPane.setPreferredSize(new Dimension(width - scaleWidth,
+        height - scaleHeight));
     this.add(mainScrollPane);
 
 
@@ -157,22 +164,11 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
 
   }
 
-  /**
-   * Helper method that displays an error message to the screen.
-   * SIDE EFFECTS: Displays a pop-up box that has a descriptive error message
-   * if the user is trying to perform an action that is not supported.
-   *
-   * @param message the specific message relating to the command that has been invoked.
-   */
   public void errorMessage(String message) {
     JOptionPane.showMessageDialog(null,
             message, "Error", JOptionPane.ERROR_MESSAGE);
   }
 
-  /**
-   * Updates the view every time something new is displayed.
-   * SIDE EFFECTS : based on whatever action is invoked.
-   */
   @Override
   public void refresh() {
     this.repaint();
@@ -210,13 +206,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     }
   }
 
-
-  /**
-   * These are call backs that respond to operations on buttons in the view.
-   * SIDE EFFECTS: performs an event based on what button on a panel is pressed.
-   *
-   * @param features the object we are calling in this function to make the view operational.
-   */
   @Override
   public void addFeatures(Features features) {
 
@@ -330,8 +319,8 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
   }
 
   /**
-   *
-   * @return
+   * Returns the file path of a selected file.
+   * @return the file path of a selected file
    */
   private String returnFilePathOfSelectedFile() {
     JFileChooser fileChooser = new JFileChooser("./");
@@ -346,32 +335,30 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
   }
 
 
-
-  private Map<String, Consumer<Features>> getActionsForCommands() {
-    Map<String, Consumer<Features>> effectOptions =
-            new HashMap<>();
-
-    effectOptions.put("Brighten", features -> {
-      String[] effects = {"luma", "intensity", "value"};
-      int chosen = JOptionPane.showOptionDialog(null,
-              "Pick one", "Color picker",
-              JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-              effects, effects[0]);
-
-//      this.setFilter.addActionListener(e -> features.setFilter
-//              (JOptionPane.showInputDialog("Enter the layer you want to transform name"),
-//                      JOptionPane.showInputDialog("Enter the filter you want to apply")));
-
-      String ext = effects[chosen].toLowerCase();
-      String layerName = null;
-
-      switch (effects[chosen]) {
-        case "":
-      }
-    });
-    return effectOptions;
-  }
-
+//  private Map<String, Consumer<Features>> getActionsForCommands() {
+//    Map<String, Consumer<Features>> effectOptions =
+//            new HashMap<>();
+//
+//    effectOptions.put("Brighten", features -> {
+//      String[] effects = {"luma", "intensity", "value"};
+//      int chosen = JOptionPane.showOptionDialog(null,
+//              "Pick one", "Color picker",
+//              JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+//              effects, effects[0]);
+//
+////      this.setFilter.addActionListener(e -> features.setFilter
+////              (JOptionPane.showInputDialog("Enter the layer you want to transform name"),
+////                      JOptionPane.showInputDialog("Enter the filter you want to apply")));
+//
+//      String ext = effects[chosen].toLowerCase();
+//      String layerName = null;
+//
+//      switch (effects[chosen]) {
+//        case "":
+//      }
+//    });
+//    return effectOptions;
+//  }
 
   @Override
   public void getImageToPutOnScreen(int height, int width, List<List<IPixel>> imageToAdd) {

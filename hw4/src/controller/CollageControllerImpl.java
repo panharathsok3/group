@@ -45,6 +45,11 @@ public class CollageControllerImpl implements CollageController {
     this.projectMade = false;
   }
 
+  /**
+   * Represents a Controller who's only job is to handle File IO.
+   * @param collage the CollageProject that will be used
+   * @param projectMade true if and only if the project has been made
+   */
   public CollageControllerImpl(CollageProject collage, boolean projectMade) {
     this.collage = collage;
     this.projectMade = projectMade;
@@ -423,6 +428,10 @@ public class CollageControllerImpl implements CollageController {
     return pixelsOnImage;
   }
 
+  /**
+   * Helper method that throws an exception when the project has not been made yet.
+   * @throws IllegalStateException when the project has not been made yet
+   */
   private void throwExceptionProjectNotMade() throws IllegalStateException {
     if (!projectMade) {
       throw new IllegalStateException("project has not been made");
