@@ -43,9 +43,15 @@ public class Layer implements ILayer {
    * @param height the height of this Layer
    * @param width the width of this Layer
    * @param pixelsOnLayer the IPixels on this Layer
+   * @throws IllegalArgumentException when the given arguments are null
    */
-  public Layer(String layerName, int height, int width,
-      List<List<IPixel>> pixelsOnLayer) {
+  public Layer(String layerName, int height, int width, List<List<IPixel>> pixelsOnLayer)
+      throws IllegalArgumentException {
+
+    if (layerName == null || pixelsOnLayer == null) {
+      throw new IllegalArgumentException("Arguments can't be null");
+    }
+
     this.layerName = layerName;
     this.height = height;
     this.width = width;

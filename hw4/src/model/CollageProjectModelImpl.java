@@ -90,7 +90,6 @@ public class CollageProjectModelImpl implements CollageProject {
   public void addImageToLayer(String layerName, List<List<IPixel>> image, int xPos, int yPos)
           throws IllegalArgumentException {
 
-    System.out.println("a");
     this.throwExceptionProjectNotMade();
 
     if (layerName == null || layerName.equals("") || image == null ||
@@ -116,7 +115,32 @@ public class CollageProjectModelImpl implements CollageProject {
 
     MacroCollageEffects macro;
 
-    List<ILayer> layers = new ArrayList<>(this.project);
+    List<List<IPixel>> pixelsOnLayer;
+
+    List<ILayer> layers = new ArrayList<>();
+
+    for (ILayer layer : this.project) {
+      pixelsOnLayer = new ArrayList<>();
+
+      for (int i = 0; i < this.canvasHeight; i++) {
+        pixelsOnLayer.add(new ArrayList<>());
+        for (int j = 0; j < this.canvasWidth; j++) {
+
+          int red = layer.getPixelsOnLayer().get(i).get(j).getRedComponent();
+          int green = layer.getPixelsOnLayer().get(i).get(j).getGreenComponent();
+          int blue = layer.getPixelsOnLayer().get(i).get(j).getBlueComponent();
+          int alpha = layer.getPixelsOnLayer().get(i).get(j).getAlphaComponent();
+
+          IPixel newPixel = new Pixel(red, green, blue, alpha);
+
+          pixelsOnLayer.get(i).add(newPixel);
+        }
+      }
+
+      layers.add(new Layer(layer.getName(), this.canvasHeight, this.canvasWidth,
+          pixelsOnLayer));
+    }
+
     List<List<IPixel>> finalImage = new ArrayList<>();
     boolean isBackground = true;
 
