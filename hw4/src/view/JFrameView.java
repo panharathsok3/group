@@ -137,7 +137,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     this.effectsOptions.setActionCommand("set-filter");
     this.effectsOptions.addActionListener(this);
 
-    this.setFilter = new JButton("Set a filter on a Layer");
+    this.setFilter = new JButton("Set filter on current Layer");
     this.setFilter.setActionCommand("set-filter");
     this.setFilter.addActionListener(this);
 
@@ -154,7 +154,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     this.mainPanel.add(commands, BorderLayout.SOUTH);
 
 
-    //pack();
     setVisible(true);
 
   }
@@ -173,21 +172,15 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
   public void actionPerformed(ActionEvent arg0) {
     switch (arg0.getActionCommand()) {
       case "new-project":
-        //do nothing
-        break;
       case "save-image":
-        //String a = JOptionPane.showInputDialog("Enter something");
-        break;
       case "load-project":
-        break;
       case "save-project":
+      case "add-image-to-layer":
         break;
       case "add-layer":
         this.layerNum++;
         DefaultListModel<Integer> dataForListOfIntegers = new DefaultListModel<>();
         dataForListOfIntegers.addElement(layerNum);
-        break;
-      case "add-image-to-layer":
         break;
       case "set-filter":
         int optionIndex = this.effectsOptions.getSelectedIndex();
