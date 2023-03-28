@@ -33,6 +33,11 @@ public interface GUIView {
   void errorMessage(String message);
 
   /**
+   * Resets the layers to display back to the user.
+   */
+  void resetLayers();
+
+  /**
    * Displays the current image that the user is working on.
    * @param height the height of the project
    * @param width the width of the project

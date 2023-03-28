@@ -5,10 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -121,7 +118,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
 
     //Selection lists
     JPanel selectionListPanel = new JPanel();
-    selectionListPanel.setBorder(BorderFactory.createTitledBorder("Selection lists"));
+    selectionListPanel.setBorder(BorderFactory.createTitledBorder("Layers"));
     selectionListPanel.setLayout(new BoxLayout(selectionListPanel, BoxLayout.X_AXIS));
     this.mainPanel.add(selectionListPanel);
 
@@ -130,8 +127,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     this.listOfStrings.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     this.listOfStrings.addListSelectionListener(this);
     selectionListPanel.add(listOfStrings);
-
-
 
     //a drop-down menu to show the list of filter options.
     this.effectsOptions = new JComboBox<>(new String[]{"normal", "brighten-value",
@@ -216,6 +211,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
             JOptionPane.showInputDialog("Enter the height"),
             JOptionPane.showInputDialog("Enter the width"),
             JOptionPane.showInputDialog("Does your project have an alpha value? Answer yes or no"));
+        this.resetLayers();
         this.dataForListOfStrings.addElement("Background");
         this.currSelectedLayer = "Background";
       } catch (IllegalArgumentException ex) {
@@ -332,6 +328,11 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
       filePath = file.getAbsolutePath();
     }
     return filePath;
+  }
+
+  @Override
+  public void resetLayers() {
+    this.dataForListOfStrings.removeAllElements();
   }
 
 

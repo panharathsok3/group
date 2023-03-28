@@ -76,6 +76,7 @@ public class CollageGUIController implements Features {
   @Override
   public void loadProject(String filePath) throws IllegalArgumentException {
     this.textUIController.loadProject(filePath);
+    this.view.resetLayers();
     this.view.updateLayers(this.model.getLayers().size());
     this.showImage();
   }
