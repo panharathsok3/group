@@ -58,8 +58,8 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     //scroll bars around this main panel
     this.mainScrollPane = new JScrollPane(mainPanel);
 
-    int scaleHeight = 300;
-    int scaleWidth = 400;
+    int scaleHeight = 200;
+    int scaleWidth = 300;
     this.mainScrollPane.setPreferredSize(new Dimension(width - scaleWidth,
         height - scaleHeight));
     this.add(mainScrollPane);
@@ -131,8 +131,8 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     //a drop-down menu to show the list of filter options.
     this.effectsOptions = new JComboBox<>(new String[]{"normal", "brighten-value",
         "brighten-luma", "brighten-intensity", "darken-value", "darken-luma",
-        "darken-intensity", "red-component", "green-Component", "blue-component",
-        "inversion-difference", "brightening-screen", "darken-multiply"});
+        "darken-intensity", "red-component", "green-component", "blue-component",
+        "inversion-difference", "brighten-screen", "darken-multiply"});
 
     this.effectsOptions.setActionCommand("set-filter");
     this.effectsOptions.addActionListener(this);
@@ -146,10 +146,10 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     commands.add(this.newProject);
     commands.add(this.addLayer);
     commands.add(this.addImageToLayer);
-    commands.add(this.setFilter);
     commands.add(this.saveProject);
     commands.add(this.saveImage);
     commands.add(this.load);
+    commands.add(this.setFilter);
     commands.add(this.effectsOptions);
     this.mainPanel.add(commands, BorderLayout.SOUTH);
 

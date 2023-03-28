@@ -885,6 +885,22 @@ public class CollageModelImplTest {
   }
 
   @Test
+  public void testMakeFinalImageAfterAddingALayer() {
+    this.init();
+    this.collage1.addLayer("L1");
+    ILayer layer = this.collage1.makeFinalImage(false);
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        assertEquals(255, layer.getPixelsOnLayer().get(i).get(j).getRedComponent());
+        assertEquals(255, layer.getPixelsOnLayer().get(i).get(j).getGreenComponent());
+        assertEquals(255, layer.getPixelsOnLayer().get(i).get(j).getBlueComponent());
+        assertEquals(255, layer.getPixelsOnLayer().get(i).get(j).getAlphaComponent());
+      }
+    }
+  }
+
+  @Test
   public void testMakeFinalImageWithNoChanges() {
     this.init();
     this.collage1.addLayer("L1");

@@ -31,6 +31,11 @@ public class GUIViewConfirmMethodCallValidReturnMock implements GUIView {
   }
 
   @Override
+  public void resetLayers() {
+
+  }
+
+  @Override
   public void getImageToPutOnScreen(int height, int width, List<List<IPixel>> imageToAdd) {
 
   }
