@@ -39,7 +39,7 @@ public class ModelConfirmMethodCallValidReturnMock implements CollageProject {
       throws IllegalArgumentException {
     try {
       this.log.append(String.format("Added an Image to a layer with the given arguments = %s, "
-          + "%s, %d, %d\n", layerName, image, xPos, yPos));
+          + "%d, %d\n", layerName, xPos, yPos));
     } catch (IOException ioe) {
       //
     }

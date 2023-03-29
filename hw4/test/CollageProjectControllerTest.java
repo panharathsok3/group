@@ -123,7 +123,7 @@ public class CollageProjectControllerTest {
 
     assertEquals("Created a new project with the given arguments = C1, 3, 3\n"
         + "Added a Layer to the project with the given name = L2\n"
-        + "Added an Image to a layer with the given arguments = L2, src/tako.ppm, 0, 0\n"
+        + "Added an Image to a layer with the given arguments = L2, 0, 0\n"
         + "Applied a filter with the given arguments = L2, red-component\n"
         + "The program has ended\n", out.toString());
   }
@@ -326,7 +326,7 @@ public class CollageProjectControllerTest {
 
     assertEquals("Created a new project with the given arguments = C1, 3, 3\n"
             + "Added a Layer to the project with the given name = L1\n"
-            + "Added an Image to a layer with the given arguments = L1, src/tako.ppm, 0, 0\n"
+            + "Added an Image to a layer with the given arguments = L1, 0, 0\n"
             + "The program has ended\n",
             this.out.toString());
   }
@@ -409,7 +409,7 @@ public class CollageProjectControllerTest {
 
     assertEquals("Created a new project with the given arguments = C1, 3, 3\n"
             + "Added a Layer to the project with the given name = L1\n"
-            + "Added an Image to a layer with the given arguments = L1, src/tako.ppm, 0, 0\n"
+            + "Added an Image to a layer with the given arguments = L1, 0, 0\n"
             + "Applied a filter with the given arguments = L1, red-component\n"
             + "The program has ended\n",
             this.out.toString());

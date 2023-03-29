@@ -78,7 +78,9 @@ public class CollageGUIController implements Features {
     this.textUIController.loadProject(filePath);
     this.view.resetLayers();
     this.view.updateLayers(this.model.getLayers().size());
+
     this.projectMade = true;
+    this.textUIController = new CollageControllerImpl(this.model, true);
     this.showImage();
   }
 
