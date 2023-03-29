@@ -207,6 +207,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
         this.resetLayers();
         this.dataForListOfStrings.addElement("Background");
         this.currSelectedLayer = "Background";
+        this.listOfStrings.setSelectedIndex(0);
       } catch (IllegalArgumentException ex) {
         //do nothing
       }
@@ -222,6 +223,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
         features.addLayer(layerName);
         this.dataForListOfStrings.addElement(layerName);
         this.currSelectedLayer = layerName;
+        this.listOfStrings.setSelectedIndex(this.layerNum);
       } catch (IllegalArgumentException ex) {
         //do nothing
       } catch (IllegalStateException ex) {
