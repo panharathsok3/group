@@ -219,7 +219,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
       try {
         this.throwErrorIfProjectNotMade(features);
 
-        String layerName = "Layer " + this.layerNum;
+        String layerName = "Layer" + this.layerNum;
         features.addLayer(layerName);
         this.dataForListOfStrings.addElement(layerName);
         this.currSelectedLayer = layerName;
@@ -303,7 +303,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
 
     this.dataForListOfStrings.addElement("Background");
     for (int i = 1; i < layerNumber; i++) {
-      this.dataForListOfStrings.addElement("Layer " + this.layerNum);
+      this.dataForListOfStrings.addElement("Layer" + this.layerNum);
       this.layerNum++;
     }
     this.currSelectedLayer = this.dataForListOfStrings.get(layerNumber - 1);

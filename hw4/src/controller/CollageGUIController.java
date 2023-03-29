@@ -48,6 +48,10 @@ public class CollageGUIController implements Features {
   public void newProject(String projectName, String height, String width, String hasAlpha)
       throws IllegalArgumentException {
 
+    if (hasAlpha == null) {
+      throw new IllegalArgumentException("Argument can't be null");
+    }
+
     try {
       int height2 = Integer.parseInt(height);
       int width2 = Integer.parseInt(width);
@@ -120,20 +124,6 @@ public class CollageGUIController implements Features {
 
   @Override
   public void saveProject(String filePath, String projectType) throws IllegalArgumentException {
-    int layerNum = 1;
-
-    for (int i = 0; i < this.model.getHeight(); i++) {
-      for (int j = 0; j < this.model.getWidth(); j++) {
-        IPixel pixel = this.model.getLayers().get(layerNum).getPixelsOnLayer().get(i).get(j);
-
-        int red = pixel.getRedComponent();
-        int green = pixel.getGreenComponent();
-        int blue = pixel.getBlueComponent();
-        int alpha = pixel.getAlphaComponent();
-
-        System.out.println(red + " " + green + " " + blue + " " + alpha);
-      }
-    }
 
     this.textUIController.saveProject(filePath, projectType);
   }
