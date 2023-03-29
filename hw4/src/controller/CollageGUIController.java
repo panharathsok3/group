@@ -2,6 +2,7 @@ package controller;
 
 
 import model.CollageProject;
+import model.IPixel;
 import view.GUIView;
 
 /**
@@ -119,6 +120,21 @@ public class CollageGUIController implements Features {
 
   @Override
   public void saveProject(String filePath, String projectType) throws IllegalArgumentException {
+    int layerNum = 1;
+
+    for (int i = 0; i < this.model.getHeight(); i++) {
+      for (int j = 0; j < this.model.getWidth(); j++) {
+        IPixel pixel = this.model.getLayers().get(layerNum).getPixelsOnLayer().get(i).get(j);
+
+        int red = pixel.getRedComponent();
+        int green = pixel.getGreenComponent();
+        int blue = pixel.getBlueComponent();
+        int alpha = pixel.getAlphaComponent();
+
+        System.out.println(red + " " + green + " " + blue + " " + alpha);
+      }
+    }
+
     this.textUIController.saveProject(filePath, projectType);
   }
 
