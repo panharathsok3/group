@@ -217,7 +217,14 @@ public class Pixel implements IPixel {
     return lightness - a * Math.max(-1, Math.min(k - 3, Math.min(9 - k, 1)));
   }
 
-  private void throwErrorIfNotCorrectRepresentation(boolean wrongRepresentation) {
+  /**
+   * Helper method to throw error if a HSL pixel is trying to access methods from a RGBA pixel or
+   * vice versa.
+   * @param wrongRepresentation true if a HSL pixel is trying to access methods from a RGBA pixel or
+   *                            vice versa
+   */
+  private void throwErrorIfNotCorrectRepresentation(boolean wrongRepresentation)
+      throws IllegalArgumentException {
     if (wrongRepresentation) {
       throw new IllegalArgumentException("This is wrong!");
     }

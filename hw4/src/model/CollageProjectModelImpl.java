@@ -1,13 +1,10 @@
 package model;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import java.util.Map;
-import java.util.Scanner;
 import model.effects.BrightenDarkenMacro;
 import model.effects.BulkAssignFilter;
 import model.effects.ChangeTransparencyMacro;
@@ -87,18 +84,16 @@ public class CollageProjectModelImpl implements CollageProject {
   }
 
   @Override
-  public void addImageToLayer(String layerName, String filePath, int xPos, int yPos)
+  public void addImageToLayer(String layerName, List<List<IPixel>> image, int xPos, int yPos)
           throws IllegalArgumentException {
 
     this.throwExceptionProjectNotMade();
 
-    if (layerName == null || layerName.equals("") || filePath == null || filePath.equals("")
-            || xPos < 0 || xPos > this.canvasHeight || yPos < 0 || yPos > this.canvasWidth) {
+    if (layerName == null || layerName.equals("") || image == null ||
+        xPos < 0 || xPos > this.canvasHeight || yPos < 0 || yPos > this.canvasWidth) {
       throw new IllegalArgumentException("layer name and file path cannot be null, x and y "
           + "positions have to be within the boundaries of the canvas");
     }
-
-    List<List<IPixel>> image = this.readImage(filePath, false, "P3");
 
     for (ILayer layer : this.project) {
       if (layerName.equals(layer.getName())) {
@@ -111,84 +106,38 @@ public class CollageProjectModelImpl implements CollageProject {
     throw new IllegalArgumentException("Layer not found");
   }
 
-  /**
-   * Read an image file and returns the pixels on the image as a 2D array.
-   * Converts color value to the base of 256.
-   * @param filename the path of the file
-   * @param hasAlpha true if and only if the original image has an alpha value
-   * @param fileType the type of file that is being read from
-   * @return the pixels on the image as a 2D array
-   * @throws IllegalStateException when the file could not be retrieved
-   *                               or the file is not a PPM file
-   */
-  private List<List<IPixel>> readImage(String filename, boolean hasAlpha, String fileType)
-      throws IllegalStateException {
-    Scanner sc;
-
-    try {
-      sc = new Scanner(new FileInputStream(filename));
-    } catch (FileNotFoundException e) {
-      throw new IllegalStateException("File " + filename + " not found!");
-    }
-
-    StringBuilder builder = new StringBuilder();
-    //read the file line by line, and populate a string. This will throw away any comment lines
-    while (sc.hasNextLine()) {
-      String s = sc.nextLine();
-      if (s.charAt(0) != '#') {
-        builder.append(s + System.lineSeparator());
-      }
-    }
-
-    //now set up the scanner to read from the string we just built
-    sc = new Scanner(builder.toString());
-
-    String token;
-
-    token = sc.next();
-    if (!token.equals(fileType)) {
-      throw new IllegalStateException("Invalid file type: plain RAW file should begin with "
-          + fileType);
-    }
-
-    int width = sc.nextInt();
-    int height = sc.nextInt();
-    int maxValue = sc.nextInt();
-
-    List<List<IPixel>> pixelsOnImage = new ArrayList<>();
-
-    for (int i = 0; i < height; i++) {
-      pixelsOnImage.add(new ArrayList<>());
-      for (int j = 0; j < width; j++) {
-        int r = sc.nextInt();
-        int g = sc.nextInt();
-        int b = sc.nextInt();
-
-        r = r * 255 / maxValue;
-        g = g * 255 / maxValue;
-        b = b * 255 / maxValue;
-
-        if (!hasAlpha) {
-          pixelsOnImage.get(i).add(new Pixel(r, g, b));
-        }
-        else {
-          int a = sc.nextInt();
-          pixelsOnImage.get(i).add(new Pixel(r, g, b, a));
-        }
-
-      }
-    }
-    return pixelsOnImage;
-  }
-
-
   @Override
   public ILayer makeFinalImage(boolean hasAlpha) {
     this.throwExceptionProjectNotMade();
 
     MacroCollageEffects macro;
 
-    List<ILayer> layers = new ArrayList<>(this.project);
+    List<List<IPixel>> pixelsOnLayer;
+
+    List<ILayer> layers = new ArrayList<>();
+
+    for (ILayer layer : this.project) {
+      pixelsOnLayer = new ArrayList<>();
+
+      for (int i = 0; i < this.canvasHeight; i++) {
+        pixelsOnLayer.add(new ArrayList<>());
+        for (int j = 0; j < this.canvasWidth; j++) {
+
+          int red = layer.getPixelsOnLayer().get(i).get(j).getRedComponent();
+          int green = layer.getPixelsOnLayer().get(i).get(j).getGreenComponent();
+          int blue = layer.getPixelsOnLayer().get(i).get(j).getBlueComponent();
+          int alpha = layer.getPixelsOnLayer().get(i).get(j).getAlphaComponent();
+
+          IPixel newPixel = new Pixel(red, green, blue, alpha);
+
+          pixelsOnLayer.get(i).add(newPixel);
+        }
+      }
+
+      layers.add(new Layer(layer.getName(), this.canvasHeight, this.canvasWidth,
+          pixelsOnLayer));
+    }
+
     List<List<IPixel>> finalImage = new ArrayList<>();
     boolean isBackground = true;
 

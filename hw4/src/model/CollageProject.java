@@ -33,7 +33,7 @@ public interface CollageProject {
    * Places an image on a layer at given dimensions where the top left is 0, 0.
    * The x values increases to the right and the y values increases downwards.
    * @param layerName the layer that is being added to
-   * @param filePath the image the user wants to add to the layer
+   * @param image the image to put on the layer
    * @param xPos the position of the x-coordinate
    * @param yPos the position of the y-coordinate
    * @throws IllegalArgumentException if the layer doesn't exist or is null
@@ -41,7 +41,7 @@ public interface CollageProject {
    *                                  or if the x or y position is not on the canvas
    * @throws IllegalStateException if the project has not been made yet
    */
-  void addImageToLayer(String layerName, String filePath, int xPos, int yPos)
+  void addImageToLayer(String layerName, List<List<IPixel>> image, int xPos, int yPos)
       throws IllegalArgumentException;
 
   /**

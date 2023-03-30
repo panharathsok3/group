@@ -16,6 +16,8 @@ public class InversionDifferenceMacro implements MacroCollageEffects {
 
   /**
    * Creates an InversionDifferenceMacro to difference blending filter onto a layer.
+   * @param height the height of the layer
+   * @param width the width of the layer
    * @param pixelsLayerBelow the 2D List of the pixel below
    * @throws IllegalArgumentException if the given argument is null
    */
