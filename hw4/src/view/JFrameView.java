@@ -190,7 +190,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
         this.errorMessage("Action doesn't exist");
         setVisible(true);
         throw new IllegalStateException("action doesn't exist");
-
     }
   }
 
@@ -205,6 +204,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
             JOptionPane.showInputDialog("Enter the width"),
             JOptionPane.showInputDialog("Does your project have an alpha value? Answer yes or no"));
         this.resetLayers();
+        this.layerNum = 1;
         this.dataForListOfStrings.addElement("Background");
         this.currSelectedLayer = "Background";
         this.listOfStrings.setSelectedIndex(0);
@@ -301,6 +301,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
   @Override
   public void updateLayers(int layerNumber) {
 
+    this.layerNum = 1;
     this.dataForListOfStrings.addElement("Background");
     for (int i = 1; i < layerNumber; i++) {
       this.dataForListOfStrings.addElement("Layer" + this.layerNum);
@@ -329,32 +330,6 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
   public void resetLayers() {
     this.dataForListOfStrings.removeAllElements();
   }
-
-
-//  private Map<String, Consumer<Features>> getActionsForCommands() {
-//    Map<String, Consumer<Features>> effectOptions =
-//            new HashMap<>();
-//
-//    effectOptions.put("Brighten", features -> {
-//      String[] effects = {"luma", "intensity", "value"};
-//      int chosen = JOptionPane.showOptionDialog(null,
-//              "Pick one", "Color picker",
-//              JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-//              effects, effects[0]);
-//
-////      this.setFilter.addActionListener(e -> features.setFilter
-////              (JOptionPane.showInputDialog("Enter the layer you want to transform name"),
-////                      JOptionPane.showInputDialog("Enter the filter you want to apply")));
-//
-//      String ext = effects[chosen].toLowerCase();
-//      String layerName = null;
-//
-//      switch (effects[chosen]) {
-//        case "":
-//      }
-//    });
-//    return effectOptions;
-//  }
 
   @Override
   public void getImageToPutOnScreen(int height, int width, List<List<IPixel>> imageToAdd) {

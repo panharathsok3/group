@@ -2,7 +2,6 @@ package controller;
 
 
 import model.CollageProject;
-import model.IPixel;
 import view.GUIView;
 
 /**
