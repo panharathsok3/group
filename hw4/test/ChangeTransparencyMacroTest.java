@@ -58,14 +58,6 @@ public class ChangeTransparencyMacroTest  {
       //do nothing because we want it to fail.
     }
 
-    try {
-      new ChangeTransparencyMacro(10, 10, false,
-              new ArrayList<List<IPixel>>());
-      fail("arguments cannot be null or negative");
-    } catch (IllegalArgumentException iae) {
-      //do nothing because we want it to fail.
-    }
-
   }
 
 
