@@ -7,3 +7,7 @@ TODO:
 - Need to keep updating the Image on screen with the list of layers
 - Make filter in a new panel with normal as the default
 - MOCKS for testing GUI view and controller
+
+
+FOR PAN:
+- test controller cuz added readImage here now

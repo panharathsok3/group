@@ -92,37 +92,5 @@ public interface IPixel {
    *                               representation to RGB
    */
   IPixel convertHSLtoRGB() throws IllegalStateException;
-
-//  /**
-//   * Modifies the component by adding or subtracting it by a given value.
-//   * @param brightnessOptions a string of values that can be applied to the component
-//   * @param add               true if and only if the value is being added to and false otherwise
-//   *                          which makes it subtract instead
-//   * @throws IllegalArgumentException if the given component is null
-//   *                                  or if the brightnessOptions is not brighten-luma,
-//   *                                  brighten-value, or brighten-intensity
-//   */
-//  void modifyComponentByBrightness(String brightnessOptions, boolean add);
-//
-//  /**
-//   * Filters for a specific color component by setting the other 2 to zero.
-//   * @param option the color to filter to
-//   * @throws IllegalArgumentException when the option is not red-component, green-component,
-//   *                                  or blue-component or if the option is null
-//   */
-//  void setFilter(String option);
-//
-//
-//  /**
-//   * Changes the transparency of this Pixel by modifying the four components if the image originally
-//   * has an alpha value and modifies only the rgb if the image doesn't have an alpha component.
-//   * @param hasAlpha true if and only if this pixel doesn't require an alpha value
-//   * @param dR       the default red value which is the value of the background's red value
-//   * @param dG       the default green value which is the value of the background's green value
-//   * @param dB       the default blue value which is the value of the background's blue value
-//   * @param dA       the default alpha value which is the value of the background's alpha value
-//   */
-//  void changeTransparency(boolean hasAlpha, int dR, int dG, int dB, int dA);
-
 }
 

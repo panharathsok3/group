@@ -1,9 +1,11 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import model.CollageProject;
 import model.ILayer;
+import model.IPixel;
 import model.Layer;
 
 /**
@@ -32,11 +34,11 @@ public class ModelConfirmMethodCallValidReturnMock implements CollageProject {
   }
 
   @Override
-  public void addImageToLayer(String layerName, String filePath, int xPos, int yPos)
+  public void addImageToLayer(String layerName, List<List<IPixel>> image, int xPos, int yPos)
       throws IllegalArgumentException {
     try {
       this.log.append(String.format("Added an Image to a layer with the given arguments = %s, "
-          + "%s, %d, %d\n", layerName, filePath, xPos, yPos));
+          + "%d, %d\n", layerName, xPos, yPos));
     } catch (IOException ioe) {
       //
     }

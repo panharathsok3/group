@@ -45,6 +45,11 @@ public class CollageControllerImpl implements CollageController {
     this.projectMade = false;
   }
 
+  /**
+   * Represents a Controller who's only job is to handle File IO.
+   * @param collage the CollageProject that will be used
+   * @param projectMade true if and only if the project has been made
+   */
   public CollageControllerImpl(CollageProject collage, boolean projectMade) {
     this.collage = collage;
     this.projectMade = projectMade;
@@ -120,8 +125,19 @@ public class CollageControllerImpl implements CollageController {
           String imageName = this.readValueString(sc);
           int x = this.readValueInteger(sc);
           int y = this.readValueInteger(sc);
+
+          String extension = imageName.substring(imageName.lastIndexOf(".") + 1);
+          String imageToken = null;
+
+          boolean hasAlpha = true;
+          if (extension.equalsIgnoreCase("ppm")) {
+            hasAlpha = false;
+            imageToken = "P3";
+          }
+
           try {
-            this.collage.addImageToLayer(layerName1, imageName, x, y);
+            this.collage.addImageToLayer(layerName1,
+                this.readImage(imageName, hasAlpha, imageToken), x, y);
           } catch (IllegalArgumentException e) {
             this.renderMessage("Arguments can't be null or negative or the layer doesn't exist");
           } catch (IllegalStateException e) {
@@ -165,7 +181,7 @@ public class CollageControllerImpl implements CollageController {
     }
     this.throwExceptionProjectNotMade();
 
-    if (projectType.equals("PPM")) {
+    if (projectType.equalsIgnoreCase("PPM")) {
       try {
         saveProjectHelper(this.collage.getProjectName(), this.collage.getHeight(),
             this.collage.getWidth(), this.collage.getMaxValue(), filePath, this.collage.getLayers(),
@@ -197,7 +213,7 @@ public class CollageControllerImpl implements CollageController {
     FileWriter fileWriter = new FileWriter(filePath);
 
     fileWriter.write(projectName + "\n");
-    fileWriter.write(height + " " + width + "\n");
+    fileWriter.write(width + " " + height + "\n");
     //depends on what ever the colors in the project are
     fileWriter.write(maxValue + "\n"); //because the max value of each pixel can be 255
 
@@ -295,12 +311,12 @@ public class CollageControllerImpl implements CollageController {
     if (!sc.hasNextInt()) {
       throw new IllegalStateException("this file cannot create a new project");
     }
-    int canvasHeight = sc.nextInt();
+    int canvasWidth = sc.nextInt();
 
     if (!sc.hasNextInt()) {
       throw new IllegalStateException("this file cannot create a new project");
     }
-    int canvasWidth = sc.nextInt();
+    int canvasHeight = sc.nextInt();
 
     if (!sc.hasNext()) {
       throw new IllegalStateException("this file cannot create a new project");
@@ -350,6 +366,72 @@ public class CollageControllerImpl implements CollageController {
     this.collage.getLayers().get(layerNum).addImage(0, 0, image);
   }
 
+
+  @Override
+  public List<List<IPixel>> readImage(String filename, boolean hasAlpha, String fileType)
+      throws IllegalStateException {
+    Scanner sc;
+
+    try {
+      sc = new Scanner(new FileInputStream(filename));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File " + filename + " not found!");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    //read the file line by line, and populate a string. This will throw away any comment lines
+    while (sc.hasNextLine()) {
+      String s = sc.nextLine();
+      if (s.charAt(0) != '#') {
+        builder.append(s + System.lineSeparator());
+      }
+    }
+
+    //now set up the scanner to read from the string we just built
+    sc = new Scanner(builder.toString());
+
+    String token;
+
+    token = sc.next();
+    if (!token.equals(fileType)) {
+      throw new IllegalStateException("Invalid file type: plain RAW file should begin with "
+          + fileType);
+    }
+
+    int width = sc.nextInt();
+    int height = sc.nextInt();
+    int maxValue = sc.nextInt();
+
+    List<List<IPixel>> pixelsOnImage = new ArrayList<>();
+
+    for (int i = 0; i < height; i++) {
+      pixelsOnImage.add(new ArrayList<>());
+      for (int j = 0; j < width; j++) {
+        int r = sc.nextInt();
+        int g = sc.nextInt();
+        int b = sc.nextInt();
+
+        r = r * 255 / maxValue;
+        g = g * 255 / maxValue;
+        b = b * 255 / maxValue;
+
+        if (!hasAlpha) {
+          pixelsOnImage.get(i).add(new Pixel(r, g, b));
+        }
+        else {
+          int a = sc.nextInt();
+          pixelsOnImage.get(i).add(new Pixel(r, g, b, a));
+        }
+
+      }
+    }
+    return pixelsOnImage;
+  }
+
+  /**
+   * Helper method that throws an exception when the project has not been made yet.
+   * @throws IllegalStateException when the project has not been made yet
+   */
   private void throwExceptionProjectNotMade() throws IllegalStateException {
     if (!projectMade) {
       throw new IllegalStateException("project has not been made");

@@ -23,7 +23,7 @@ public class ChangeTransparencyMacro implements MacroCollageEffects {
    * @param width the width of the layer
    * @param hasAlpha true if and only if the original image has an alpha value
    * @param prevLayer a 2D array of IPixels from the previous layer
-   * @throws IllegalArgumentException
+   * @throws IllegalArgumentException if the given arguments are null
    */
   public ChangeTransparencyMacro(int height, int width, boolean hasAlpha,
       List<List<IPixel>> prevLayer) throws IllegalArgumentException {
@@ -46,16 +46,26 @@ public class ChangeTransparencyMacro implements MacroCollageEffects {
         int blue = layer.getPixelsOnLayer().get(i).get(j).getBlueComponent();
         int alpha = layer.getPixelsOnLayer().get(i).get(j).getAlphaComponent();
 
+        int dR = this.prevLayer.get(i).get(j).getRedComponent();
+        int dG = this.prevLayer.get(i).get(j).getGreenComponent();
+        int dB = this.prevLayer.get(i).get(j).getBlueComponent();
+        int dA = this.prevLayer.get(i).get(j).getAlphaComponent();
+
         if (!this.hasAlpha) {
-          red = (int) (red * alpha / 255f);
-          green = (int) (green * alpha / 255f);
-          blue = (int) (blue * alpha / 255f);
+          if (alpha == 255) {
+            red = (int) (red * alpha / 255f);
+            green = (int) (green * alpha / 255f);
+            blue = (int) (blue * alpha / 255f);
+          }
+          else {
+            red = dR;
+            green = dG;
+            blue = dB;
+            alpha = 255;
+          }
         } else {
           int originalAlpha = alpha;
-          int dR = this.prevLayer.get(i).get(j).getRedComponent();
-          int dG = this.prevLayer.get(i).get(j).getGreenComponent();
-          int dB = this.prevLayer.get(i).get(j).getBlueComponent();
-          int dA = this.prevLayer.get(i).get(j).getAlphaComponent();
+
 
           double alphaPrime = (originalAlpha / 255f) + (dA / 255f) * (1 - (originalAlpha / 255f));
 

@@ -43,9 +43,15 @@ public class Layer implements ILayer {
    * @param height the height of this Layer
    * @param width the width of this Layer
    * @param pixelsOnLayer the IPixels on this Layer
+   * @throws IllegalArgumentException when the given arguments are null
    */
-  public Layer(String layerName, int height, int width,
-      List<List<IPixel>> pixelsOnLayer) {
+  public Layer(String layerName, int height, int width, List<List<IPixel>> pixelsOnLayer)
+      throws IllegalArgumentException {
+
+    if (layerName == null || pixelsOnLayer == null) {
+      throw new IllegalArgumentException("Arguments can't be null");
+    }
+
     this.layerName = layerName;
     this.height = height;
     this.width = width;
@@ -69,8 +75,8 @@ public class Layer implements ILayer {
       throw new IllegalArgumentException("Arguments can't be null and they can't be negative");
     }
 
-    int height = image.size();
-    int width = image.get(0).size();
+    int height = image.size() + yPos;
+    int width = image.get(0).size() + xPos;
     if (image.size() > this.height) {
       height = this.height;
     }
@@ -78,10 +84,16 @@ public class Layer implements ILayer {
       width = this.width;
     }
 
-    for (int i = xPos; i < height; i++) {
-      for (int j = yPos; j < width; j++) {
-        this.pixelsOnLayer.get(i).set(j, image.get(i).get(j));
+    int imageHeight = 0;
+    int imageWidth;
+
+    for (int i = yPos; i < height; i++) {
+      imageWidth = 0;
+      for (int j = xPos; j < width; j++) {
+        this.pixelsOnLayer.get(i).set(j, image.get(imageHeight).get(imageWidth));
+        imageWidth++;
       }
+      imageHeight++;
     }
   }
 

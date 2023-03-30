@@ -7,7 +7,7 @@ import model.IPixel;
 import model.Pixel;
 
 /**
- *
+ * A darkens or brightens an image using the pixel's HSL values.
  */
 public class DarkenMultiplyBrightenScreenMacro implements MacroCollageEffects {
 
@@ -17,13 +17,14 @@ public class DarkenMultiplyBrightenScreenMacro implements MacroCollageEffects {
   private final boolean brightenDarken;
 
   /**
-   *
-   * @param height
-   * @param width
-   * @param prevLayerImage
-   * @param brightenDarken true if and only if this is used for darken-multiply and it will be used
+   * Creates a DarkenMultiplyBrightenScreenMacro that will brighten or darken the image on the
+   * screen based on the HSL values of the pixels.
+   * @param height the height of the layer
+   * @param width the width of the layer
+   * @param prevLayerImage a 2D array of IPixels from the previous layer
+   * @param brightenDarken true if and only if this is used for darken-multiply, and it will be used
    *                       for brighten-screen otherwise
-   * @throws IllegalArgumentException
+   * @throws IllegalArgumentException if the given arguments are null
    */
   public DarkenMultiplyBrightenScreenMacro(int height, int width, List<List<IPixel>> prevLayerImage,
       boolean brightenDarken) throws IllegalArgumentException {
