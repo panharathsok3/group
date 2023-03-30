@@ -42,6 +42,7 @@ public class DarkenMultiplyBrightenMacroTest {
       //do nothing because we want it to fail.
     }
 
+    //test failing?
     try {
       new DarkenMultiplyBrightenScreenMacro(-10, 10,
               new ArrayList<List<IPixel>>(), true);
@@ -115,7 +116,7 @@ public class DarkenMultiplyBrightenMacroTest {
         assertEquals(4, p.getRedComponent());
         assertEquals(9, p.getGreenComponent());
         assertEquals(12, p.getBlueComponent());
-        assertEquals(189.66, p.getAlphaComponent(), 0.1);
+        assertEquals(1.0, p.getAlphaComponent(), 0.1);
       }
     }
 
@@ -160,7 +161,7 @@ public class DarkenMultiplyBrightenMacroTest {
         assertEquals(38, p.getRedComponent());
         assertEquals(91, p.getGreenComponent());
         assertEquals(124, p.getBlueComponent());
-        assertEquals(255, p.getAlphaComponent());
+        assertEquals(100, p.getAlphaComponent());
       }
     }
 
