@@ -26,9 +26,9 @@ public class ChangeTransparencyMacroTest  {
   @Before
   public void init() {
     this.layer1 = new Layer("L1", 10, 15, 255);
-    this.layer2 = new Layer("L2", 15, 30, 100);
-    this.layer3 = new Layer("L3", 40, 40, 150);
-    this.layer4 = new Layer("L4", 10, 10, 255);
+    this.layer2 = new Layer("L2", 10, 15, 0);
+    this.layer3 = new Layer("L3", 10, 15, 0);
+    this.layer4 = new Layer("L4", 10, 15, 255);
   }
 
   @Test
@@ -52,14 +52,6 @@ public class ChangeTransparencyMacroTest  {
 
     try {
       new ChangeTransparencyMacro(2, -2000, true,
-              new ArrayList<List<IPixel>>());
-      fail("arguments cannot be null or negative");
-    } catch (IllegalArgumentException iae) {
-      //do nothing because we want it to fail.
-    }
-
-    try {
-      new ChangeTransparencyMacro(10, 10, false,
               new ArrayList<List<IPixel>>());
       fail("arguments cannot be null or negative");
     } catch (IllegalArgumentException iae) {
@@ -94,7 +86,7 @@ public class ChangeTransparencyMacroTest  {
       pixelsOnCurrentLayer.add(new ArrayList<>());
       for (int j = 0; j < 15; j++) {
         pixelsOnCurrentLayer.get(i).add(new Pixel(21, 50,
-                68, 255));
+                68, 10));
       }
     }
 
@@ -105,8 +97,8 @@ public class ChangeTransparencyMacroTest  {
     for (int i = 0; i < 10; i++) {
       pixelsOnCurrentLayer2.add(new ArrayList<>());
       for (int j = 0; j < 15; j++) {
-        pixelsOnCurrentLayer2.get(i).add(new Pixel(21, 50,
-                68, 100));
+        pixelsOnCurrentLayer2.get(i).add(new Pixel(120, 60,
+                20, 100));
       }
     }
 
@@ -116,12 +108,13 @@ public class ChangeTransparencyMacroTest  {
             pixelsOnCurrentLayer);
     macro.executeMacro(this.layer3);
 
-    for (List<IPixel> list : this.layer4.getPixelsOnLayer()) {
+
+    for (List<IPixel> list : this.layer3.getPixelsOnLayer()) {
       for (IPixel p : list) {
-        assertEquals(15, p.getRedComponent());
-        assertEquals(150, p.getGreenComponent());
-        assertEquals(70, p.getBlueComponent());
-        assertEquals(255, p.getAlphaComponent());
+        assertEquals(114, p.getRedComponent());
+        assertEquals(59, p.getGreenComponent());
+        assertEquals(22, p.getBlueComponent());
+        assertEquals(106, p.getAlphaComponent());
       }
     }
 

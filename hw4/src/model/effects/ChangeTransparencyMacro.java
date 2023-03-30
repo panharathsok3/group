@@ -24,10 +24,11 @@ public class ChangeTransparencyMacro implements MacroCollageEffects {
    * @param hasAlpha true if and only if the original image has an alpha value
    * @param prevLayer a 2D array of IPixels from the previous layer
    * @throws IllegalArgumentException if the given arguments are null
+   *                                  or if the given height and width is negative
    */
   public ChangeTransparencyMacro(int height, int width, boolean hasAlpha,
       List<List<IPixel>> prevLayer) throws IllegalArgumentException {
-    if (prevLayer == null) {
+    if (prevLayer == null || height < 0 || width < 0) {
       throw new IllegalArgumentException("Arguments can't be null");
     }
 
@@ -39,6 +40,11 @@ public class ChangeTransparencyMacro implements MacroCollageEffects {
 
   @Override
   public void executeMacro(ILayer layer) throws IllegalArgumentException {
+
+    if (layer == null) {
+      throw new IllegalArgumentException("Arguments can't be null");
+    }
+
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
         int red = layer.getPixelsOnLayer().get(i).get(j).getRedComponent();

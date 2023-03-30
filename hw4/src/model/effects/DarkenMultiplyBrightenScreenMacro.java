@@ -25,11 +25,12 @@ public class DarkenMultiplyBrightenScreenMacro implements MacroCollageEffects {
    * @param brightenDarken true if and only if this is used for darken-multiply, and it will be used
    *                       for brighten-screen otherwise
    * @throws IllegalArgumentException if the given arguments are null
+   *                                  or if the given hieght or width is negative
    */
   public DarkenMultiplyBrightenScreenMacro(int height, int width, List<List<IPixel>> prevLayerImage,
       boolean brightenDarken) throws IllegalArgumentException {
 
-    if (prevLayerImage == null) {
+    if (prevLayerImage == null || height < 0 || width < 0) {
       throw new IllegalArgumentException("Arguments can't be null");
     }
 
