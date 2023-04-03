@@ -247,10 +247,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
       try {
         this.throwErrorIfProjectNotMade(features);
 
-        String projectType = JOptionPane.showInputDialog("What kind of project is this? eg: ppm, "
-            + "png, jpeg, etc. We currently only support ppm");
-
-        features.saveProject(this.returnFilePathOfSelectedFile(), projectType);
+        features.saveProject(this.returnFilePathOfSelectedFile());
       } catch (IllegalStateException ex) {
         this.errorMessage("A project has not been made");
       } catch (IllegalArgumentException ex) {

@@ -99,8 +99,6 @@ public class CollageGUIController implements Features {
           this.textUIController.readImage(filePath, this.hasAlpha, imageToken),
           xPosition, yPosition);
 
-
-
       this.showImage();
     } catch (NumberFormatException e) {
       throw new IllegalArgumentException("x and y position needs to be integers");
@@ -108,9 +106,8 @@ public class CollageGUIController implements Features {
   }
 
   @Override
-  public void saveProject(String filePath, String projectType) throws IllegalArgumentException {
-
-    this.textUIController.saveProject(filePath, projectType);
+  public void saveProject(String filePath) throws IllegalArgumentException {
+    this.textUIController.saveProject(filePath);
   }
 
   @Override

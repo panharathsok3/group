@@ -497,7 +497,7 @@ public class CollageProjectControllerTest {
 
   @Test
   public void testInvalidSaveProject() {
-    this.in = new StringReader("save-project A A quit");
+    this.in = new StringReader("save-project A quit");
     this.out = new StringBuilder();
 
     this.collageModel = new CollageProjectModelImpl();
@@ -764,14 +764,7 @@ public class CollageProjectControllerTest {
     }
 
     try {
-      this.collageController.saveProject(null, "ppm");
-      fail("Arguments can't be null");
-    } catch (IllegalArgumentException e) {
-      // do nothing
-    }
-
-    try {
-      this.collageController.saveProject("src/fileName", null);
+      this.collageController.saveProject(null);
       fail("Arguments can't be null");
     } catch (IllegalArgumentException e) {
       // do nothing
@@ -982,8 +975,7 @@ public class CollageProjectControllerTest {
     this.collageController.runProgram();
 
     model.newProject("C1", 2, 2);
-    this.collageController.saveProject("res/project/saveProjectAndLoadWhileWorking",
-        "PPM");
+    this.collageController.saveProject("res/project/saveProjectAndLoadWhileWorking");
 
     model.newProject("C2", 2, 2);
     model.addLayer("L1");

@@ -101,9 +101,8 @@ public class CollageControllerImpl implements CollageController {
           break;
         case "save-project":
           String filePath = this.readValueString(sc);
-          String fileType = this.readValueString(sc);
           try {
-            this.saveProject(filePath, fileType);
+            this.saveProject(filePath);
           } catch (IllegalArgumentException e) {
             this.renderMessage("Arguments can't be null");
           } catch (IllegalStateException e) {
@@ -174,21 +173,19 @@ public class CollageControllerImpl implements CollageController {
 
 
   @Override
-  public void saveProject(String filePath, String projectType) throws IllegalArgumentException,
+  public void saveProject(String filePath) throws IllegalArgumentException,
       IllegalStateException {
-    if (filePath == null || projectType == null) {
+    if (filePath == null) {
       throw new IllegalArgumentException("Cannot give null as an argument");
     }
     this.throwExceptionProjectNotMade();
 
-    if (projectType.equalsIgnoreCase("PPM")) {
-      try {
-        saveProjectHelper(this.collage.getProjectName(), this.collage.getHeight(),
-            this.collage.getWidth(), this.collage.getMaxValue(), filePath, this.collage.getLayers(),
-            this.collage.getFiltersOnProject(), false);
-      } catch (IOException e) {
-        throw new IllegalArgumentException("Was not able to save");
-      }
+    try {
+      saveProjectHelper(this.collage.getProjectName(), this.collage.getHeight(),
+          this.collage.getWidth(), this.collage.getMaxValue(), filePath, this.collage.getLayers(),
+          this.collage.getFiltersOnProject(), false);
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Was not able to save");
     }
   }
 

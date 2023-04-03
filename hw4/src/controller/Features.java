@@ -56,10 +56,9 @@ public interface Features {
    * Saves the project onto a file with a given file path. The projectType refers to the file that
    * is being worked on this can be a PNG, JPEG, PPM, etc.
    * @param filePath the file path that the project will be saved to
-   * @param projectType the project type of the project
    * @throws IllegalArgumentException when the given argument is null
    */
-  void saveProject(String filePath, String projectType) throws IllegalArgumentException;
+  void saveProject(String filePath) throws IllegalArgumentException;
 
   /**
    * Saves the current image on the project to a file.

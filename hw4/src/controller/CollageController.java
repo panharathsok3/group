@@ -38,7 +38,7 @@ public interface CollageController {
    * @throws IllegalStateException if the user is not able to save their project
    *                               or if the project has not been made yet
    */
-  void saveProject(String filePath, String projectType) throws IllegalArgumentException,
+  void saveProject(String filePath) throws IllegalArgumentException,
       IllegalStateException;
 
 

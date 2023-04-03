@@ -205,10 +205,6 @@ public class PixelTest {
   public void testConvertRGBtoHSL() {
     this.init();
 
-    System.out.println(this.pixel4.convertRGBtoHSL().getHueComponent());
-    System.out.println(this.pixel4.convertRGBtoHSL().getSaturationComponent());
-    System.out.println(this.pixel4.convertRGBtoHSL().getLightnessComponent());
-
     assertEquals(0.0, this.pixel1.convertRGBtoHSL().getHueComponent(), 0.01);
     assertEquals(0.0, this.pixel1.convertRGBtoHSL().getSaturationComponent(), 0.01);
     assertEquals(0.0, this.pixel1.convertRGBtoHSL().getLightnessComponent(), 0.01);
