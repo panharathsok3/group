@@ -77,10 +77,10 @@ public class Layer implements ILayer {
 
     int height = image.size() + yPos;
     int width = image.get(0).size() + xPos;
-    if (image.size() > this.height) {
+    if (height > this.height) {
       height = this.height;
     }
-    if (image.get(0).size() > this.width) {
+    if (width > this.width) {
       width = this.width;
     }
 

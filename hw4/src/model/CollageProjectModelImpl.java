@@ -171,12 +171,12 @@ public class CollageProjectModelImpl implements CollageProject {
           break;
         case "darken-multiply":
           macro = new DarkenMultiplyBrightenScreenMacro(this.canvasHeight, this.canvasWidth,
-              finalImage, false);
+              finalImage, true);
           macro.executeMacro(layer);
           break;
         case "brighten-screen":
           macro = new DarkenMultiplyBrightenScreenMacro(this.canvasHeight, this.canvasWidth,
-              finalImage, true);
+              finalImage, false);
           macro.executeMacro(layer);
            break;
         default:
