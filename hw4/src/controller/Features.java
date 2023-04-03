@@ -20,11 +20,10 @@ public interface Features {
    * @param projectName the name of the project
    * @param height the height of the project
    * @param width the width of the project
-   * @param hasAlpha true if and only if the project uses an alpha value
    * @throws IllegalArgumentException when the given argument is null
    *                                  or if height or width is not an integer as a String
    */
-  void newProject(String projectName, String height, String width, String hasAlpha)
+  void newProject(String projectName, String height, String width)
       throws IllegalArgumentException;
 
   /**

@@ -6,7 +6,8 @@ import view.GUIView;
 
 /**
  * This class handles the asynchronous interactions that the user inputs and delegates action to
- * the model to handle the processing part and send information to the GUI to update it.
+ * the model to handle the processing part and send information to the GUI to update it. It also
+ * uses the CollageController to let it handle the File IO.
  */
 public class CollageGUIController implements Features {
 
@@ -44,27 +45,12 @@ public class CollageGUIController implements Features {
   }
 
   @Override
-  public void newProject(String projectName, String height, String width, String hasAlpha)
+  public void newProject(String projectName, String height, String width)
       throws IllegalArgumentException {
-
-    if (hasAlpha == null) {
-      throw new IllegalArgumentException("Argument can't be null");
-    }
 
     try {
       int height2 = Integer.parseInt(height);
       int width2 = Integer.parseInt(width);
-
-      if (hasAlpha.equalsIgnoreCase("yes")) {
-        this.hasAlpha = true;
-      }
-      else if (hasAlpha.equalsIgnoreCase("no")) {
-        this.hasAlpha = false;
-      }
-      else {
-        throw new IllegalArgumentException("you need to enter either yes or no when asked for the "
-            + "alpha value");
-      }
 
       this.model.newProject(projectName, height2, width2);
       this.showImage();
@@ -149,7 +135,7 @@ public class CollageGUIController implements Features {
    */
   private void showImage() {
     this.view.getImageToPutOnScreen(this.model.getHeight(), this.model.getWidth(),
-        this.model.makeFinalImage(this.hasAlpha).getPixelsOnLayer());
+        this.model.makeFinalImage(true).getPixelsOnLayer());
   }
 
 }

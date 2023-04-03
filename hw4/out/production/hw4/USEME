@@ -1,0 +1,27 @@
+New project
+# To create a new project:
+- Click on the New project button
+- Enter the project name
+- Enter the project height
+- Enter the project width
+- Enter true or false on whether or not they are working with images that have or don't have alpha
+values.
+
+NOTE: None of the other buttons will work until the user has successfully made a new project or if
+the user has successfully loaded a new project
+
+
+Add a new Layer
+# To add a new layer,
+
+- Add an image to a Layer
+
+
+- Save A project
+
+
+- Load A project
+
+
+- Set filter on current Layer
+

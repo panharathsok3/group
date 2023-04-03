@@ -282,23 +282,94 @@ NOTE: After all work has been done and saved, and you are
 
   Do: quit
 
-
-We used stackoverflow to get the screen size of a screen.
-
-
 NOTE FOR GRADER:
 Copy and paste the script in the RunScript file into the command line.
 The actions will be performed and the new images and project will be
 saved in the specified path for viewing.
+
+At least one example PPM image (different from any of the ones provided to you in this assignment),
+its red, blue, and green components as their own images, and this image brightened and darkened
+by itself using each of value, intensity, and luma in a second new layer
+named suitably in a res/folder.
+
+
+
+
+
+
+Assignment 5 addition/modifications:
+
+# Modification
+The big modification that we made is that the File IO is now being handled inside the controller
+instead of the the model. This means that the CollageProjectModel interface from A4 is now a part
+of the CollageController interface. This just means the controller now has more things to handle
+from the user. This is done because the controller deals with user input and inputting and
+outputting to a specific file is something the controller should do and not the model.
+
+Another modification that was made was made was the transparency calculation and modification. This
+was originally done ion the pixel class, however, as we realized that the modification happens once
+the composite image needs to be retrieved is when the transparency plays a role, so we decided to
+make it into a macro as well.
+
+The final modification that we made was we added a make final image method in the model which
+returns the composite image as a 2D List of IPixel which is the representation that we had as an
+image. We made this method so that the client can easily retrieve the final image so that they can
+see the progress that they made on the project that they are working on.
+
+# Additions
+We added more macros to the model so that means there are more classes that implement the
+MacroCollegeEffects interface. We also added the GUI which has its own interface and implementation.
+
+# DarkenMultiplyBrightenScreenMacro - Class
+The DarkenMultiplyBrightenScreenMacro class is a macro that implements the MacroCollageEffects
+interface. It allows the user reduce or increase the brightness all the pixels on a layer by
+modifying the hue, saturation, and lightness of a pixel.
+
+
+# InversionDifferenceMacro - Class
+The InversionDifferenceMacro class is a macro that implements the MacroCollageEffects interface.
+It allows the user to invert the colors of an image on the current layer based on the composite
+image below.
+
+
+# ChangeTransparencyMacro - Class
+The ChangeTransparencyMacro class is a macro that implements the MacroCollageEffects interface.
+It allows the user to invert the colors of an image on the current layer based on the composite
+image below.
+
+
+# Features - Interface
+The Features interface represents the features that are currently supported with the GUI that we
+have made. It is used to delegate information from the GUI when the user clicks on something to the
+model and return that back to the GUI.
+
+
+# CollageGUIController - Class
+The CollageGUIController class inherits the Features. This class handles the asynchronous
+interactions that the user inputs and delegates action to the model to handle the processing part
+and send information to the GUI to update it. This class uses CollageController to handle file IO.
+
+
+# GUIView - Interface
+The GUIView interface represents the Graphical User Interface that the user will see and interact
+based on the asynchronous inputs.
+
+
+# JFrameView - Class
+The JFrameView class inherits the GUIView. The GUI that the user will interact with and
+uses the Features interface as the controller which performs actions from the listeners in the GUI.
+It sets up the events will occur once a certain action is performed by the user.
+
+
+# Main - Class
+The Main class is used to run the GUI that we've made.
+
+
+We used stackoverflow to get the screen size of a screen so that this image frame will change
+depending on the resolution of the screen.
 
 Citations :
 https://www.goodhousekeeping.com/life/pets/g4531/cutest-dog-breeds/
 Copyright © 1994-2021, Oracle and/or its affiliates. All rights reserved.
 https://stackoverflow.com/questions/3680221/how-can-i-get-screen-resolution-in-java
 https://stackoverflow.com/questions/24503361/how-to-split-a-string-after-a-dot-in-java
-
-
-At least one example PPM image (different from any of the ones provided to you in this assignment),
-its red, blue, and green components as their own images, and this image brightened and darkened
-by itself using each of value, intensity, and luma in a second new layer
-named suitably in a res/folder.

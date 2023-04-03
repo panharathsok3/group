@@ -201,8 +201,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
         features.newProject(
             JOptionPane.showInputDialog("Enter your project name"),
             JOptionPane.showInputDialog("Enter the height"),
-            JOptionPane.showInputDialog("Enter the width"),
-            JOptionPane.showInputDialog("Does your project have an alpha value? Answer yes or no"));
+            JOptionPane.showInputDialog("Enter the width"));
         this.resetLayers();
         this.layerNum = 1;
         this.dataForListOfStrings.addElement("Background");

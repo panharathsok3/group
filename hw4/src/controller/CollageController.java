@@ -4,7 +4,8 @@ import java.util.List;
 import model.IPixel;
 
 /**
- * A controller interface for the CollageProjectModelImpl.
+ * A controller interface for the CollageProjectModelImpl. This interface deals with handling file
+ * IO and running the program for the CollageProjectModelImpl.
  */
 public interface CollageController {
 
