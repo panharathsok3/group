@@ -2,9 +2,6 @@
   <artifact type="jar" build-on-make="true" name="hw4:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/hw4_jar</output-path>
     <root id="archive" name="hw4.jar">
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/res/META-INF/MANIFEST.MF" />
-      </element>
       <element id="module-output" name="hw4" />
     </root>
   </artifact>

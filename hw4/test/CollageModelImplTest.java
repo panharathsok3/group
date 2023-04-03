@@ -397,7 +397,7 @@ public class CollageModelImplTest {
       this.collage1.addImageToLayer("L3", new ArrayList<>(1),
           10, 10);
       fail("Layer doesn't exist");
-    } catch (IllegalArgumentException e) {
+    } catch (IllegalStateException e) {
       // do nothing
     }
 

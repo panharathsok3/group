@@ -367,6 +367,8 @@ The Main class is used to run the GUI that we've made.
 
 We used stackoverflow to get the screen size of a screen so that this image frame will change
 depending on the resolution of the screen.
+We also used stackoverflow to get the file extension by getting the substring of the string after
+the period.
 
 Citations :
 https://www.goodhousekeeping.com/life/pets/g4531/cutest-dog-breeds/

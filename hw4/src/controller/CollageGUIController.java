@@ -14,7 +14,6 @@ public class CollageGUIController implements Features {
   private final CollageProject model;
   private CollageController textUIController;
   private GUIView view;
-  private boolean hasAlpha;
   private boolean projectMade;
 
   /**
@@ -90,13 +89,15 @@ public class CollageGUIController implements Features {
       String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
 
       String imageToken = null;
+      boolean hasAlpha = true;
 
       if (extension.equalsIgnoreCase("ppm")) {
         imageToken = "P3";
+        hasAlpha = false;
       }
 
       this.model.addImageToLayer(layerName,
-          this.textUIController.readImage(filePath, this.hasAlpha, imageToken),
+          this.textUIController.readImage(filePath, hasAlpha, imageToken),
           xPosition, yPosition);
 
       this.showImage();

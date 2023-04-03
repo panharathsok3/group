@@ -42,7 +42,7 @@ public interface CollageProject {
    * @throws IllegalStateException if the project has not been made yet
    */
   void addImageToLayer(String layerName, List<List<IPixel>> image, int xPos, int yPos)
-      throws IllegalArgumentException;
+      throws IllegalArgumentException, IllegalStateException;
 
   /**
    * Sets the filter of the given layer based on the filter options.
@@ -50,9 +50,10 @@ public interface CollageProject {
    * brighten-value,brighten-intensity,brighten-luma, etc.
    * @param layerName the name of the layer we want to apply this filter on.
    * @param filterOption the option of filter that the client desires.
-   * @throws IllegalArgumentException if the given layerName is null or doesn't exist
+   * @throws IllegalArgumentException if the given layerName is null
    *                                  or if the filterOptions is null or doesn't exist
    * @throws IllegalStateException if the project has not been made yet
+   *                               or if the given layerName doesn't exist
    */
   void setFilter(String layerName, String filterOption) throws IllegalArgumentException,
       IllegalStateException;

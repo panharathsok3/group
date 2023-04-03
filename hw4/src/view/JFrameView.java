@@ -275,7 +275,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
             JOptionPane.showInputDialog("Enter the x position"),
             JOptionPane.showInputDialog("Enter the y position"));
       } catch (IllegalStateException ex) {
-        this.errorMessage("A project has not been made");
+        this.errorMessage("A project has not been made or the layer doesn't exist");
       } catch (IllegalArgumentException ex) {
         //do nothing
       }

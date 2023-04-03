@@ -85,7 +85,7 @@ public class CollageProjectModelImpl implements CollageProject {
 
   @Override
   public void addImageToLayer(String layerName, List<List<IPixel>> image, int xPos, int yPos)
-          throws IllegalArgumentException {
+          throws IllegalArgumentException, IllegalStateException {
 
     this.throwExceptionProjectNotMade();
 
@@ -103,7 +103,7 @@ public class CollageProjectModelImpl implements CollageProject {
       }
     }
 
-    throw new IllegalArgumentException("Layer not found");
+    throw new IllegalStateException("Layer not found");
   }
 
   @Override
