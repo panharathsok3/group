@@ -38,22 +38,16 @@ import model.IPixel;
  */
 public class JFrameView extends JFrame implements GUIView, ActionListener, ListSelectionListener {
 
-  private JPanel mainPanel;
-  private JPanel imagePanel;
-  private JScrollPane mainScrollPane;
-  private JButton newProject;
-  private JButton addLayer;
-  private JButton addImageToLayer;
-  private JButton setFilter;
-  private JButton saveProject;
-  private JButton saveImage;
-  private JButton load;
-  private JComboBox<String> effectsOptions;
-  private JLabel imageLabel;
-  private JScrollPane imageScrollPane;
-  private JList<String> listOfStrings;
-  private int height;
-  private int width;
+  private final JButton newProject;
+  private final JButton addLayer;
+  private final JButton addImageToLayer;
+  private final JButton setFilter;
+  private final JButton saveProject;
+  private final JButton saveImage;
+  private final JButton load;
+  private final JComboBox<String> effectsOptions;
+  private final JLabel imageLabel;
+  private final JList<String> listOfStrings;
   private int layerNum;
   private String currSelectedLayer;
   private String currSelectedFilter;
@@ -71,44 +65,44 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     int height = (int) screenSize.getHeight();
     int width = (int) screenSize.getWidth();
 
-    this.height = (int) (height / 1.5f);
-    this.width = width / 2;
+    int height1 = (int) (height / 1.5f);
+    int width1 = width / 2;
 
     this.setSize(width, height);
     this.setLayout(new FlowLayout());
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    this.mainPanel = new JPanel();
-    this.mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+    JPanel mainPanel = new JPanel();
+    mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
     //scroll bars around this main panel
-    this.mainScrollPane = new JScrollPane(mainPanel);
+    JScrollPane mainScrollPane = new JScrollPane(mainPanel);
 
     int scaleHeight = 200;
     int scaleWidth = 300;
-    this.mainScrollPane.setPreferredSize(new Dimension(width - scaleWidth,
+    mainScrollPane.setPreferredSize(new Dimension(width - scaleWidth,
         height - scaleHeight));
     this.add(mainScrollPane);
 
 
     //image panel
-    this.imagePanel = new JPanel();
-    this.mainPanel.add(this.imagePanel);
+    JPanel imagePanel = new JPanel();
+    mainPanel.add(imagePanel);
 
     //show an image with a scrollbar
 
     //a border around the panel with a caption
-    this.imagePanel.setBorder(BorderFactory.createTitledBorder("Image"));
-    this.imagePanel.setLayout(new GridLayout());
+    imagePanel.setBorder(BorderFactory.createTitledBorder("Image"));
+    imagePanel.setLayout(new GridLayout());
     //imagePanel.setMaximumSize(null);
 
     this.imageLabel = new JLabel();
-    this.imageScrollPane = new JScrollPane(this.imageLabel);
+    JScrollPane imageScrollPane = new JScrollPane(this.imageLabel);
 
     this.imageLabel.setIcon(new ImageIcon());
 
-    this.imageScrollPane.setPreferredSize(new Dimension(this.width, this.height));
-    this.imagePanel.add(this.imageScrollPane);
+    imageScrollPane.setPreferredSize(new Dimension(width1, height1));
+    imagePanel.add(imageScrollPane);
 
     //Commands and image effects
     JPanel commands = new JPanel();
@@ -146,7 +140,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     JPanel selectionListPanel = new JPanel();
     selectionListPanel.setBorder(BorderFactory.createTitledBorder("Layers"));
     selectionListPanel.setLayout(new BoxLayout(selectionListPanel, BoxLayout.X_AXIS));
-    this.mainPanel.add(selectionListPanel);
+    mainPanel.add(selectionListPanel);
 
     this.dataForListOfStrings = new DefaultListModel<>();
     this.listOfStrings = new JList<>(this.dataForListOfStrings);
@@ -177,7 +171,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
     commands.add(this.load);
     commands.add(this.setFilter);
     commands.add(this.effectsOptions);
-    this.mainPanel.add(commands, BorderLayout.SOUTH);
+    mainPanel.add(commands, BorderLayout.SOUTH);
 
 
     setVisible(true);

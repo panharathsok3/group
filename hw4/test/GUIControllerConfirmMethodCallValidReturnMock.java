@@ -2,6 +2,10 @@ import controller.Features;
 import java.io.IOException;
 import view.GUIView;
 
+/**
+ * This class is used to test the controller to see if the GUI controller is receiving the correct
+ * inputs.
+ */
 public class GUIControllerConfirmMethodCallValidReturnMock implements Features {
 
   private final Appendable log;
