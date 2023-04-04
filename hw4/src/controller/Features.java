@@ -5,6 +5,8 @@ import view.GUIView;
 
 /**
  * The features that will be used for a GUI to delegate information between the model and the view.
+ * The setView method needs to called first to set up the view with this Features. The newProject or
+ * loadProject method needs to be called first without any errors before other methods can be used.
  */
 public interface Features {
 

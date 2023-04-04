@@ -3,7 +3,8 @@ package model;
 import java.util.List;
 
 /**
- * Represents the interface for a single layer that can hold images and modify it.
+ * Represents the interface for a single layer that can hold images and modify it. It exposes the
+ * name of the ILayer, and the 2D List of pixels on this ILayer.
  */
 public interface ILayer {
 

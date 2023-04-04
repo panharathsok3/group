@@ -6,6 +6,8 @@ import model.IPixel;
 
 /**
  * The GUI that will display information onto the screen and make events occur based on user inputs.
+ * It adds features that the user will interact with. It also updates the layers, resets the layers,
+ * and also displays image to put on the screen.
  */
 public interface GUIView {
 

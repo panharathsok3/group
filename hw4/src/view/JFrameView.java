@@ -166,6 +166,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
   @Override
   public void refresh() {
     this.repaint();
+    this.revalidate();
   }
 
   @Override

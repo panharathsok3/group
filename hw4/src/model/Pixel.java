@@ -5,6 +5,7 @@ package model;
  * The pixel stores the red, green, blue, and alpha components of the pixel.
  * If the pixel being red from an image originally doesn't have an alpha component,
  * it will be set to 255.
+ * The pixel can also be represented using the hue, saturation, and lightness of a pixel.
  */
 public class Pixel implements IPixel {
   private int redComponent;
@@ -101,7 +102,7 @@ public class Pixel implements IPixel {
   }
 
   @Override
-  public int getAlphaComponent() throws IllegalStateException {
+  public int getAlphaComponent() {
     return this.alphaComponent;
   }
 

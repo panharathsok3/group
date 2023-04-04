@@ -6,8 +6,8 @@ import view.GUIView;
 
 /**
  * This class handles the asynchronous interactions that the user inputs and delegates action to
- * the model to handle the processing part and send information to the GUI to update it. It also
- * uses the CollageController to let it handle the File IO.
+ * the model using the CollageController to handle the processing part and send information to the
+ * GUI to update it. It also uses the CollageController to let it handle the File IO.
  */
 public class CollageGUIController implements Features {
 

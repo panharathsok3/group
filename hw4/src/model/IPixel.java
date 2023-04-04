@@ -1,7 +1,9 @@
 package model;
 
 /**
- * Represents a Pixel interface for Modifying and accessing a Pixel.
+ * Represents a IPixel interface for Modifying and accessing a IPixel. This interface exposes the
+ * red, green, blue, and alpha component for a RGBA and RGB IPixel. It also exposes the hue,
+ * saturation, and lightness if a HSL IPixel.
  */
 public interface IPixel {
 
@@ -29,9 +31,8 @@ public interface IPixel {
   /**
    * Returns the alpha component of this IPixel.
    * @return the alpha component of this IPixel
-   * @throws IllegalStateException when a HSL pixel is trying to access this method
    */
-  int getAlphaComponent() throws IllegalStateException;
+  int getAlphaComponent();
 
   /**
    * Returns the hue of this IPixel.
