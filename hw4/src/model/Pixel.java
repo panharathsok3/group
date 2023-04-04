@@ -160,7 +160,8 @@ public class Pixel implements IPixel {
     double delta = componentMax - componentMin;
 
     double lightness = (componentMax + componentMin) / 2;
-    double hue, saturation;
+    double hue;
+    double saturation;
     if (delta == 0) {
       hue = 0;
       saturation = 0;
@@ -209,10 +210,10 @@ public class Pixel implements IPixel {
 
   /**
    * Helper method that performs the translation from the HSL polygonal
-   * model to the more familiar RGB model
+   * model to the more familiar RGB model.
    */
   private double convertFn(double hue, double saturation, double lightness, int n) {
-    double k = (n + (hue/30)) % 12;
+    double k = (n + (hue / 30)) % 12;
     double a  = saturation * Math.min(lightness, 1 - lightness);
 
     return lightness - a * Math.max(-1, Math.min(k - 3, Math.min(9 - k, 1)));

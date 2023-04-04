@@ -1,13 +1,31 @@
 package view;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -20,9 +38,16 @@ import model.IPixel;
  */
 public class JFrameView extends JFrame implements GUIView, ActionListener, ListSelectionListener {
 
-  private JPanel mainPanel, imagePanel;
+  private JPanel mainPanel;
+  private JPanel imagePanel;
   private JScrollPane mainScrollPane;
-  private JButton newProject, addLayer, addImageToLayer, setFilter, saveProject, saveImage, load;
+  private JButton newProject;
+  private JButton addLayer;
+  private JButton addImageToLayer;
+  private JButton setFilter;
+  private JButton saveProject;
+  private JButton saveImage;
+  private JButton load;
   private JComboBox<String> effectsOptions;
   private JLabel imageLabel;
   private JScrollPane imageScrollPane;
@@ -30,7 +55,8 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
   private int height;
   private int width;
   private int layerNum;
-  private String currSelectedLayer, currSelectedFilter;
+  private String currSelectedLayer;
+  private String currSelectedFilter;
   private DefaultListModel<String> dataForListOfStrings;
 
   /**
@@ -170,8 +196,8 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
   }
 
   @Override
-  public void actionPerformed(ActionEvent arg0) {
-    switch (arg0.getActionCommand()) {
+  public void actionPerformed(ActionEvent event) {
+    switch (event.getActionCommand()) {
       case "new-project":
       case "save-image":
       case "load-project":

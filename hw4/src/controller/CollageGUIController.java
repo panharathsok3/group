@@ -81,7 +81,7 @@ public class CollageGUIController implements Features {
 
   @Override
   public void addImageToLayer(String layerName, String filePath, String xPos, String yPos)
-      throws IllegalArgumentException{
+      throws IllegalArgumentException {
     try {
       int xPosition = Integer.parseInt(xPos);
       int yPosition = Integer.parseInt(yPos);

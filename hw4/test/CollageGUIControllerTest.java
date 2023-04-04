@@ -12,6 +12,9 @@ import org.junit.Test;
 import view.GUIView;
 import view.JFrameView;
 
+/**
+ * A CollageGUIControllerTest is a test class for CollageGUIController.
+ */
 public class CollageGUIControllerTest {
   Features controller;
   CollageProject model;

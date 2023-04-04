@@ -15,6 +15,9 @@ import model.effects.MacroCollageEffects;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+/**
+ * A DarkenMultiplyBrightenMacroTest is a test class for DarkenMultiplyBrightenMacro.
+ */
 public class DarkenMultiplyBrightenMacroTest {
 
   ILayer layer1;

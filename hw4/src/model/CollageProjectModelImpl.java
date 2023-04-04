@@ -89,8 +89,8 @@ public class CollageProjectModelImpl implements CollageProject {
 
     this.throwExceptionProjectNotMade();
 
-    if (layerName == null || layerName.equals("") || image == null ||
-        xPos < 0 || xPos > this.canvasHeight || yPos < 0 || yPos > this.canvasWidth) {
+    if (layerName == null || layerName.equals("") || image == null
+        || xPos < 0 || xPos > this.canvasHeight || yPos < 0 || yPos > this.canvasWidth) {
       throw new IllegalArgumentException("layer name and file path cannot be null, x and y "
           + "positions have to be within the boundaries of the canvas");
     }
@@ -178,7 +178,7 @@ public class CollageProjectModelImpl implements CollageProject {
           macro = new DarkenMultiplyBrightenScreenMacro(this.canvasHeight, this.canvasWidth,
               finalImage, false);
           macro.executeMacro(layer);
-           break;
+          break;
         default:
           //do nothing
       }

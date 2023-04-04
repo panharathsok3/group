@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,9 @@ import model.effects.MacroCollageEffects;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * A InversionDifferenceMacroTest is a test class for InversionDifferenceMacro.
+ */
 public class InversionDifferenceMacroTest {
 
   ILayer layer1;
@@ -30,6 +34,7 @@ public class InversionDifferenceMacroTest {
   public void invalidConstruction() {
     try {
       MacroCollageEffects macro = new InversionDifferenceMacro(1, 1 , null);
+      fail("Arguments can't be null");
     } catch (IllegalArgumentException e) {
       // do nothing
     }

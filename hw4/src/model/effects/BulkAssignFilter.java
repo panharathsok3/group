@@ -67,12 +67,5 @@ public class BulkAssignFilter implements MacroCollageEffects {
       default:
         throw new IllegalArgumentException("the option must be red, green, or blue");
     }
-
-//    for (int i = 0; i < this.row; i++) {
-//      for (int j = 0; j < this.col; j++) {
-//
-//        layer.getPixelsOnLayer().get(i).get(j).setFilter(this.optionFilter);
-//      }
-//    }
   }
 }

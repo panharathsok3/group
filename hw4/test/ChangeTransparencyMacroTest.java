@@ -9,14 +9,15 @@ import model.ILayer;
 import model.IPixel;
 import model.Layer;
 import model.Pixel;
-import model.effects.BrightenDarkenMacro;
-import model.effects.BulkAssignFilter;
 import model.effects.ChangeTransparencyMacro;
 import model.effects.MacroCollageEffects;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+/**
+ * A ChangeTransparencyMacroTest is a test class for ChangeTransparencyMacro.
+ */
 public class ChangeTransparencyMacroTest  {
   ILayer layer1;
   ILayer layer2;
