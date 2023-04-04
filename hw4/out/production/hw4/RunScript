@@ -7,7 +7,7 @@
   add-image-to-layer layer2 res/Images/dog.ppm 100 50
   set-filter layer2 darken-luma
   save-image res/Images/newDarkenLumaDog2.ppm
-  save-project res/Project1Saved PPM
+  save-project res/Project1Saved
   quit
 
 
