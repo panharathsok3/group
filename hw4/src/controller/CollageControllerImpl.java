@@ -1,5 +1,8 @@
 package controller;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -9,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
 
 import model.CollageProject;
 import model.ILayer;
@@ -47,7 +52,8 @@ public class CollageControllerImpl implements CollageController {
 
   /**
    * Represents a Controller who's only job is to handle File IO.
-   * @param collage the CollageProject that will be used
+   *
+   * @param collage     the CollageProject that will be used
    * @param projectMade true if and only if the project has been made
    */
   public CollageControllerImpl(CollageProject collage, boolean projectMade) {
@@ -95,7 +101,7 @@ public class CollageControllerImpl implements CollageController {
             this.renderMessage("Arguments can't be null");
           } catch (IllegalStateException e) {
             this.renderMessage("File can't be open or file is not enough to start a load a "
-                + "project");
+                    + "project");
             this.projectMade = false;
           }
           break;
@@ -136,7 +142,7 @@ public class CollageControllerImpl implements CollageController {
 
           try {
             this.collage.addImageToLayer(layerName1,
-                this.readImage(imageName, hasAlpha, imageToken), x, y);
+                    this.readImage(imageName, hasAlpha, imageToken), x, y);
           } catch (IllegalArgumentException e) {
             this.renderMessage("Arguments can't be null or negative or the layer doesn't exist");
           } catch (IllegalStateException e) {
@@ -150,7 +156,7 @@ public class CollageControllerImpl implements CollageController {
             this.collage.setFilter(layerName2, filterOption);
           } catch (IllegalArgumentException e) {
             this.renderMessage("Arguments can't be null or the layer doesn't exist or filter "
-                + "doesn't exist");
+                    + "doesn't exist");
           } catch (IllegalStateException e) {
             this.renderMessage("The project hasn't been made yet");
           }
@@ -163,6 +169,8 @@ public class CollageControllerImpl implements CollageController {
             this.renderMessage("Arguments can't be null");
           } catch (IllegalStateException e) {
             this.renderMessage("The project hasn't been made yet");
+          } catch (IOException e) {
+            //
           }
           break;
         default:
@@ -174,7 +182,7 @@ public class CollageControllerImpl implements CollageController {
 
   @Override
   public void saveProject(String filePath) throws IllegalArgumentException,
-      IllegalStateException {
+          IllegalStateException {
     if (filePath == null) {
       throw new IllegalArgumentException("Cannot give null as an argument");
     }
@@ -182,8 +190,8 @@ public class CollageControllerImpl implements CollageController {
 
     try {
       saveProjectHelper(this.collage.getProjectName(), this.collage.getHeight(),
-          this.collage.getWidth(), this.collage.getMaxValue(), filePath, this.collage.getLayers(),
-          this.collage.getFiltersOnProject(), false);
+              this.collage.getWidth(), this.collage.getMaxValue(), filePath, this.collage.getLayers(),
+              this.collage.getFiltersOnProject(), false);
     } catch (IOException e) {
       throw new IllegalArgumentException("Was not able to save");
     }
@@ -191,20 +199,21 @@ public class CollageControllerImpl implements CollageController {
 
   /**
    * Helper method for saving a project to a file.
+   *
    * @param projectName the name of the project
-   * @param height the height of the image/project
-   * @param width the width of the image/project
-   * @param maxValue the max value of a pixel component
-   * @param filePath the location where the file will be stored.
-   * @param layers the layers of the entire project
-   * @param filters the map of that has the layer name as the key and its filter as the value
+   * @param height      the height of the image/project
+   * @param width       the width of the image/project
+   * @param maxValue    the max value of a pixel component
+   * @param filePath    the location where the file will be stored.
+   * @param layers      the layers of the entire project
+   * @param filters     the map of that has the layer name as the key and its filter as the value
    * @param isSaveImage true if and only if this method is used to save an image
    * @throws IllegalArgumentException if the given filePath is null
-   * @throws IOException if there is issue writing to the file
+   * @throws IOException              if there is issue writing to the file
    */
   private void saveProjectHelper(String projectName, int height, int width, int maxValue,
-      String filePath, List<ILayer> layers, Map<String, String> filters, boolean isSaveImage)
-      throws IOException {
+                                 String filePath, List<ILayer> layers, Map<String, String> filters, boolean isSaveImage)
+          throws IOException {
 
     //write the new file to this path
     FileWriter fileWriter = new FileWriter(filePath);
@@ -228,11 +237,10 @@ public class CollageControllerImpl implements CollageController {
             int blueComponent = pixels.get(j).get(k).getBlueComponent();
             int alphaComponent = pixels.get(j).get(k).getAlphaComponent();
             fileWriter.write(redComponent + " " + greenComponent + " " + blueComponent + " "
-                + alphaComponent + "\n");
+                    + alphaComponent + "\n");
           }
         }
-      }
-      else {
+      } else {
         List<List<IPixel>> pixels = layer.getPixelsOnLayer();
         for (int j = 0; j < height; j++) {
           for (int k = 0; k < width; k++) {
@@ -249,7 +257,7 @@ public class CollageControllerImpl implements CollageController {
   }
 
   @Override
-  public void saveImage(String filePath) throws IllegalArgumentException, IllegalStateException {
+  public void saveImage(String filePath) throws IllegalArgumentException, IllegalStateException, IOException {
     this.throwExceptionProjectNotMade();
 
     if (filePath == null) {
@@ -264,18 +272,76 @@ public class CollageControllerImpl implements CollageController {
 
       try {
         this.saveProjectHelper("P3", this.collage.getHeight(), this.collage.getWidth(),
-            this.collage.getMaxValue(), filePath, listLayer, this.collage.getFiltersOnProject(),
-            true);
+                this.collage.getMaxValue(), filePath, listLayer, this.collage.getFiltersOnProject(),
+                true);
       } catch (IOException e) {
         throw new IllegalArgumentException("Was not able to save");
       }
     }
+
+
+  }
+
+  private void saveOtherFormats(String filePath) throws IOException {
+
+    if (filePath == null) {
+      throw new IllegalArgumentException("Arguments can't be null");
+    }
+
+    BufferedImage newFormats;
+    ILayer finalImage;
+
+    finalImage = this.collage.makeFinalImage(true);
+    List<ILayer> listLayer = new ArrayList<>();
+    listLayer.add(finalImage);
+    List<List<IPixel>> pixels = listLayer.get(0).getPixelsOnLayer();
+
+    if (filePath.endsWith("png")) {
+      try {
+        this.saveProjectHelper("PNG", this.collage.getHeight(), this.collage.getWidth(),
+                this.collage.getMaxValue(), filePath, listLayer, this.collage.getFiltersOnProject(),
+                true);
+      } catch (IOException e) {
+        throw new IllegalArgumentException("Was not able to save");
+      }
+
+      newFormats = new BufferedImage(this.collage.getWidth(),
+              this.collage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    } else {
+
+      try {
+        this.saveProjectHelper("JPEG", this.collage.getHeight(), this.collage.getWidth(),
+                this.collage.getMaxValue(), filePath, listLayer, this.collage.getFiltersOnProject(),
+                true);
+      } catch (IOException e) {
+        throw new IllegalArgumentException("Was not able to save");
+      }
+
+      newFormats = new BufferedImage(this.collage.getWidth(),
+              this.collage.getHeight(), BufferedImage.TYPE_INT_RGB);
+    }
+
+
+    for (int i = 0; i < this.collage.getHeight(); i++) {
+      for (int j = 0; j < this.collage.getWidth(); j++) {
+
+        int redComponent = pixels.get(i).get(j).getRedComponent();
+        int greenComponent = pixels.get(i).get(j).getGreenComponent();
+        int blueComponent = pixels.get(i).get(j).getBlueComponent();
+        int alphaComponent = pixels.get(i).get(j).getAlphaComponent();
+        //newFormats.setRGB(j, i, collage.getLayers().get(i).getPixelsOnLayer().get(j).get(0).getRedComponent());
+      }
+    }
+
+    String type = filePath.substring(filePath.indexOf(".") + 1).trim();
+    File saveAs = new File(filePath);
+    ImageIO.write(newFormats, type, saveAs);
   }
 
 
   @Override
   public void loadProject(String filePath) throws IllegalArgumentException,
-      IllegalStateException {
+          IllegalStateException {
 
     if (filePath == null) {
       throw new IllegalArgumentException("Arguments can't be null");
@@ -337,17 +403,18 @@ public class CollageControllerImpl implements CollageController {
 
         layerNum++;
         this.addImageToLayerFromFile(sc, layerNum,
-            this.collage.getHeight(), this.collage.getWidth());
+                this.collage.getHeight(), this.collage.getWidth());
       }
     } catch (IllegalStateException e) {
       throw new IllegalStateException("Not enough information to add/create a new layer to add to "
-          + "the collage project");
+              + "the collage project");
     }
   }
 
   /**
    * Adds the content of the image from the file and place it on the Layer.
-   * @param sc the scanner to read from the file
+   *
+   * @param sc       the scanner to read from the file
    * @param layerNum the number of the layer
    */
   private void addImageToLayerFromFile(Scanner sc, int layerNum, int height, int width) {
@@ -366,7 +433,7 @@ public class CollageControllerImpl implements CollageController {
 
   @Override
   public List<List<IPixel>> readImage(String filename, boolean hasAlpha, String fileType)
-      throws IllegalStateException {
+          throws IllegalStateException {
     Scanner sc;
 
     try {
@@ -392,7 +459,7 @@ public class CollageControllerImpl implements CollageController {
     token = sc.next();
     if (!token.equals(fileType)) {
       throw new IllegalStateException("Invalid file type: plain RAW file should begin with "
-          + fileType);
+              + fileType);
     }
 
     int width = sc.nextInt();
@@ -414,8 +481,7 @@ public class CollageControllerImpl implements CollageController {
 
         if (!hasAlpha) {
           pixelsOnImage.get(i).add(new Pixel(r, g, b));
-        }
-        else {
+        } else {
           int a = sc.nextInt();
           pixelsOnImage.get(i).add(new Pixel(r, g, b, a));
         }
@@ -425,8 +491,37 @@ public class CollageControllerImpl implements CollageController {
     return pixelsOnImage;
   }
 
+
+  private List<List<IPixel>> readNewImageFormats(String filename, boolean hasAlpha, String fileType) throws IOException,
+          IllegalStateException {
+
+    BufferedImage image = ImageIO.read(new File(filename));
+    List<List<IPixel>> pixelsOnImage = new ArrayList<>();
+
+    for (int i = 0; i < image.getHeight(); i++) {
+      List<IPixel> rowOfPixels = new ArrayList<>();
+      for (int j = 0; j < image.getWidth(); j++) {
+        //have to do the reverse since the coordinate system is different with other formats
+        int rgb = image.getRGB(j, i);
+        Color color = new Color(rgb);
+//      Color color = new Color(image.getRGB(j,i));
+        if (!hasAlpha) {
+          IPixel pixel = new Pixel(color.getRed(), color.getGreen(), color.getBlue());
+          rowOfPixels.add(pixel);
+        } else {
+          //png allows for alpha transparency
+          IPixel pixel = new Pixel(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+          rowOfPixels.add(pixel);
+        }
+      }
+      pixelsOnImage.add(rowOfPixels);
+    }
+    return pixelsOnImage;
+  }
+
   /**
    * Helper method that throws an exception when the project has not been made yet.
+   *
    * @throws IllegalStateException when the project has not been made yet
    */
   private void throwExceptionProjectNotMade() throws IllegalStateException {
@@ -481,6 +576,7 @@ public class CollageControllerImpl implements CollageController {
 
   /**
    * Renders a message to the user.
+   *
    * @param message the message to print out
    */
   private void renderMessage(String message) {

@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.util.List;
 import model.IPixel;
 
@@ -49,7 +50,7 @@ public interface CollageController {
    *                                  or if the given argument is null
    * @throws IllegalStateException if the project has not been made yet
    */
-  void saveImage(String filePath) throws IllegalArgumentException, IllegalStateException;
+  void saveImage(String filePath) throws IllegalArgumentException, IllegalStateException,IOException;
 
   /**
    * Read an image file and returns the pixels on the image as a 2D array.
