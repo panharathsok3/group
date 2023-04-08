@@ -295,47 +295,51 @@ public class CollageControllerImpl implements CollageController {
     List<ILayer> listLayer = new ArrayList<>();
     listLayer.add(finalImage);
     List<List<IPixel>> pixels = listLayer.get(0).getPixelsOnLayer();
+    String type = filePath.substring(filePath.indexOf(".") + 1).trim();
+
+
 
     if (filePath.endsWith("png")) {
       try {
         this.saveProjectHelper("PNG", this.collage.getHeight(), this.collage.getWidth(),
                 this.collage.getMaxValue(), filePath, listLayer, this.collage.getFiltersOnProject(),
                 true);
+
+        newFormats = new BufferedImage(this.collage.getWidth(),
+                this.collage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        File saveAs = new File(filePath);
+        ImageIO.write(newFormats, type, saveAs);
       } catch (IOException e) {
         throw new IllegalArgumentException("Was not able to save");
       }
-
-      newFormats = new BufferedImage(this.collage.getWidth(),
-              this.collage.getHeight(), BufferedImage.TYPE_INT_ARGB);
     } else {
-
       try {
         this.saveProjectHelper("JPEG", this.collage.getHeight(), this.collage.getWidth(),
                 this.collage.getMaxValue(), filePath, listLayer, this.collage.getFiltersOnProject(),
                 true);
+
+        newFormats = new BufferedImage(this.collage.getWidth(),
+                this.collage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        File saveAs = new File(filePath);
+        ImageIO.write(newFormats, type, saveAs);
       } catch (IOException e) {
         throw new IllegalArgumentException("Was not able to save");
       }
-
-      newFormats = new BufferedImage(this.collage.getWidth(),
-              this.collage.getHeight(), BufferedImage.TYPE_INT_RGB);
     }
-
 
     for (int i = 0; i < this.collage.getHeight(); i++) {
       for (int j = 0; j < this.collage.getWidth(); j++) {
-
-        int redComponent = pixels.get(i).get(j).getRedComponent();
-        int greenComponent = pixels.get(i).get(j).getGreenComponent();
-        int blueComponent = pixels.get(i).get(j).getBlueComponent();
-        int alphaComponent = pixels.get(i).get(j).getAlphaComponent();
-        //newFormats.setRGB(j, i, collage.getLayers().get(i).getPixelsOnLayer().get(j).get(0).getRedComponent());
+        IPixel currentPixels = pixels.get(i).get(j);
+        Color color = new Color(currentPixels.getRedComponent(), currentPixels.getGreenComponent(),
+                currentPixels.getBlueComponent());
+        int getColor = color.getRGB();
+        newFormats.setRGB(j, i, getColor);
       }
     }
 
-    String type = filePath.substring(filePath.indexOf(".") + 1).trim();
-    File saveAs = new File(filePath);
-    ImageIO.write(newFormats, type, saveAs);
+
+
   }
 
 
