@@ -64,8 +64,6 @@ The JFrameView class inherits the GUIView. The GUI that the user will interact w
 uses the Features interface as the controller which performs actions from the listeners in the GUI.
 It sets up the events will occur once a certain action is performed by the user.
 
-#
-
 
 # Main - Class
 The Main class is used to run the GUI that we've made.
