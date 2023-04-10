@@ -1,8 +1,10 @@
 package controller;
 
+import java.awt.Transparency;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
+import java.awt.image.ComponentColorModel;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -32,16 +34,18 @@ public class CollageGUIControllerWithOtherFileTypes extends CollageControllerImp
 
     BufferedImage image;
     ColorSpace colorSpace;
-    ColorModel colorModel;
     int pixel;
 
     try {
       image = ImageIO.read(file);
-      colorModel = image.getColorModel();
-      colorSpace = colorModel.getColorSpace();
 
-      for (int i = 0; i < colorSpace.getNumComponents(); i ++) {
-
+      for (int i = 0; i < image.getHeight(); i ++) {
+        for (int j = 0; j < image.getWidth(); j++) {
+          int rgb = image.getRGB(j, i);
+          int red = (rgb >> 16) & 0x000000FF;
+          int green = (rgb >> 8) & 0x000000FF;
+          int blue = (rgb) & 0x000000FF;
+        }
       }
 
     } catch (IOException e) {
