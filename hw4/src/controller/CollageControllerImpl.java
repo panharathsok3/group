@@ -281,10 +281,10 @@ public class CollageControllerImpl implements CollageController {
       }
     }
     else if (filePath.endsWith(".png")) {
-      this.saveImageHelper("png", filePath);
+      this.saveImageHelper("png", filePath, BufferedImage.TYPE_INT_ARGB);
     }
     else if (filePath.endsWith(".jpg")) {
-      this.saveImageHelper("jpg", filePath);
+      this.saveImageHelper("jpg", filePath, BufferedImage.TYPE_INT_RGB);
     }
 
     throw new IllegalArgumentException("We do not support the given file type");
@@ -296,13 +296,13 @@ public class CollageControllerImpl implements CollageController {
    * @param fileName the name of the saved file
    * @throws IllegalStateException if an IOException occurs
    */
-  private void saveImageHelper(String formatName, String fileName) throws IllegalStateException {
+  private void saveImageHelper(String formatName, String fileName, int type) throws IllegalStateException {
     File file = new File(fileName);
     int height = this.collage.getHeight();
     int width = this.collage.getWidth();
     ILayer imageToAdd = this.collage.makeFinalImage(true);
 
-    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    BufferedImage image = new BufferedImage(width, height, type);
 
     for (int i = 0; i < height; i++) {
       for (int j = 0; j< width; j++) {
