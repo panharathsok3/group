@@ -1,3 +1,6 @@
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -6,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import javax.imageio.ImageIO;
 import model.ILayer;
 import model.IPixel;
 import model.Pixel;
@@ -1240,6 +1244,112 @@ public class CollageProjectControllerTest {
       assertEquals("6", sc.next());
       assertEquals("12", sc.next());
       assertEquals("0", sc.next());
+    }
+  }
+
+  @Test
+  public void testSaveImagePNG() {
+    this.init();
+
+    this.in = new StringReader("new-project project 800 600 "
+        + "add-layer L1 "
+        + "add-image-to-layer L1 src/tako.ppm 0 0 "
+        + "save-image res/Images/tako.png quit");
+    this.out = new StringBuilder();
+
+    this.collageModel = new CollageProjectModelImpl();
+    CollageView view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, this.collageModel, view);
+    this.collageController.runProgram();
+
+    File file = new File("res/Images/tako.png");
+
+    BufferedImage image;
+
+    Scanner sc;
+    try {
+      sc = new Scanner(new FileInputStream("src/tako.ppm"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    String title = sc.next();
+    int width = sc.nextInt();
+    int height = sc.nextInt();
+    int maxValue = sc.nextInt();
+
+
+    try {
+      image = ImageIO.read(file);
+
+      for (int i = 0; i < image.getHeight(); i ++) {
+        for (int j = 0; j < image.getWidth(); j++) {
+          Color color = new Color(image.getRGB(j, i));
+          int red = color.getRed();
+          int green = color.getGreen();
+          int blue = color.getBlue();
+
+          assertEquals(sc.nextInt(), red);
+          assertEquals(sc.nextInt(), green);
+          assertEquals(sc.nextInt(), blue);
+        }
+      }
+
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException");
+    }
+  }
+
+  @Test
+  public void testSaveImageJPG() {
+    this.init();
+
+    this.in = new StringReader("new-project project 800 600 "
+        + "add-layer L1 "
+        + "add-image-to-layer L1 src/tako.ppm 0 0 "
+        + "save-image res/Images/tako.jpg quit");
+    this.out = new StringBuilder();
+
+    this.collageModel = new CollageProjectModelImpl();
+    CollageView view = new ViewConfirmMethodCallValidReturnMock(this.out);
+    this.collageController = new CollageControllerImpl(this.in, this.collageModel, view);
+    this.collageController.runProgram();
+
+    File file = new File("res/Images/tako.jpg");
+
+    BufferedImage image;
+
+    Scanner sc;
+    try {
+      sc = new Scanner(new FileInputStream("src/tako.ppm"));
+    } catch (FileNotFoundException e) {
+      throw new IllegalStateException("File not found!");
+    }
+
+    String title = sc.next();
+    int width = sc.nextInt();
+    int height = sc.nextInt();
+    int maxValue = sc.nextInt();
+
+
+    try {
+      image = ImageIO.read(file);
+
+      for (int i = 0; i < image.getHeight(); i ++) {
+        for (int j = 0; j < image.getWidth(); j++) {
+          Color color = new Color(image.getRGB(j, i));
+          int red = color.getRed();
+          int green = color.getGreen();
+          int blue = color.getBlue();
+
+          assertEquals(sc.nextInt(), red);
+          assertEquals(sc.nextInt(), green);
+          assertEquals(sc.nextInt(), blue);
+        }
+      }
+
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException");
     }
   }
 
