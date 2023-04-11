@@ -277,6 +277,10 @@ public class CollageControllerImpl implements CollageController {
       } catch (IOException e) {
         throw new IllegalArgumentException("Was not able to save");
       }
+    } else if (filePath.endsWith(".png")) {
+      this.saveOtherFormats(filePath);
+    } else if (filePath.endsWith(".jpeg")) {
+      this.saveOtherFormats(filePath);
     }
 
 
