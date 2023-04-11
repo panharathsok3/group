@@ -1,7 +1,9 @@
 package controller;
 
 
+import java.util.List;
 import model.CollageProject;
+import model.IPixel;
 import view.GUIView;
 
 /**
@@ -89,16 +91,16 @@ public class CollageGUIController implements Features {
       String extension = filePath.substring(filePath.lastIndexOf(".") + 1);
 
       String imageToken = null;
-      boolean hasAlpha = true;
+      List<List<IPixel>> image = null;
 
       if (extension.equalsIgnoreCase("ppm")) {
         imageToken = "P3";
-        hasAlpha = false;
+        image = this.textUIController.readImagePPM(filePath, imageToken);
+      } else {
+        image = this.textUIController.readImage(filePath);
       }
 
-      this.model.addImageToLayer(layerName,
-          this.textUIController.readImagePPM(filePath, imageToken),
-          xPosition, yPosition);
+      this.model.addImageToLayer(layerName, image, xPosition, yPosition);
 
       this.showImage();
     } catch (NumberFormatException e) {

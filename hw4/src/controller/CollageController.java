@@ -48,8 +48,16 @@ public interface CollageController {
    * @throws IllegalArgumentException if the user is not able to save their new image
    *                                  or if the given argument is null
    * @throws IllegalStateException if the project has not been made yet
+   *                               or if the image type is not supported
    */
   void saveImage(String filePath) throws IllegalArgumentException, IllegalStateException;
+
+  /**
+   * Reads in an image with a given file name and returns a 2D List of IPixels.
+   * @param filename the name of the image to be read
+   * @return a 2D List of IPixels of the image
+   */
+  List<List<IPixel>> readImage(String filename);
 
   /**
    * Read an image file and returns the pixels on the image as a 2D array.

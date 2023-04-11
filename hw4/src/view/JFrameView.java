@@ -257,7 +257,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
         this.throwErrorIfProjectNotMade(features);
         features.saveImage(this.returnFilePathOfSelectedFile());
       } catch (IllegalStateException ex) {
-        this.errorMessage("A project has not been made");
+        this.errorMessage("A project has not been made or the image type is not supported");
       } catch (IllegalArgumentException ex) {
         //do nothing
       }

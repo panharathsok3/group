@@ -1,5 +1,8 @@
 package controller;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -10,6 +13,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
 import model.CollageProject;
 import model.ILayer;
 import model.IPixel;
@@ -126,27 +130,23 @@ public class CollageControllerImpl implements CollageController {
           int y = this.readValueInteger(sc);
 
           String extension = imageName.substring(imageName.lastIndexOf(".") + 1);
-          String imageToken = null;
-          List<List<IPixel>> image = new ArrayList<>();
+          String imageToken;
+          List<List<IPixel>> image;
 
-          boolean hasAlpha = true;
           if (extension.equalsIgnoreCase("ppm")) {
             imageToken = "P3";
             image = this.readImagePPM(imageName, imageToken);
           }
-          else if (extension.equalsIgnoreCase("png")) {
-            imageToken = "png";
-          }
-          else if (extension.equalsIgnoreCase("jpg")){
-            imageToken = "jpg";
+          else if (extension.equalsIgnoreCase("png")
+              || extension.equalsIgnoreCase("jpg")) {
+            image = this.readImage(imageName);
           }
           else {
             throw new IllegalStateException("We only support ppm, png, and jpg");
           }
 
           try {
-            this.collage.addImageToLayer(layerName1,
-                image, x, y);
+            this.collage.addImageToLayer(layerName1, image, x, y);
           } catch (IllegalArgumentException e) {
             this.renderMessage("Arguments can't be null or negative or the layer doesn't exist");
           } catch (IllegalStateException e) {
@@ -280,6 +280,52 @@ public class CollageControllerImpl implements CollageController {
         throw new IllegalArgumentException("Was not able to save");
       }
     }
+    else if (filePath.endsWith(".png")) {
+      this.saveImageHelper("png", filePath);
+    }
+    else if (filePath.endsWith(".jpg")) {
+      this.saveImageHelper("jpg", filePath);
+    }
+
+    throw new IllegalArgumentException("We do not support the given file type");
+  }
+
+  /**
+   * Creates the current working image in the model.
+   * @param formatName the image type
+   * @param fileName the name of the saved file
+   * @throws IllegalStateException if an IOException occurs
+   */
+  private void saveImageHelper(String formatName, String fileName) throws IllegalStateException {
+    File file = new File(fileName);
+    int height = this.collage.getHeight();
+    int width = this.collage.getWidth();
+    ILayer imageToAdd = this.collage.makeFinalImage(true);
+
+    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j< width; j++) {
+        int r = imageToAdd.getPixelsOnLayer().get(i).get(j).getRedComponent();
+        int g = imageToAdd.getPixelsOnLayer().get(i).get(j).getGreenComponent();
+        int b = imageToAdd.getPixelsOnLayer().get(i).get(j).getBlueComponent();
+
+        int a = imageToAdd.getPixelsOnLayer().get(i).get(j).getAlphaComponent();
+
+        int argb = a << 24;
+        argb |= r << 16;
+        argb |= g << 8;
+        argb |= b;
+        image.setRGB(j, i, argb);
+      }
+    }
+
+    try {
+      ImageIO.write(image, formatName, file);
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException\n");
+    }
+
   }
 
 
@@ -371,6 +417,35 @@ public class CollageControllerImpl implements CollageController {
     }
 
     this.collage.getLayers().get(layerNum).addImage(0, 0, image);
+  }
+
+  @Override
+  public List<List<IPixel>> readImage(String filename) {
+    File file = new File(filename);
+
+    BufferedImage image;
+    List<List<IPixel>> result = new ArrayList<>();
+
+    try {
+      image = ImageIO.read(file);
+
+      for (int i = 0; i < image.getHeight(); i ++) {
+        result.add(new ArrayList<>());
+        for (int j = 0; j < image.getWidth(); j++) {
+          Color color = new Color(image.getRGB(j, i));
+          int red = color.getRed();
+          int green = color.getGreen();
+          int blue = color.getBlue();
+          int alpha = color.getAlpha();
+          result.get(i).add(new Pixel(red, green, blue, alpha));
+        }
+      }
+
+    } catch (IOException e) {
+      throw new IllegalStateException("Unexpected IOException");
+    }
+
+    return result;
   }
 
 
