@@ -55,12 +55,11 @@ public interface CollageController {
    * Read an image file and returns the pixels on the image as a 2D array.
    * Converts color value to the base of 256.
    * @param filename the path of the file
-   * @param hasAlpha true if and only if the original image has an alpha value
    * @param fileType the type of file that is being read from
    * @return the pixels on the image as a 2D array
    * @throws IllegalStateException when the file could not be retrieved
    *                               or the file is not a PPM file
    */
-  List<List<IPixel>> readImage(String filename, boolean hasAlpha, String fileType)
+  List<List<IPixel>> readImagePPM(String filename, String fileType)
       throws IllegalStateException;
 }

@@ -127,16 +127,26 @@ public class CollageControllerImpl implements CollageController {
 
           String extension = imageName.substring(imageName.lastIndexOf(".") + 1);
           String imageToken = null;
+          List<List<IPixel>> image = new ArrayList<>();
 
           boolean hasAlpha = true;
           if (extension.equalsIgnoreCase("ppm")) {
-            hasAlpha = false;
             imageToken = "P3";
+            image = this.readImagePPM(imageName, imageToken);
+          }
+          else if (extension.equalsIgnoreCase("png")) {
+            imageToken = "png";
+          }
+          else if (extension.equalsIgnoreCase("jpg")){
+            imageToken = "jpg";
+          }
+          else {
+            throw new IllegalStateException("We only support ppm, png, and jpg");
           }
 
           try {
             this.collage.addImageToLayer(layerName1,
-                this.readImage(imageName, hasAlpha, imageToken), x, y);
+                image, x, y);
           } catch (IllegalArgumentException e) {
             this.renderMessage("Arguments can't be null or negative or the layer doesn't exist");
           } catch (IllegalStateException e) {
@@ -365,7 +375,7 @@ public class CollageControllerImpl implements CollageController {
 
 
   @Override
-  public List<List<IPixel>> readImage(String filename, boolean hasAlpha, String fileType)
+  public List<List<IPixel>> readImagePPM(String filename, String fileType)
       throws IllegalStateException {
     Scanner sc;
 
@@ -412,14 +422,7 @@ public class CollageControllerImpl implements CollageController {
         g = g * 255 / maxValue;
         b = b * 255 / maxValue;
 
-        if (!hasAlpha) {
-          pixelsOnImage.get(i).add(new Pixel(r, g, b));
-        }
-        else {
-          int a = sc.nextInt();
-          pixelsOnImage.get(i).add(new Pixel(r, g, b, a));
-        }
-
+        pixelsOnImage.get(i).add(new Pixel(r, g, b));
       }
     }
     return pixelsOnImage;

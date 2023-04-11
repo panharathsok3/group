@@ -97,7 +97,7 @@ public class CollageGUIController implements Features {
       }
 
       this.model.addImageToLayer(layerName,
-          this.textUIController.readImage(filePath, hasAlpha, imageToken),
+          this.textUIController.readImagePPM(filePath, imageToken),
           xPosition, yPosition);
 
       this.showImage();
