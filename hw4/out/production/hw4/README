@@ -1,4 +1,16 @@
-Assignment 5 addition/modifications:
+Assignment 6 additions/modifications:
+
+The modifications that we made is inside the CollageControllerImpl Class, we added a new method that
+that can help parse jpg and png images. We also modified the saveImage method so that it can save
+images as a png and jpg. This is done to accommodate for different file types.
+
+We also modified the CollageGUIController Class so that it knows how to read in a different file
+type other than a PPM image. This is done to accommodate for different file types.
+
+
+
+
+Assignment 5 additions/modifications:
 
 # Modification
 The big modification that we made is that the File IO is now being handled inside the controller
@@ -360,17 +372,6 @@ NOTE: After all work has been done and saved, and you are
       ready to quit the program, run the quit command.
 
   Do: quit
-
-NOTE FOR GRADER:
-Copy and paste the script in the RunScript file into the command line.
-The actions will be performed and the new images and project will be
-saved in the specified path for viewing.
-
-At least one example PPM image (different from any of the ones provided to you in this assignment),
-its red, blue, and green components as their own images, and this image brightened and darkened
-by itself using each of value, intensity, and luma in a second new layer
-named suitably in a res/folder.
-
 
 Citations :
 https://www.goodhousekeeping.com/life/pets/g4531/cutest-dog-breeds/
