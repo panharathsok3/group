@@ -286,8 +286,9 @@ public class CollageControllerImpl implements CollageController {
     else if (filePath.endsWith(".jpg")) {
       this.saveImageHelper("jpg", filePath, BufferedImage.TYPE_INT_RGB);
     }
-
-    throw new IllegalArgumentException("We do not support the given file type");
+    else {
+      throw new IllegalArgumentException("We do not support the given file type");
+    }
   }
 
   /**

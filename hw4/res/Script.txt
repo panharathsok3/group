@@ -1,0 +1,8 @@
+new-project project 800 600
+add-layer L1
+add-image-to-layer L1 res/Images/tako.png 0 0
+set-filter L1 red-component
+save-image res/Images/takoRed.jpg
+load-project res/project/takoRedProject
+save-project res/project/takoRedProject
+quit

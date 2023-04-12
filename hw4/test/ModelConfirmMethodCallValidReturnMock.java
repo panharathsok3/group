@@ -56,18 +56,18 @@ public class ModelConfirmMethodCallValidReturnMock implements CollageProject {
   }
 
   @Override
-  public Layer makeFinalImage(boolean hasAlpha) {
-    return null;
+  public ILayer makeFinalImage(boolean hasAlpha) {
+    return new Layer("L", 1, 1, 1);
   }
 
   @Override
-  public ArrayList<ILayer> getLayers() throws IllegalStateException {
-    return null;
+  public List<ILayer> getLayers() throws IllegalStateException {
+    return new ArrayList<>();
   }
 
   @Override
   public String getProjectName() throws IllegalStateException {
-    return null;
+    return "project";
   }
 
   @Override
