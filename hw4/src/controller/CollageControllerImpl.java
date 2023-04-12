@@ -297,7 +297,8 @@ public class CollageControllerImpl implements CollageController {
    * @param fileName the name of the saved file
    * @throws IllegalStateException if an IOException occurs
    */
-  private void saveImageHelper(String formatName, String fileName, int type) throws IllegalStateException {
+  private void saveImageHelper(String formatName, String fileName, int type)
+      throws IllegalStateException {
     File file = new File(fileName);
     int height = this.collage.getHeight();
     int width = this.collage.getWidth();
@@ -306,7 +307,7 @@ public class CollageControllerImpl implements CollageController {
     BufferedImage image = new BufferedImage(width, height, type);
 
     for (int i = 0; i < height; i++) {
-      for (int j = 0; j< width; j++) {
+      for (int j = 0; j < width; j++) {
         int r = imageToAdd.getPixelsOnLayer().get(i).get(j).getRedComponent();
         int g = imageToAdd.getPixelsOnLayer().get(i).get(j).getGreenComponent();
         int b = imageToAdd.getPixelsOnLayer().get(i).get(j).getBlueComponent();
