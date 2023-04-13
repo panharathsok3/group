@@ -1,5 +1,6 @@
 package view;
 
+import controller.Features;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,8 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -28,9 +27,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import controller.Features;
-import model.IPixel;
 
 /**
  * The GUI that the user will interact with and uses the Features interface as the controller which
@@ -180,7 +176,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
 
   public void errorMessage(String message) {
     JOptionPane.showMessageDialog(null,
-            message, "Error", JOptionPane.ERROR_MESSAGE);
+        message, "Error", JOptionPane.ERROR_MESSAGE);
   }
 
   @Override
@@ -349,24 +345,7 @@ public class JFrameView extends JFrame implements GUIView, ActionListener, ListS
   }
 
   @Override
-  public void getImageToPutOnScreen(int height, int width, List<List<IPixel>> imageToAdd) {
-    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-    for (int x = 0; x < image.getHeight(); x++) {
-      for (int y = 0; y < image.getWidth(); y++) {
-        int r = imageToAdd.get(x).get(y).getRedComponent();
-        int g = imageToAdd.get(x).get(y).getGreenComponent();
-        int b = imageToAdd.get(x).get(y).getBlueComponent();
-
-        int a = imageToAdd.get(x).get(y).getAlphaComponent();
-
-        int argb = a << 24;
-        argb |= r << 16;
-        argb |= g << 8;
-        argb |= b;
-        image.setRGB(y, x, argb);
-      }
-    }
+  public void getImageToPutOnScreen(BufferedImage image) {
 
     this.imageLabel.setIcon(new ImageIcon(image));
     this.repaint();

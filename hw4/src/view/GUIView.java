@@ -1,6 +1,7 @@
 package view;
 
 import controller.Features;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import model.IPixel;
 
@@ -41,10 +42,8 @@ public interface GUIView {
 
   /**
    * Displays the current image that the user is working on.
-   * @param height the height of the project
-   * @param width the width of the project
-   * @param imageToAdd the image to be added onto the screen
+   * @param image the image to be added onto the screen
    */
-  void getImageToPutOnScreen(int height, int width, List<List<IPixel>> imageToAdd);
+  void getImageToPutOnScreen(BufferedImage image);
 }
 

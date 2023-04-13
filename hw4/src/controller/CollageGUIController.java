@@ -1,6 +1,7 @@
 package controller;
 
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 import model.CollageProject;
 import model.IPixel;
@@ -134,8 +135,28 @@ public class CollageGUIController implements Features {
    * Delegates to the view to display the current image onto the screen.
    */
   private void showImage() {
-    this.view.getImageToPutOnScreen(this.model.getHeight(), this.model.getWidth(),
-        this.model.makeFinalImage(true).getPixelsOnLayer());
-  }
 
+    List<List<IPixel>> imageToAdd = this.model.makeFinalImage(true).getPixelsOnLayer();
+
+    BufferedImage image = new BufferedImage(this.model.getHeight(),
+        this.model.getWidth(), BufferedImage.TYPE_INT_ARGB);
+
+    for (int x = 0; x < image.getHeight(); x++) {
+      for (int y = 0; y < image.getWidth(); y++) {
+        int r = imageToAdd.get(x).get(y).getRedComponent();
+        int g = imageToAdd.get(x).get(y).getGreenComponent();
+        int b = imageToAdd.get(x).get(y).getBlueComponent();
+
+        int a = imageToAdd.get(x).get(y).getAlphaComponent();
+
+        int argb = a << 24;
+        argb |= r << 16;
+        argb |= g << 8;
+        argb |= b;
+        image.setRGB(y, x, argb);
+      }
+    }
+
+    this.view.getImageToPutOnScreen(image);
+  }
 }
