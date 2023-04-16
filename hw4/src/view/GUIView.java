@@ -2,8 +2,6 @@ package view;
 
 import controller.Features;
 import java.awt.image.BufferedImage;
-import java.util.List;
-import model.IPixel;
 
 /**
  * The GUI that will display information onto the screen and make events occur based on user inputs.
