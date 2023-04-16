@@ -1,0 +1,174 @@
+# Overview
+This program is an image editing software that allows users to create a project, where a white
+background will be the first thing that is created. The program also allows the user to add a layer,
+add an image to a layer, set a filter on a layer, save the image to a file, save the current working
+project to a file, and load a project.
+
+All of these features are available and it does not depend on the type of UI that the user wants to
+work with. All the features function with both the GUI and text.
+
+#Requirements/Dependencies
+- Java 11 or higher JRE
+- JUnit 4 for running tests
+
+# USEME
+The USEME can be found in the same folder as the README and is called USEME. This is an instruction
+manual on how to use this program.
+
+
+### Model ###
+
+# IPixel - Interface
+
+The IPixel interface represents the operations that can be performed on a Pixel
+We have methods that allow the user to modify the pixel and calculate for the brightness of the
+pixel. There are also observers in the pixel class in case the user wants to know the specific
+component of the pixels.
+
+# Pixel - Class
+
+The Pixel class represents a single pixel that makes up images. We made our Pixel class backwards
+compatible with other forms of Images in case there is no alpha value which we set to 255. We have
+one constructor that takes in all 4 components from an image and one take takes only the rgb values.
+
+# ILayer - Interface
+
+The ILayer interface represents operations that can be done to a Layer. It allows the user to get
+the IPixels on a ILayer and the Name of an ILayer. It also allows the user to add a 2D ArrayList of
+IPixels onto an ILayer.
+
+# Layer - Class
+
+The Layer class represents a layer that is used on the collage. It has functionality that allows the
+user to add an image onto the layer and observers for the user to know what the name of the layer
+they are working on as well as the content on the layer so that they can modify it as they see fit.
+
+# CollageProject - Interface
+
+The CollageProject interface represents operations that can be done on the application of a collage.
+It gives functionality to add a layer, add an image to a layer, get the final image as an ILayer,
+and set a filter onto a layer. Finally, there are also a bunch of observers that the user can query
+if they need to use it. This is information the user has already known from using the methods
+mentioned above. So, if they need information about something they forgot, the observers are there
+to help them.
+
+# CollageProjectModelImpl - Class
+
+The CollageProjectModelImpl class is the model of our program. It inherits the CollageProject. This
+class is used to make a collage to work on. It has the functionality from CollageProject like
+modifying layers that are made and has observers about the project. It stores the ILayers in the
+project as a 2D List. It stores the filters applied as a Map from the ILayer name to the name of the
+filter.
+
+# Effects - Package
+
+We have an Effects package that holds the macros that is used in the model.
+
+# MacroCollageEffects - Interface
+
+The MacroCollageEffects interface is our macro and we came to an agreement that since macros are a
+scalable way to create a growing extended set of functionality, it would be best to use the command
+design pattern to support a set of effects/ filters that our program offers. This way, our design is
+loosely coupled and if we have to add more operations(effects), we can just add new classes that
+inherits this interface.
+
+It is also a way to ensure that when a new tool/class is added, it doesn't affect the functionality
+of the tools/class that already exists.
+
+# BrightenDarkenMacro - Class
+
+The BrightenDarkenMacro class is a macro that implements the MacroCollageEffects interface. It
+allows the user reduce or increase the brightness all the pixels on a layer according to either their
+value, intensity or luma.
+
+# BulkAssignFilter - Class
+
+The BulkAssignFilter class is a macro that implements the MacroCollageEffects interface. It allows
+the user to filter all the pixels on a layer and set them to one of their components(red, green,
+blue).
+
+# DarkenMultiplyBrightenScreenMacro - Class
+The DarkenMultiplyBrightenScreenMacro class is a macro that implements the MacroCollageEffects
+interface. It allows the user reduce or increase the brightness all the pixels on a layer by
+modifying the hue, saturation, and lightness of a pixel.
+
+
+# InversionDifferenceMacro - Class
+The InversionDifferenceMacro class is a macro that implements the MacroCollageEffects interface.
+It allows the user to invert the colors of an image on the current layer based on the composite
+image below.
+
+
+# ChangeTransparencyMacro - Class
+The ChangeTransparencyMacro class is a macro that implements the MacroCollageEffects interface.
+It allows the user to invert the colors of an image on the current layer based on the composite
+image below.
+
+
+
+
+### View ###
+
+# CollageView - Interface
+
+The CollageView interface represents a way for the user to see what they are working on. Though
+currently it is a text-based implementation on the program so there is nothing to see in real time.
+So, right now, it has only one method which is to send a message to the user.
+
+# CollageTextView - Class
+
+The CollageTextView class inherits the CollageView. It is used to print messages to the user.
+
+# GUIView - Interface
+The GUIView interface represents the Graphical User Interface that the user will see and interact
+based on the asynchronous inputs.
+
+# JFrameView - Class
+The JFrameView class inherits the GUIView. The GUI that the user will interact with and
+uses the Features interface as the controller which performs actions from the listeners in the GUI.
+It sets up the events will occur once a certain action is performed by the user. It has buttons that
+the user can click and it will display something on a panel for the user.
+
+
+
+### Controller ###
+
+# CollageController - Interface
+
+The CollageController interface represents a controller for the CollageProjectModelImpl. It is used
+to run the program which accept user input and perform some actions like loading, creating and
+saving a project,adding layers to a project etc. It also has functionality to read in a PPM, jpg,
+and png images. It also has the ability to save the image images as PPM, jpg and png. It can also
+save the project that the user is working on to a file and load a project from a file as well.
+
+# CollageControllerImpl - Class
+
+The CollageControllerImpl class inherits the CollageController. This class is used to
+read user input and perform actions accordingly. It also performs file IO to save, load, and export
+images.
+
+# Features - Interface
+The Features interface represents the features that are currently supported with the GUI that we
+have made. It is used to delegate information from the GUI when the user clicks on something to the
+model and return that back to the GUI.
+
+# CollageGUIController - Class
+The CollageGUIController class inherits the Features. This class handles the asynchronous
+interactions that the user inputs and delegates action to the model to handle the processing part
+and send information to the GUI to update it. This class uses CollageController to handle file IO.
+
+# Main - Class
+The Main class is used to run the GUI. It can also be used to run the program as an interactive
+script on the terminal.
+
+
+We used stackoverflow to get the screen size of a screen so that this image frame will change
+depending on the resolution of the screen.
+We also used stackoverflow to get the file extension by getting the substring of the string after
+the period.
+
+Citations :
+https://www.goodhousekeeping.com/life/pets/g4531/cutest-dog-breeds/
+Copyright © 1994-2021, Oracle and/or its affiliates. All rights reserved.
+https://stackoverflow.com/questions/3680221/how-can-i-get-screen-resolution-in-java
+https://stackoverflow.com/questions/24503361/how-to-split-a-string-after-a-dot-in-java

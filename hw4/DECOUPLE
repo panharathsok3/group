@@ -1,0 +1,15 @@
+1.
+If we're talking about the CollageTextView, it doesn't need any other file as it is used in the
+controller to send information to the user. It just needs the CollageView and CollageTextView file.
+
+For the GUIView, it needs the Features interface so that there is functionality inside the GUI when
+the user interacts with the GUI. The files that it needs are the GUIView, JFrameView, and
+Features file.
+
+2.
+For the CollageTextView, the CollageView is the class implementing the CollageTextView so as the
+class implementing the interface it needs it and it needs itself in order to exist.
+
+For the JFrameView, it needs the Features interface so that it has functionality to respond to user
+input as it is an asynchronous system. It needs the interface that it implements which is the
+GUIView and it needs the JFrameView, it needs itself to exist.
