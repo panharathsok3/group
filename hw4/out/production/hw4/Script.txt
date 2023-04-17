@@ -1,8 +1,14 @@
-new-project project 800 600
+new-project project 1000 1000
 add-layer L1
 add-image-to-layer L1 res/Images/tako.png 0 0
 set-filter L1 red-component
-save-image res/Images/takoRed.jpg
-save-project res/project/takoRedProject
-load-project res/project/takoRedProject
+add-layer L2
+add-image-to-layer L2 res/Images/doggo2.jpg 400 400
+add-image-to-layer L1 res/Images/dog.ppm 600 0
+add-layer L3
+add-image-to-layer L3 res/Images/dog.ppm 600 600
+add-image-to-layer L3 res/Images/dog.ppm 500 500
+set-filter L2 brighten-screen
+set-filter L3 inversion-difference
+save-image res/Images/finalImage.png
 quit
